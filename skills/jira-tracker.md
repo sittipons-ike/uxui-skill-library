@@ -1,0 +1,204 @@
+---
+name: jira-tracker
+description: Sprint tracking automation สำหรับทีม UXI Jira board — รัน Mon/Wed/Fri 9am แจ้ง status changes, manday overrun, sprint ending. Monday เพิ่ม weekly per-person summary. ใช้ Atlassian MCP (OAuth) → Python คำนวณ → Lark webhook (HMAC). State diff ผ่าน state.json
+type: automation
+---
+
+# Jira Sprint Tracker
+
+Sprint tracking automation ที่รัน Mon/Wed/Fri 9 AM ส่งสรุป + alerts เข้า Lark group "Jira daily update"
+
+## 🎯 Trigger Conditions
+
+Skill นี้เป็น **scheduled automation** (launchd) — ไม่ต้องใช้ /command เรียก
+
+แต่ skill นี้อ้างอิง pattern ที่ใช้ได้กับ automation อื่นๆ (Atlassian MCP + Python state diff + Lark webhook)
+
+---
+
+## 📦 Files
+
+```
+~/.config/claude-automations/jira-tracker/
+├── tracker.py        # main logic (Python)
+├── run.sh            # launchd wrapper
+├── state.json        # auto-managed (last poll snapshot)
+└── logs/
+
+~/Library/LaunchAgents/
+└── com.sittiponsorojsakul.jira-tracker.plist  # Mon/Wed/Fri @ 9am
+```
+
+## 🔑 Dependencies
+
+### Keychain entries (read-only)
+- `lark-jira-update-webhook` — Lark group webhook URL (Lark group "Jira daily update")
+- `lark-jira-update-secret` — HMAC signing secret
+
+### MCP / OAuth
+- Atlassian MCP เชื่อมกับ `prachum.a@7solutions.co.th` (shared work account)
+- ใช้ OAuth ไม่ใช่ API token (API token ใช้ไม่ได้ในสถานการณ์ปัจจุบัน)
+
+### Project
+- Cloud ID: `131ad226-f4a8-42b6-9148-b5b945a2617f`
+- Project key: `UXI` (UX/UI project)
+- Story Points field: `customfield_10032`
+- Sprint field: `customfield_10020`
+
+---
+
+## 🏗️ Architecture
+
+```
+launchd (Mon/Wed/Fri 9am)
+  ↓
+run.sh (sets env, exports HOME/PATH, unsets ANTHROPIC_API_KEY)
+  ↓
+tracker.py
+  ├─ Fetch issues via claude -p --dangerously-skip-permissions (uses Atlassian MCP)
+  ├─ Parse JSON → load state.json
+  ├─ Compute diffs:
+  │    • Status changes
+  │    • Manday overrun (working days vs points)
+  │    • Sprint end approaching (3 working days, To Do exists)
+  ├─ Compose Lark messages (Thai)
+  ├─ Send to Lark webhook (HMAC-signed)
+  └─ Save updated state.json
+```
+
+## 📊 Output Format
+
+### Monday — Weekly summary + alerts (ถ้ามี)
+
+```
+📊 Sprint 56 Weekly — 11 พ.ค. 2026 (จันทร์)
+
+👤 Big - Sanvasu: 9 pts (8 tasks)
+👤 Beer_woranittha: 8 pts (3 tasks)
+👤 sittiponike: 4 pts (2 tasks)
+
+Total: 21 pts · 13 tasks
+Sprint ends: 21 พ.ค. 2026 (10 working days)
+⚠️ N tickets ยังไม่ estimate (แสดง —)
+```
+
+### Wed/Fri — Update message
+
+```
+📋 Sprint 56 Update — พุธ 13 พ.ค. 2026
+
+🔄 Status changes (2)
+• UXI-4499 [Big - Sanvasu]: To Do → In Progress
+• UXI-4486 [Big - Sanvasu]: In Progress → Done
+
+🚨 Manday Overrun (1)
+• UXI-4493 [Big - Sanvasu] [2pt] In Progress 4 working days (เกินงบ 2 วัน)
+
+⚠️ Sprint ends in 3 working days · 4 tickets ใน To Do (5 pts)
+```
+
+ถ้าไม่มี alert → "✅ ไม่มีการเปลี่ยนแปลง"
+
+---
+
+## 🧮 Logic Rules
+
+### 1. Status change detection
+- เทียบ `current.status_name` กับ `state.json[key].status`
+- First run = state ว่าง → ไม่ alert (เริ่ม track)
+
+### 2. Manday overrun
+- เฉพาะ ticket ที่ `status_category == "indeterminate"` (ไม่ใช่ To Do, ไม่ใช่ Done)
+- `points > 0` (ticket ที่ไม่มี estimate ข้าม)
+- `working_days_since_moved_out_of_todo > points` → alert (เกินงบ N วัน)
+- "moved_out_of_todo_at" = ตอนแรก track ใช้ `statuscategorychangedate` จาก API; ตอนเปลี่ยน status ตามจริง = poll time
+
+### 3. Sprint end approaching
+- working days ถึง `sprint.endDate` ≤ 3
+- มี ticket อย่างน้อย 1 ใน To Do (`status_category == "new"`)
+- Dedupe: 1 ครั้งต่อ sprint endDate (จำใน `state.sprint_end_alerted_for`)
+
+### Working day calculation
+- Mon-Fri only (skip Sat-Sun)
+- Inclusive of `end`, exclusive of `start`
+- Implementation: simple loop with `weekday() < 5`
+
+### Ticket counting (Method B)
+- นับ **ทุก ticket** (Story + Sub-task + Bug + ฯลฯ)
+- Ticket ที่ไม่มี points → แสดง "—" + นับ 0
+
+---
+
+## 🚀 Activation
+
+```bash
+# Bootstrap (load schedule)
+launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.sittiponsorojsakul.jira-tracker.plist
+
+# Verify
+launchctl print gui/$(id -u)/com.sittiponsorojsakul.jira-tracker | grep -E "state|next"
+```
+
+## 🛑 Deactivation
+
+```bash
+launchctl bootout gui/$(id -u) ~/Library/LaunchAgents/com.sittiponsorojsakul.jira-tracker.plist
+```
+
+## 🧪 Manual Test
+
+```bash
+# Pre-flight (no Claude quota): keychain + Lark webhook only
+python3 -c "from tracker import working_days_between; ..."
+
+# Full run (uses ~3K Claude tokens)
+~/.config/claude-automations/jira-tracker/run.sh
+
+# Or unbuffered Python with progress
+python3 -u ~/.config/claude-automations/jira-tracker/tracker.py
+```
+
+---
+
+## 💰 Cost
+
+| | |
+|---|---|
+| Per run | ~3K tokens (claude fetch only — Python คำนวณเอง) |
+| Per week | 3 runs × 3K = ~10K tokens |
+| Per month | ~40-50K tokens |
+
+ใช้ subscription Claude Max (ไม่มี API charges)
+
+---
+
+## 🐛 Troubleshooting
+
+| Problem | Likely cause | Fix |
+|---|---|---|
+| `Fetched 0 issues` | Active sprint ว่างเปล่า OR JQL filter wrong | ดู Jira board ว่ามี active sprint มั้ย |
+| `claude exit non-zero` | OAuth expired / quota exhausted | `claude /login` re-auth |
+| `Lark error 19021` | HMAC sign ผิด | ตรวจ `lark-jira-update-secret` ใน Keychain |
+| `No JSON object found in claude output` | Claude เพิ่ม prose ปน JSON | ปรับ prompt ให้ strict — extractor ในโค้ดมี regex แล้ว |
+| State drift (alerts ไม่ตรง) | state.json corrupted | ลบ `state.json` แล้วรันใหม่ (ครั้งถัดไปเริ่ม fresh — ไม่มี status alerts) |
+
+---
+
+## 🔄 Reset / Reuse Pattern
+
+ถ้าจะใช้ pattern นี้กับ project Jira อื่น:
+
+1. Copy ทั้ง dir `~/.config/claude-automations/jira-tracker/` → `<new-name>/`
+2. แก้ `tracker.py` config:
+   - `PROJECT_KEY`
+   - `SP_FIELD` (อาจไม่ใช่ 10032 ใน Jira อื่น — query field list หรือใช้ getJiraIssue ดู custom fields)
+3. Update Keychain entries (`<new>-webhook`, `<new>-secret`)
+4. Copy plist + เปลี่ยน `Label` + paths
+5. Bootstrap ใหม่
+
+---
+
+## 🔗 Related
+
+- **email-summarizer** skill — pattern เดียวกันแต่ใช้ Gmail MCP
+- **Lark webhook setup** — เก็บ URL + secret ใน Keychain ผ่าน `/addkey`

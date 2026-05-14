@@ -106,7 +106,17 @@ node -v
 
 ---
 
-## ขั้นตอนที่ 4 — ลง Skills ของทีม
+## ขั้นตอนที่ 4 — ลง Design Skills เพิ่มเติม (จาก impeccable.style)
+
+เปิด Browser ไปที่ **[impeccable.style](https://impeccable.style/#faq)** → ทำตาม install guide
+
+Skills ชุดนี้เพิ่มความสามารถ visual design ให้ Claude เช่น animate, polish, colorize, critique ฯลฯ
+
+> ติดตั้งครั้งเดียว ได้ทุก skill จาก impeccable.style อัตโนมัติ
+
+---
+
+## ขั้นตอนที่ 5 — ลง Skills ของทีม
 
 เปิด **Terminal** → `cd` เข้าโฟลเดอร์ที่ดาวน์โหลด repo นี้มา แล้วรัน:
 
@@ -118,9 +128,13 @@ bash setup.sh
 
 > **ไม่รู้จัก git?** กด **Code → Download ZIP** บน GitHub → แตกไฟล์ → เปิด Terminal → `cd` ไปที่โฟลเดอร์ที่แตกแล้ว → รัน `bash setup.sh`
 
+> **ต้องทำขั้นตอนที่ 4 ก่อน** — setup.sh ไม่รวม skills จาก impeccable.style
+
 ---
 
 ## Skills ที่ได้มา
+
+**จาก repo นี้ (setup.sh):**
 
 | ไฟล์ | ใช้ทำอะไร |
 |---|---|
@@ -128,6 +142,13 @@ bash setup.sh
 | `ux-skill.md` | วาง User Flow + IA |
 | `ui-skill.md` | map component + token |
 | `ux-writing.md` | เขียน / rewrite copy |
+| `masterprompt.md` | แปลง input คร่าวๆ เป็น structured prompt |
+| `notion-planning.md` | วางแผนงานลง Notion |
+| `email-summarizer.md` | สรุป + draft email |
+| `jira-tracker.md` | manage Jira issues |
+
+**จาก impeccable.style (ขั้นตอนที่ 4):**
+animate, polish, colorize, critique, audit, adapt, arrange, bolder, clarify, distill, delight, extract, frontend-design, harden, normalize, onboard, optimize, overdrive, quieter, teach-impeccable, typeset
 
 ---
 
