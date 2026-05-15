@@ -6,6 +6,39 @@ type: automation
 
 # Email Summarizer Skill
 
+> ⚠️ **ต้อง setup ก่อนใช้งาน** — skill นี้ต้องการการเชื่อมต่อ Gmail และ (optional) Lark webhook
+
+## 🔧 Setup Checklist
+
+ทำครั้งเดียวก่อนเริ่มใช้ — เช็กตามลำดับ:
+
+### ขั้นตอนที่ 1 — เชื่อม Gmail MCP
+
+Gmail MCP ทำให้ Claude อ่านเมลได้ (read-only ไม่ส่งเมลเอง)
+
+1. เปิด Claude Code Desktop → พิมพ์ `/mcp`
+2. ถ้าเห็น **Gmail** หรือ **google-workspace** สถานะ Connected → ข้ามขั้นนี้ได้
+3. ถ้ายังไม่มี → ติดต่อ @sittipon เพื่อขอ config ครับ
+
+### ขั้นตอนที่ 2 — เก็บ Lark Webhook (ถ้าต้องการส่ง Lark)
+
+ถ้าแค่สรุปเมลดูเองในแชท → ข้ามขั้นนี้ได้
+
+ถ้าอยากให้ output ส่งเข้า Lark group อัตโนมัติ:
+
+1. ขอ Webhook URL จาก admin Lark group
+2. เปิด Claude Code Desktop แล้วรัน:
+   ```
+   /addkey lark-email-webhook
+   ```
+3. วาง Webhook URL เมื่อถูกถาม (ไม่ต้อง paste ใน chat)
+
+### ✅ พร้อมใช้งานเมื่อ
+- [ ] Gmail MCP สถานะ Connected ใน `/mcp`
+- [ ] (optional) `lark-email-webhook` อยู่ใน Keychain แล้ว
+
+---
+
 ใช้สำหรับสรุปเมลใน Gmail inbox ย้อนหลัง 24 ชั่วโมง output เป็นภาษาไทย รูปแบบที่ wrapper script (`~/.config/claude-automations/daily-email-summary/run.sh`) parse และส่งเข้า Lark group ได้
 
 ---
