@@ -30,6 +30,15 @@ Skills และคู่มือสำหรับทีม Designer ใช้
 
 > skill ที่มี ⚠️ จะแสดง checklist setup ให้กรอกก่อนทุกครั้งที่รัน
 
+**ตัวเสริม (ติดตั้งแยก)**
+
+animate, polish, colorize, critique, audit, adapt, arrange, bolder, clarify, distill, delight, extract, frontend-design, harden, normalize, onboard, optimize, overdrive, quieter, teach-impeccable, typeset
+
+ติดตั้งด้วย:
+```
+npx skills add pbakaus/impeccable
+```
+
 ## อัปเดต
 
 ```
