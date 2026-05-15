@@ -13,6 +13,8 @@
 4. ลง Skills ของทีม (รัน setup.sh)
 ```
 
+> **ตัวเสริม (ไม่บังคับ):** ลง Design Skills จาก impeccable.style — เพิ่ม skills ด้าน visual design เช่น animate, polish, colorize
+
 ---
 
 ## ขั้นตอนที่ 1 — ติดตั้ง Node.js
@@ -106,26 +108,7 @@ node -v
 
 ---
 
-## ขั้นตอนที่ 4 — ลง Design Skills เพิ่มเติม (จาก impeccable.style)
-
-Skills ชุดนี้เพิ่มความสามารถ visual design ให้ Claude เช่น animate, polish, colorize, critique ฯลฯ
-
-**วิธีติดตั้ง:**
-
-1. เปิด **Terminal** (Spotlight: `Cmd + Space` → พิมพ์ `Terminal` → Enter)
-2. copy คำสั่งนี้ทั้งหมด วางใน Terminal แล้วกด Enter:
-
-```
-npx skills add pbakaus/impeccable
-```
-
-3. รอจนคำสั่งทำงานเสร็จ (อาจใช้เวลา 1–2 นาที)
-
-> ติดตั้งครั้งเดียว — ได้ทุก skill จาก impeccable.style อัตโนมัติ
-
----
-
-## ขั้นตอนที่ 5 — ลง Skills ของทีม
+## ขั้นตอนที่ 4 — ลง Skills ของทีม
 
 1. เปิด **Finder** → ไปที่โฟลเดอร์ที่ดาวน์โหลด repo นี้มา (โฟลเดอร์ชื่อ `uxui-agent-library`)
 2. เปิด **Terminal** (ค้นหาใน Spotlight: `Cmd + Space` → พิมพ์ `Terminal` → Enter)
@@ -143,7 +126,20 @@ bash setup.sh
 
 > **ไม่มี repo ในเครื่อง?** เปิด GitHub → กด **Code → Download ZIP** → แตกไฟล์ → ทำตามขั้นตอน 1–6 อีกครั้ง
 
-> **ต้องทำขั้นตอนที่ 4 ก่อน** — setup.sh ไม่รวม skills จาก impeccable.style
+---
+
+## ตัวเสริม — Design Skills จาก impeccable.style (ไม่บังคับ)
+
+เพิ่มความสามารถด้าน visual design เช่น animate, polish, colorize, critique, typeset ฯลฯ
+
+1. เปิด **Terminal** (Spotlight: `Cmd + Space` → พิมพ์ `Terminal` → Enter)
+2. copy คำสั่งนี้วางใน Terminal แล้วกด Enter:
+
+```
+npx skills add pbakaus/impeccable
+```
+
+3. รอจนเสร็จ (1–2 นาที) — ได้ทุก skill อัตโนมัติ
 
 ---
 
