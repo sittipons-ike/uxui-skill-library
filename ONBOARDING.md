@@ -108,11 +108,18 @@ node -v
 
 ## ขั้นตอนที่ 4 — ลง Design Skills เพิ่มเติม (จาก impeccable.style)
 
-เปิด Browser ไปที่ **[impeccable.style](https://impeccable.style/#faq)** → ทำตาม install guide
-
 Skills ชุดนี้เพิ่มความสามารถ visual design ให้ Claude เช่น animate, polish, colorize, critique ฯลฯ
 
-> ติดตั้งครั้งเดียว ได้ทุก skill จาก impeccable.style อัตโนมัติ
+**วิธีติดตั้ง (ไม่ต้องใช้ terminal):**
+
+1. เปิด **Claude Code Desktop**
+2. พิมพ์ `/plugin` แล้วกด Enter
+3. กดแท็บ **Discover**
+4. ค้นหา **Impeccable**
+5. กด **Install**
+6. รอสักครู่จนขึ้น Installed
+
+> ติดตั้งครั้งเดียว ได้ทุก skill จาก impeccable.style — ไม่ต้องแตะ Terminal เลย
 
 ---
 
