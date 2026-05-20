@@ -10,7 +10,7 @@
 1. ติดตั้ง Node.js
 2. ติดตั้ง Claude Code Desktop
 3. ต่อ Figma เข้า Claude (แก้ไฟล์ config)
-4. ลง Skills ของทีม (รัน setup.sh)
+4. ลง Skills ของทีม (รัน npx skills add)
 ```
 
 > **ตัวเสริม (ไม่บังคับ):** ลง Design Skills จาก impeccable.style — เพิ่ม skills ด้าน visual design เช่น animate, polish, colorize
@@ -110,21 +110,17 @@ node -v
 
 ## ขั้นตอนที่ 4 — ลง Skills ของทีม
 
-1. เปิด **Finder** → ไปที่โฟลเดอร์ที่ดาวน์โหลด repo นี้มา (โฟลเดอร์ชื่อ `uxui-agent-library`)
-2. เปิด **Terminal** (ค้นหาใน Spotlight: `Cmd + Space` → พิมพ์ `Terminal` → Enter)
-3. พิมพ์ `cd ` (มีเว้นวรรค 1 ตัวหลัง cd) **แล้วอย่ากด Enter ยังนะ**
-4. **ลาก** โฟลเดอร์ `uxui-agent-library` จาก Finder ไปวางใน Terminal window
-   → path จะปรากฏขึ้นอัตโนมัติ เช่น `cd /Users/yourname/Downloads/uxui-agent-library`
-5. กด **Enter**
-6. พิมพ์คำสั่งนี้แล้วกด Enter:
+1. เปิด **Terminal** (Spotlight: `Cmd + Space` → พิมพ์ `Terminal` → Enter)
+2. copy คำสั่งนี้ทั้งบรรทัด วางใน Terminal แล้วกด Enter:
 
 ```
-bash setup.sh
+npx skills add sittipons-ike/uxui-agent-library
 ```
 
-รอสักครู่ ถ้าขึ้น `✅ เสร็จแล้ว!` แสดงว่า Skills พร้อมใช้งาน
+3. ถ้าถามว่าจะติดตั้ง package `skills` หรือไม่ → กด `y` แล้ว Enter
+4. รอจนขึ้น `Done!` — ได้ทุก skill อัตโนมัติ
 
-> **ไม่มี repo ในเครื่อง?** เปิด GitHub → กด **Code → Download ZIP** → แตกไฟล์ → ทำตามขั้นตอน 1–6 อีกครั้ง
+> **อัปเดต Skills ในอนาคต** — รันคำสั่งเดิมซ้ำได้เลย จะดึงเวอร์ชันล่าสุดให้
 
 ---
 
@@ -145,7 +141,7 @@ npx skills add pbakaus/impeccable
 
 ## Skills ที่ได้มา
 
-**จาก repo นี้ (setup.sh):**
+**จาก repo นี้ (npx skills add):**
 
 | ไฟล์ | ใช้ทำอะไร |
 |---|---|
@@ -190,12 +186,13 @@ Rewrite copy ใน Figma นี้: [วาง Figma link]
 
 ## อัปเดต Skills เมื่อทีม lead เพิ่ม skill ใหม่
 
+รันคำสั่งเดิมจากขั้นตอนที่ 4 ซ้ำได้เลย:
+
 ```
-git pull
-bash setup.sh
+npx skills add sittipons-ike/uxui-agent-library
 ```
 
-สองคำสั่งนี้ดึง skill ใหม่ลงเครื่องให้อัตโนมัติ
+ดึง skill ใหม่ลงเครื่องให้อัตโนมัติ
 
 ---
 

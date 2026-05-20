@@ -2,9 +2,17 @@
 
 Skills และคู่มือสำหรับทีม Designer ใช้ Claude Code ร่วมกับ Figma
 
-## เริ่มต้น
+## ติดตั้ง (คำสั่งเดียวจบ)
 
-อ่าน **[ONBOARDING.md](ONBOARDING.md)** — ใช้เวลา ~30 นาที ทำครั้งเดียว
+เปิด Terminal แล้วรัน:
+
+```
+npx skills add sittipons-ike/uxui-agent-library
+```
+
+> ครั้งแรกอาจถามขอ permission ติดตั้ง package `skills` — กด `y` ได้เลย
+
+อยากดูคู่มือฉบับเต็ม (ลง Node.js, ต่อ Figma MCP, ฯลฯ) → อ่าน **[ONBOARDING.md](ONBOARDING.md)**
 
 ## Skills ที่มี
 
@@ -39,8 +47,10 @@ animate, polish, colorize, critique, audit, adapt, arrange, bolder, clarify, dis
 npx skills add pbakaus/impeccable
 ```
 
-## อัปเดต
+## อัปเดต Skills
+
+รันคำสั่งเดิมซ้ำเพื่อดึงเวอร์ชันล่าสุด:
 
 ```
-git pull && bash setup.sh
+npx skills add sittipons-ike/uxui-agent-library
 ```
