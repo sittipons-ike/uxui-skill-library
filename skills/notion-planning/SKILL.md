@@ -1,3 +1,8 @@
+---
+name: notion-planning
+description: สร้างระบบ planning ใน Notion แบบ 2-level hierarchy (Groups + Tasks) พร้อม Auto-updating Progress Bar — ใช้เมื่อ user ต้องการวางแผนงานลง Notion, สร้าง task tracker, หรือทำ project plan ที่มี nested structure
+---
+
 # Notion Planning Template
 
 > Template สำหรับสร้างระบบ planning ใน Notion แบบ 2-level hierarchy (Groups + Tasks) พร้อม Auto-updating Progress Bar
