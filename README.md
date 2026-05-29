@@ -54,6 +54,7 @@ npx skills add sittipons-ike/uxui-skill-library
 
 | Skill | หน้าที่ |
 |---|---|
+| `setup-helper` | Guide ทีมตอน install ครั้งแรก — เช็ก prerequisites + แนะนำ skill แรก |
 | `audit-ui` | ตรวจ Figma DS compliance ก่อน handoff |
 | `ux-skill` | วาง User Flow + Information Architecture |
 | `ui-skill` | Map component + design token จาก Blueprint |

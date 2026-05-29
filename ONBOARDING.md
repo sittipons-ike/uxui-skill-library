@@ -122,6 +122,12 @@ claude plugin install uxui-skills
 
 รอจนขึ้น Installed — ได้ทุก skill อัตโนมัติ
 
+**ลองใช้ครั้งแรก** — พิมพ์ใน Claude Code:
+```
+/setup-helper
+```
+จะมี checklist และแนะนำ skill แรกให้ลอง
+
 > **อัปเดต Skills ในอนาคต:** `claude plugin marketplace update`
 
 > **ทางเลือก** ถ้า network เปิด npm — `npx skills add sittipons-ike/uxui-skill-library`
