@@ -7,17 +7,19 @@
 ## ภาพรวม — ต้องทำ 4 อย่าง
 
 ```
-1. ติดตั้ง Node.js
+1. ติดตั้ง Node.js + Git
 2. ติดตั้ง Claude Code Desktop
 3. ต่อ Figma เข้า Claude (แก้ไฟล์ config)
-4. ลง Skills ของทีม (รัน npx skills add)
+4. ลง Skills ของทีม (claude plugin install)
 ```
 
 > **ตัวเสริม (ไม่บังคับ):** ลง Design Skills จาก impeccable.style — เพิ่ม skills ด้าน visual design เช่น animate, polish, colorize
 
 ---
 
-## ขั้นตอนที่ 1 — ติดตั้ง Node.js
+## ขั้นตอนที่ 1 — ติดตั้ง Node.js + Git
+
+### 1a — ติดตั้ง Node.js
 
 Node.js คือโปรแกรมที่ช่วยให้ Claude ต่อ Figma ได้
 
@@ -31,6 +33,28 @@ node -v
 ```
 
 ถ้าขึ้นเลข เช่น `v22.0.0` แสดงว่าสำเร็จ
+
+### 1b — ติดตั้ง Git (Command Line Tools)
+
+Git ใช้สำหรับให้ Claude Code จัดการ session — ถ้าไม่ลง Claude Code จะขึ้น popup "Install Git"
+
+1. เปิด **Terminal** (Spotlight: `Cmd + Space` → พิมพ์ `Terminal` → Enter)
+2. copy คำสั่งนี้วางใน Terminal แล้วกด Enter:
+
+```
+xcode-select --install
+```
+
+3. จะมี popup ขึ้นมาให้กด **Install** → รอจนเสร็จ (5-10 นาที)
+4. ตรวจสอบ: ใน Terminal พิมพ์
+
+```
+git --version
+```
+
+ถ้าขึ้นเลข เช่น `git version 2.39.0` แสดงว่าสำเร็จ
+
+> ถ้าใน Claude Code มี popup **"Install Git"** ขึ้นมา — ทำตามขั้นตอนนี้ก่อน แล้วกลับมาเปิด Claude Code ใหม่
 
 ---
 

@@ -41,9 +41,9 @@ Skill นี้ trigger เมื่อ user พูดว่า:
 header: "Setup Check"
 options (multiSelect: true):
   - "✅ ติดตั้ง Node.js แล้ว (เช็ก: node -v ใน Terminal)"
+  - "✅ ติดตั้ง Git แล้ว (เช็ก: git --version ใน Terminal)"
   - "✅ ติดตั้ง Claude Code Desktop แล้ว"
   - "✅ ต่อ Figma MCP แล้ว (เช็กที่ /mcp เห็น figma-console Connected)"
-  - "✅ install plugin uxui-skills แล้ว (รัน claude plugin install uxui-skills)"
 ```
 
 ### Phase 3: วิเคราะห์ผล + แนะนำขั้นต่อ
@@ -67,14 +67,14 @@ options (multiSelect: true):
    → เปิด nodejs.org → กดปุ่ม LTS → install
    → เช็กด้วย `node -v` ใน Terminal
 
+❌ ยังไม่ได้ติดตั้ง Git
+   → เปิด Terminal แล้วรัน: xcode-select --install
+   → กด Install เมื่อมี popup → รอ 5-10 นาที
+   → เช็กด้วย `git --version`
+
 ❌ ยังไม่ได้ต่อ Figma MCP
    → ดู ONBOARDING.md ขั้นตอนที่ 3
    → หรือติดต่อ @sittipon (design@7solutions.co.th)
-
-❌ ยังไม่ได้ install plugin
-   → ใน Claude Code พิมพ์:
-      claude plugin marketplace add https://github.com/sittipons-ike/uxui-skill-library
-      claude plugin install uxui-skills
 ```
 
 แล้วบอก: "ทำให้ครบแล้วเรียก /setup-helper ใหม่อีกที"
