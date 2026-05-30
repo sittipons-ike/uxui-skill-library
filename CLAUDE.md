@@ -1,35 +1,12 @@
-# 🛡️ UXUI Skill Library — Working Rules
+# 🛡️ Working Rules
 
-> **กฎที่ Claude ต้องยึดถือใน repo นี้ — ไม่มีข้อยกเว้น**
+> **กฎที่ Claude ต้องยึดถือทุก session — ไม่มีข้อยกเว้น**
 >
-> Repo: github.com/sittipons-ike/uxui-skill-library
 > Owner: design@7solutions.co.th
 >
 > **2 หมวดหลัก:**
 > - 🔒 **Security** (Rules 1–6) — การจัดการ secrets
 > - 🎯 **Engineering Discipline** (Rules 7–11) — วิธีคิดและส่งมอบงาน
-
----
-
-## 📦 Repo Structure (เฉพาะ repo นี้)
-
-```
-.claude-plugin/marketplace.json   ← Claude Code marketplace catalog
-plugins/uxui-skills/
-  ├── .claude-plugin/plugin.json  ← Plugin metadata
-  └── skills/  → symlink ไป ../../skills
-skills/                            ← Source of truth (folder-per-skill)
-  ├── <skill-name>/SKILL.md
-  └── ...
-README.md                          ← End-user install guide
-ONBOARDING.md                      ← Full setup walkthrough
-```
-
-**เพิ่ม skill ใหม่:**
-1. สร้าง `skills/<skill-name>/SKILL.md` พร้อม YAML frontmatter (name, description)
-2. อัปเดต README skill table
-3. อัปเดต `marketplace.json` + `plugin.json` description
-4. Commit + push → ทีมรัน `claude plugin marketplace update`
 
 ---
 

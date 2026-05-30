@@ -4,13 +4,32 @@
 
 ---
 
+## 🚀 วิธีง่ายสุด — ใช้ /setup-helper
+
+ถ้าติดตั้ง Claude Code Desktop + plugin แล้ว (ขั้น 2 + ขั้น 4):
+
+```
+พิมพ์ในChat: /setup-helper
+```
+
+`/setup-helper` จะ:
+- ✅ Auto-detect ว่าเครื่องคุณลงอะไรไปแล้วบ้าง
+- ✅ แสดง diagnostic ว่าขาดอะไร
+- ✅ Guide ติดตั้งทีละ step ตามที่ขาด
+- ✅ ติดตั้ง working rules ของทีมให้
+- ✅ แนะนำ skill แรกให้ลอง
+
+**เริ่มต้นจาก zero ทำตามขั้นตอน manual ข้างล่างนี้:**
+
+---
+
 ## ภาพรวม — ต้องทำ 4 อย่าง
 
 ```
 1. ติดตั้ง Node.js + Git
 2. ติดตั้ง Claude Code Desktop
 3. ต่อ Figma เข้า Claude (แก้ไฟล์ config)
-4. ลง Skills ของทีม (claude plugin install)
+4. ลง Skills ของทีม (claude plugin install) → จากนั้น /setup-helper
 ```
 
 > **ตัวเสริม (ไม่บังคับ):** ลง Design Skills จาก impeccable.style — เพิ่ม skills ด้าน visual design เช่น animate, polish, colorize
