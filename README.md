@@ -13,7 +13,7 @@ Skills และคู่มือสำหรับทีม Designer ใช้
 
 > ดูคู่มือ step-by-step → **[ONBOARDING.md](ONBOARDING.md)**
 
-**วิธีง่ายสุด:** ติดตั้ง Claude Code + plugin (ขั้น 2 ข้างล่าง) แล้วพิมพ์ `/setup-helper` ในChat → จะ auto-detect และ guide ที่เหลือให้
+**วิธีง่ายสุด:** ติดตั้ง Claude Code + plugin (ขั้น 2 ข้างล่าง) แล้วพิมพ์ `/check-setup` ในChat → จะ auto-detect และ guide ที่เหลือให้
 
 ---
 
@@ -40,7 +40,7 @@ claude plugin install uxui-skills
 
 พิมพ์ใน Claude Code:
 ```
-/setup-helper
+/check-setup
 ```
 
 → จะเช็ก setup ครบไหม + แนะนำ skill แรกให้ลอง
@@ -51,7 +51,7 @@ claude plugin install uxui-skills
 
 | Skill | หน้าที่ |
 |---|---|
-| `setup-helper` | Guide ทีมตอน install ครั้งแรก — เช็ก prerequisites + แนะนำ skill แรก |
+| `check-setup` | Guide ทีมตอน install ครั้งแรก — เช็ก prerequisites + แนะนำ skill แรก |
 | `audit-ui` | ตรวจ Figma DS compliance ก่อน handoff |
 | `ux-skill` | วาง User Flow + Information Architecture |
 | `ui-skill` | Map component + design token จาก Blueprint |

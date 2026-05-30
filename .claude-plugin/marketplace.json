@@ -11,7 +11,7 @@
     {
       "name": "uxui-skills",
       "displayName": "UXUI Skills Bundle",
-      "description": "ครบทุก skill ของทีม Designer: setup-helper, audit-ui, ux-skill, ui-skill, ux-writing, prd, masterprompt, notion-planning, audit, email-summarizer, jira-tracker, design-builder, design-component-builder, design-icon-builder, design-ui-builder, design-md-audit, design-styleguide, design-remix",
+      "description": "ครบทุก skill ของทีม Designer: check-setup, audit-ui, ux-skill, ui-skill, ux-writing, prd, masterprompt, notion-planning, audit, email-summarizer, jira-tracker, design-builder, design-component-builder, design-icon-builder, design-ui-builder, design-md-audit, design-styleguide, design-remix",
       "version": "1.0.0",
       "category": "design",
       "source": "./plugins/uxui-skills",

@@ -2,7 +2,7 @@
   "name": "uxui-skills",
   "version": "1.0.0",
   "displayName": "UXUI Skills Bundle",
-  "description": "ครบทุก skill ของทีม Designer 7solutions — setup-helper, audit-ui, ux-skill, ui-skill, ux-writing, prd, masterprompt, notion-planning, audit, email-summarizer, jira-tracker + Design System Suite (design-builder/component-builder/icon-builder/ui-builder/md-audit/styleguide/remix)",
+  "description": "ครบทุก skill ของทีม Designer 7solutions — check-setup, audit-ui, ux-skill, ui-skill, ux-writing, prd, masterprompt, notion-planning, audit, email-summarizer, jira-tracker + Design System Suite (design-builder/component-builder/icon-builder/ui-builder/md-audit/styleguide/remix)",
   "author": {
     "name": "7solutions Design Team",
     "email": "design@7solutions.co.th",
