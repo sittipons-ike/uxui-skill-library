@@ -1,7 +1,7 @@
 ---
 name: design-builder
-description: Build the BASE of a design system from scratch — outputs design.md (tokens-only file) with primitive + semantic + mood + iconography-placeholder. Asks for brand vibe, audience, mood, accepts reference attachments. Biases token defaults by mood. Tailwind v3.4+ palette for primitives. Part of a 3-file split architecture (design.md + components.md + ui.md). Component layer, icons, and UI compositions are built by separate skills (design-component-builder, design-icon-builder, design-ui-builder). Supports light/dark modes. Triggers on "build design system", "create design.md", "design system from scratch", "brand design guide", "สร้าง design system", "ออกแบบ DS ใหม่".
-version: 5.0.0
+description: Build the BASE of a design system — outputs design.md (tokens-only file). DUAL-PATH (v6.0.0):accepts brand inputs from scratch OR ingests client-given assets (palette, mood, brand refs, typography). Phase 0 inventory check detects what user already has, then asks ONLY for missing pieces. Includes primitive + semantic + mood + iconography-placeholder. Biases token defaults by mood. Tailwind v3.4+ palette for primitives. Part of a 3-file split architecture (design.md + components.md + ui.md). Supports light/dark modes. Triggers on "build design system", "create design.md", "design system from scratch", "brand design guide", "มี palette แล้ว", "ใช้ brand kit ที่มี", "have palette ready", "สร้าง design system", "ออกแบบ DS ใหม่".
+version: 6.0.0
 user-invokable: true
 ---
 
@@ -34,25 +34,102 @@ design-styleguide         →  HTML / Figma render of all 3
 
 ## Execution Steps
 
-### 1. Gather inputs (ask user — one batch)
+### Phase 0 — Inventory check (MUST use AskUserQuestion)
+
+**ห้ามถามด้วย text** — ใช้ AskUserQuestion `multiSelect: true` ทันที:
+
+```
+คำถาม: "มีอะไรพร้อมแล้วบ้าง? (เลือกได้หลายข้อ)"
+header: "Brand assets"
+multiSelect: true
+options:
+  - "✅ มี color palette แล้ว (hex/HSL ของ primary/secondary/accent)"
+  - "✅ มี mood/vibe direction ชัดแล้ว"
+  - "✅ มี brand reference (logo/Figma/website/mood-board)"
+  - "✅ มี typography choice แล้ว (font family / pairing)"
+  - "❌ เริ่มจาก zero — ยังไม่มีอะไรเลย"
+```
+
+**Normalize ผลลัพธ์เป็น InputBundle:**
+
+```yaml
+InputBundle:
+  has_palette:     true | false
+  has_mood:        true | false
+  has_brand_refs:  true | false
+  has_typography:  true | false
+  from_scratch:    true | false   # = ทุกข้ออื่นเป็น false
+```
+
+**Decision tree:**
+- ถ้า `from_scratch == true` → ไป Phase 1A (zero — ถามทุกอย่างเหมือน v5.0.0)
+- มิฉะนั้น → ไป Phase 1B (adaptive — ถามเฉพาะที่ขาด)
+
+---
+
+### Phase 1A — Gather from zero (backward-compat v5.0.0)
+
+**ถามทุกอย่าง 1 batch:**
+
 - **Product / brand name**
 - **One-sentence positioning** (e.g., "premium audio for audiophiles")
 - **Audience** (e.g., "Gen Z gamers", "enterprise IT admins")
-- **Mood — pick 1 primary + 1-2 secondary** from this canonical list:
-  - `bold-tech` — sharp edges, dense layouts, monoline icons, flat shadows, tight tracking
-  - `friendly-warm` — rounded everything, generous spacing, soft shadows, outlined or duotone icons
-  - `premium-editorial` — minimal radii, hairline borders, barely-there shadows, slow ease, wide tracking
-  - `playful-vivid` — pill radii, colored shadows, animated/bouncy icons, spring easing, saturated
-  - `technical-dev` — sharp 2-4px radii, mono accents, wireframe icons, snappy linear, tight density
-  - `calm-focused` — moderate radii, restrained accent, subtle shadows, generous whitespace, ease-out
-- **Reference attachments** (optional, any combination):
-  - Image files: `*.jpg`, `*.png`, `*.svg` (screenshots, mood boards, brand kits)
-  - Markdown: existing `DESIGN.md`, brand brief, style guide notes
-  - URLs: live sites, Figma frames, Dribbble shots
-  - User pastes any of these → read content + extract: dominant colors, type pairing, spacing density, radius preference, mood signals
+- **Mood — pick 1 primary + 1-2 secondary** from canonical list (ดูตาราง Mood Map ใน Step 1b)
+- **Reference attachments** (optional, ถ้ามี)
 - **Reference brands** (optional verbal) — "feels like Linear + Notion"
 - **Constraints** — dark mode required? mobile-first? accessibility tier (AA/AAA)?
 - **Tech stack** — Tailwind / CSS vars / Figma tokens / other
+
+ไป Step 1-confirm
+
+---
+
+### Phase 1B — Adaptive gather (client-given assets path)
+
+ถามเฉพาะที่ขาด ตามตารางนี้:
+
+| InputBundle flag | ถ้า true (มี) | ถ้า false (ขาด) |
+|---|---|---|
+| `has_palette` | Ask user paste hex list (primary/secondary/accent + optional neutrals/status) | Ask: "ชอบสีหลักโทนไหน?" (warm/cool/neutral/vivid) + auto-pick Tailwind hue |
+| `has_mood` | Ask user pick from canonical mood list OR paste their mood description | Ask "Brand vibe เป็นยังไง?" → pick mood from canonical list |
+| `has_brand_refs` | Ask user paste/upload (image, URL, markdown, Figma link) | Skip |
+| `has_typography` | Ask user paste font names + weights + usage notes | Skip — default ตาม mood |
+
+**Always-required (ถาม 100% ทุกครั้ง — ไม่ assume):**
+1. Product / brand name
+2. One-sentence positioning
+3. Audience
+4. Dark mode required? (y/n)
+5. Accessibility tier (AA / AAA)
+
+---
+
+### Step 1-confirm — Echo InputBundle ก่อน generate (MANDATORY)
+
+**ห้ามข้าม** — ตาม Working Rule 7 (NO MAGIC) + Rule 8 (VERIFY BEFORE DONE)
+
+แสดง InputBundle ที่ collect ได้เป็น markdown table:
+
+```markdown
+## พร้อม generate? เช็ก input ก่อน:
+
+| Field | Value | Source |
+|---|---|---|
+| Brand name | Acme Co | user input |
+| Positioning | "premium audio for audiophiles" | user input |
+| Audience | "Gen Z gamers" | user input |
+| Primary color | `#2563eb` (blue.600) | **client-given** ✅ |
+| Secondary color | `#f59e0b` (amber.500) | **client-given** ✅ |
+| Mood | bold-tech | client-given ✅ |
+| Typography | Inter / JetBrains Mono | client-given ✅ |
+| Brand refs | logo.svg, brandkit.pdf | client-given ✅ |
+| Dark mode | required | user input |
+| A11y tier | AA | user input |
+
+พิมพ์ **'go'** = generate · พิมพ์ **'แก้ X'** = แก้ field
+```
+
+รอ user confirm ก่อนไป Step 1b
 
 ### 1b. Apply Mood Map → bias token defaults
 
@@ -125,6 +202,33 @@ primitive:
 ```
 
 Never copy hex from a single reference without confirming — propose, ask user to confirm.
+
+### 1d. Honor client-given palette (NEW in v6.0.0)
+
+ถ้า `InputBundle.has_palette == true` — **LOCK client-given hex values**:
+
+1. **Snap to Tailwind ladder if possible** — สำหรับแต่ละ hex client ให้:
+   - Compute ΔE76 (CIE Lab) ระหว่าง hex client กับทุก Tailwind shade ใน hue ใกล้เคียง
+   - ถ้า ΔE < 5 → snap เข้า Tailwind shade ที่ใกล้สุด, log `mapped from client #XXXXXX → tailwind.<hue>.<stop>`
+   - ถ้า ΔE ≥ 5 → ตั้งเป็น **custom brand hue** + generate 50..950 ladder ผ่าน OKLCH interpolation (lightness curve เดียวกับ Tailwind)
+
+2. **Use as primary semantic source** — NOT mood default:
+   - `semantic.colors.primary.*` = derived จาก client-given primary
+   - `semantic.colors.secondary.*` = derived จาก client-given secondary (ถ้ามี)
+   - `semantic.colors.accent.*` = derived จาก client-given accent (ถ้ามี)
+   - Neutrals / status colors ใช้ mood default ตามเดิม
+
+3. **Re-run Contrast Pair Matrix (Step 1bc) ด้วย LOCKED values**
+
+4. **ถ้า contrast fail** — auto-shift เฉพาะ semantic mapping ที่ fail (ไม่แตะ client-given primary):
+   - แทนที่จะเปลี่ยน `primary.default` → ปรับ `text.on-bgcolor` ไป shade ที่ contrast pass
+   - **Log shift ใน `## Known Gaps`** ด้วย format มาตรฐาน:
+     ```
+     ## Known Gaps
+     - shifted from client-provided #2563eb → semantic.text.on-bgcolor = #f8fafc (reason: AA fail on primary.default surface, original #ffffff = 4.2:1, shifted = 4.8:1)
+     ```
+
+5. **NEVER silently change client-given values** — log every adjustment + reason
 
 ### 2. Generate `DESIGN.md` using this exact structure
 

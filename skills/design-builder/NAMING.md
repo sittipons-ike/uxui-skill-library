@@ -582,3 +582,27 @@ When importing/remixing a DESIGN.md that uses other conventions, normalize in th
 - **Icon size scale** — separate from typography size? TBD.
 
 Resolve these before Phase 3 (component tier).
+
+---
+
+## 12. Known Gaps entry format (v6.0.0+)
+
+When `design-builder` (or any downstream skill) needs to log an auto-shift away from a client-given input or a contrast-fail fallback, use this **exact format** in the `## Known Gaps` section of `design.md`:
+
+```markdown
+## Known Gaps
+
+- shifted from client-provided #XXXXXX → semantic.<role>.<state> = #YYYYYY (reason: <short reason>, original ratio: A.A:1, shifted ratio: B.B:1)
+- mapped from client #XXXXXX → tailwind.<hue>.<stop> (reason: ΔE < 5)
+- custom hue generated from client #XXXXXX → primitive.colors.brand.50..950 (reason: ΔE ≥ 5, no Tailwind match)
+- TBD: <free-form note for future work>
+```
+
+**Rules:**
+- One bullet per gap. No nested lists.
+- The `shifted from client-provided` keyword is **reserved** — only used when honoring client-given palette (Step 1d). `design-md-audit` treats these as informational, not errors.
+- `mapped from client` and `custom hue generated from client` are also reserved keywords — both informational.
+- `TBD:` prefix is free-form, treated as audit warnings.
+- Hex values lowercase, 6 chars. Reasons under 80 chars.
+
+`design-md-audit` parses this section by keyword prefix. New keywords require parser update.

@@ -145,6 +145,14 @@ Audit enforces WCAG 2.1 Level AA at spec level (catches issues BEFORE code is wr
 - [ ] Failing pairs MUST be documented in Known Gaps with original + adjusted values
 - [ ] If `mood.primary` is `premium-editorial` and uses light text on cream surfaces, extra scrutiny (common AA fail mode)
 
+**Known Gaps reserved keywords (v6.0.0+)** — parse-only, do NOT flag as errors:
+- `shifted from client-provided #XXXXXX → ...` — client palette honored, semantic mapping shifted (informational, design-builder v6+)
+- `mapped from client #XXXXXX → tailwind.<hue>.<stop>` — client hex snapped to Tailwind ladder (informational)
+- `custom hue generated from client #XXXXXX → primitive.colors.<name>.50..950` — non-Tailwind hex, brand ladder generated (informational)
+- `TBD: <free-form>` — open work, treat as warning not error
+
+See `design-builder/NAMING.md § 12` for full format spec.
+
 **Tier: components.md (atomic)**
 - [ ] Every atom has `a11y:` block (button / icon / input / label / helper-text / avatar / badge)
 - [ ] atom.button declares `hit-area-min: 44`; sizes with visual height < 44 declare invisible padding workaround

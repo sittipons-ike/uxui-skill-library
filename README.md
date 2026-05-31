@@ -65,7 +65,7 @@ claude plugin install uxui-skills
 
 | Skill | หน้าที่ |
 |---|---|
-| `design-builder` | สร้าง `design.md` — base tokens (primitive + semantic + mood + iconography) จาก brand vibe |
+| `design-builder` v6 | สร้าง `design.md` — dual-path (zero / client-given palette + mood + refs) → base tokens + WCAG validation + Known Gaps log |
 | `design-component-builder` | สร้าง `components.md` — atomic library (atom/molecule/organism) อ้าง tokens |
 | `design-icon-builder` | populate iconography layer + ดึง SVG จริงจาก Phosphor/Tabler/Heroicons ฯลฯ |
 | `design-ui-builder` | สร้าง `ui.md` — UI compositions (page/pattern/section/flow) อ้าง components |
