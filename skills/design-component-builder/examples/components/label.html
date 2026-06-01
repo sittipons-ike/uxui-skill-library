@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<!-- ds-label | Tokens: --color-text-default, --color-text-muted, --color-danger-default, --color-danger-bg, --font-sans, --text-sm, --text-md, --leading-sm, --leading-md, --weight-medium, --weight-semibold, --space-1, --space-2, --space-3, --radius-sm | A11y: <label for=""> ties label to input id; aria-required on required inputs; aria-describedby links helper/error text; aria-invalid on error state; required asterisk has aria-hidden + sr-only text "required" -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ds-label · Form Field Label</title>
+  <link rel="stylesheet" href="../tokens.css">
+  <style>
+    body {
+      font-family: var(--font-sans);
+      color: var(--color-text-default);
+      padding: var(--space-6, 2rem);
+      max-width: 720px;
+      margin: 0 auto;
+      background: var(--color-bg-default, #fff);
+    }
+    h1 { font-size: var(--text-2xl, 1.5rem); font-weight: var(--weight-semibold); margin-bottom: var(--space-2); }
+    h2 { font-size: var(--text-lg, 1.125rem); font-weight: var(--weight-semibold); margin-top: var(--space-6, 2rem); margin-bottom: var(--space-3); border-bottom: 1px solid var(--color-border-subtle, #eee); padding-bottom: var(--space-2); }
+    h3 { font-size: var(--text-md); font-weight: var(--weight-medium); margin-top: var(--space-4, 1rem); margin-bottom: var(--space-2); color: var(--color-text-muted); }
+    .description { color: var(--color-text-muted); font-size: var(--text-md); line-height: var(--leading-md); margin-bottom: var(--space-4, 1rem); }
+    .ds-field {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+      margin-bottom: var(--space-4, 1rem);
+    }
+    .ds-field input {
+      font-family: var(--font-sans);
+      font-size: var(--text-md);
+      line-height: var(--leading-md);
+      padding: var(--space-2) var(--space-3);
+      border: 1px solid var(--color-border-default, #d1d5db);
+      border-radius: var(--radius-md, 6px);
+      min-height: var(--touch-min, 44px);
+      color: var(--color-text-default);
+      background: var(--color-bg-default, #fff);
+    }
+    .ds-field input:focus {
+      outline: none;
+      border-color: var(--color-primary-default);
+      box-shadow: var(--shadow-focus, 0 0 0 3px rgba(59,130,246,0.3));
+    }
+    .ds-field input[aria-invalid="true"] {
+      border-color: var(--color-danger-default);
+    }
+    .ds-field input[aria-invalid="true"]:focus {
+      box-shadow: 0 0 0 3px var(--color-danger-bg, rgba(220,38,38,0.2));
+    }
+
+    /* Base label */
+    .ds-label {
+      font-family: var(--font-sans);
+      font-size: var(--text-sm, 0.875rem);
+      line-height: var(--leading-sm, 1.4);
+      font-weight: var(--weight-semibold);
+      color: var(--color-text-default);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+    }
+
+    /* Required asterisk */
+    .ds-label__required {
+      color: var(--color-danger-default);
+      font-weight: var(--weight-semibold);
+      margin-left: 2px;
+    }
+
+    /* Optional tag */
+    .ds-label__optional {
+      color: var(--color-text-muted);
+      font-weight: var(--weight-medium);
+      font-size: var(--text-sm, 0.875rem);
+      margin-left: var(--space-1);
+    }
+
+    /* Helper text */
+    .ds-label__helper {
+      font-family: var(--font-sans);
+      font-size: var(--text-sm, 0.875rem);
+      line-height: var(--leading-sm, 1.4);
+      color: var(--color-text-muted);
+      font-weight: var(--weight-medium);
+      margin-top: var(--space-1);
+    }
+
+    /* Error message */
+    .ds-label__error {
+      font-family: var(--font-sans);
+      font-size: var(--text-sm, 0.875rem);
+      line-height: var(--leading-sm, 1.4);
+      color: var(--color-danger-default);
+      font-weight: var(--weight-medium);
+      margin-top: var(--space-1);
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+    }
+
+    /* Screen reader only */
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>ds-label</h1>
+  <p class="description">Form field label component. Pairs with <code>&lt;input&gt;</code>, <code>&lt;select&gt;</code>, or <code>&lt;textarea&gt;</code> using <code>for=</code> / <code>id=</code>. Communicates field name, requirement state, and supplementary help or error context.</p>
+
+  <section>
+    <h2>Required</h2>
+    <h3>Variant: required (with asterisk)</h3>
+    <div class="ds-field">
+      <label for="email-required" class="ds-label ds-label--required">
+        Email address
+        <span class="ds-label__required" aria-hidden="true">*</span>
+        <span class="sr-only">required</span>
+      </label>
+      <input type="email" id="email-required" required aria-required="true" placeholder="you@example.com">
+    </div>
+  </section>
+
+  <section>
+    <h2>Optional</h2>
+    <h3>Variant: optional (tagged "Optional")</h3>
+    <div class="ds-field">
+      <label for="phone-optional" class="ds-label ds-label--optional">
+        Phone number
+        <span class="ds-label__optional">(Optional)</span>
+      </label>
+      <input type="tel" id="phone-optional" placeholder="+66 ...">
+    </div>
+  </section>
+
+  <section>
+    <h2>With helper text</h2>
+    <h3>State: is-helper</h3>
+    <div class="ds-field">
+      <label for="username-helper" class="ds-label">
+        Username
+        <span class="ds-label__required" aria-hidden="true">*</span>
+        <span class="sr-only">required</span>
+      </label>
+      <input type="text" id="username-helper" required aria-required="true" aria-describedby="username-helper-text" placeholder="your_handle">
+      <span id="username-helper-text" class="ds-label__helper">
+        3–20 characters. Letters, numbers, and underscores only.
+      </span>
+    </div>
+  </section>
+
+  <section>
+    <h2>With error message</h2>
+    <h3>State: is-error</h3>
+    <div class="ds-field">
+      <label for="password-error" class="ds-label">
+        Password
+        <span class="ds-label__required" aria-hidden="true">*</span>
+        <span class="sr-only">required</span>
+      </label>
+      <input type="password" id="password-error" required aria-required="true" aria-invalid="true" aria-describedby="password-error-text" value="123">
+      <span id="password-error-text" class="ds-label__error" role="alert">
+        <span aria-hidden="true">⚠</span>
+        Password must be at least 8 characters.
+      </span>
+    </div>
+
+    <h3>State: is-error + helper text</h3>
+    <div class="ds-field">
+      <label for="confirm-error" class="ds-label">
+        Confirm password
+        <span class="ds-label__required" aria-hidden="true">*</span>
+        <span class="sr-only">required</span>
+      </label>
+      <input type="password" id="confirm-error" required aria-required="true" aria-invalid="true" aria-describedby="confirm-helper confirm-error-text" value="abc">
+      <span id="confirm-helper" class="ds-label__helper">Must match the password above.</span>
+      <span id="confirm-error-text" class="ds-label__error" role="alert">
+        <span aria-hidden="true">⚠</span>
+        Passwords do not match.
+      </span>
+    </div>
+  </section>
+</body>
+</html>

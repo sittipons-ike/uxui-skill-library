@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design System Components</title>
+  <link rel="stylesheet" href="tokens.css">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--font-sans, system-ui, -apple-system, sans-serif);
+      background: var(--color-surface-base, #ffffff);
+      color: var(--color-content-primary, #111111);
+      line-height: 1.5;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.5rem;
+      background: var(--color-surface-raised, #fafafa);
+      border-bottom: 1px solid var(--color-edge-subtle, #e5e5e5);
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    #theme-toggle {
+      padding: 0.5rem 1rem;
+      background: var(--color-surface-base, #ffffff);
+      color: var(--color-content-primary, #111111);
+      border: 1px solid var(--color-edge-default, #d4d4d4);
+      border-radius: var(--radius-md, 6px);
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+    #theme-toggle:hover {
+      background: var(--color-surface-hover, #f5f5f5);
+    }
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: 1rem 1.5rem;
+      background: var(--color-surface-raised, #fafafa);
+      border-bottom: 1px solid var(--color-edge-subtle, #e5e5e5);
+    }
+    nav a {
+      padding: 0.375rem 0.75rem;
+      color: var(--color-content-secondary, #525252);
+      text-decoration: none;
+      border-radius: var(--radius-sm, 4px);
+      font-size: 0.875rem;
+      border: 1px solid var(--color-edge-subtle, #e5e5e5);
+    }
+    nav a:hover {
+      background: var(--color-surface-hover, #f5f5f5);
+      color: var(--color-content-primary, #111111);
+    }
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    section {
+      margin-bottom: 3rem;
+      scroll-margin-top: 6rem;
+    }
+    section h2 {
+      margin: 0 0 1rem 0;
+      font-size: 1.5rem;
+      font-weight: 600;
+      text-transform: capitalize;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--color-edge-subtle, #e5e5e5);
+    }
+    iframe {
+      width: 100%;
+      border: 1px solid var(--color-edge-subtle, #e5e5e5);
+      border-radius: var(--radius-md, 6px);
+      min-height: 400px;
+      background: var(--color-surface-base, #ffffff);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Design System Components</h1>
+    <button id="theme-toggle" aria-label="Toggle theme">Toggle theme</button>
+  </header>
+
+  <nav aria-label="Component navigation">
+    <a href="#button">Button</a>
+    <a href="#input">Input</a>
+    <a href="#select">Select</a>
+    <a href="#checkbox">Checkbox</a>
+    <a href="#radio">Radio</a>
+    <a href="#textarea">Textarea</a>
+    <a href="#label">Label</a>
+    <a href="#card">Card</a>
+    <a href="#badge">Badge</a>
+  </nav>
+
+  <main>
+    <section id="button">
+      <h2>Button</h2>
+      <iframe src="components/button.html" loading="lazy" title="Button component"></iframe>
+    </section>
+
+    <section id="input">
+      <h2>Input</h2>
+      <iframe src="components/input.html" loading="lazy" title="Input component"></iframe>
+    </section>
+
+    <section id="select">
+      <h2>Select</h2>
+      <iframe src="components/select.html" loading="lazy" title="Select component"></iframe>
+    </section>
+
+    <section id="checkbox">
+      <h2>Checkbox</h2>
+      <iframe src="components/checkbox.html" loading="lazy" title="Checkbox component"></iframe>
+    </section>
+
+    <section id="radio">
+      <h2>Radio</h2>
+      <iframe src="components/radio.html" loading="lazy" title="Radio component"></iframe>
+    </section>
+
+    <section id="textarea">
+      <h2>Textarea</h2>
+      <iframe src="components/textarea.html" loading="lazy" title="Textarea component"></iframe>
+    </section>
+
+    <section id="label">
+      <h2>Label</h2>
+      <iframe src="components/label.html" loading="lazy" title="Label component"></iframe>
+    </section>
+
+    <section id="card">
+      <h2>Card</h2>
+      <iframe src="components/card.html" loading="lazy" title="Card component"></iframe>
+    </section>
+
+    <section id="badge">
+      <h2>Badge</h2>
+      <iframe src="components/badge.html" loading="lazy" title="Badge component"></iframe>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var toggle = document.getElementById('theme-toggle');
+      var STORAGE_KEY = 'ds-theme';
+
+      var saved = localStorage.getItem(STORAGE_KEY);
+      if (saved === 'light' || saved === 'dark') {
+        root.setAttribute('data-theme', saved);
+      }
+
+      function syncIframes(theme) {
+        var frames = document.querySelectorAll('iframe');
+        frames.forEach(function (f) {
+          try {
+            if (f.contentDocument && f.contentDocument.documentElement) {
+              f.contentDocument.documentElement.setAttribute('data-theme', theme);
+            }
+          } catch (e) {
+            // cross-origin; ignore
+          }
+        });
+      }
+
+      toggle.addEventListener('click', function () {
+        var current = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+        var next = current === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', next);
+        localStorage.setItem(STORAGE_KEY, next);
+        syncIframes(next);
+      });
+
+      document.querySelectorAll('iframe').forEach(function (f) {
+        f.addEventListener('load', function () {
+          var current = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+          try {
+            if (f.contentDocument && f.contentDocument.documentElement) {
+              f.contentDocument.documentElement.setAttribute('data-theme', current);
+            }
+          } catch (e) {
+            // cross-origin; ignore
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

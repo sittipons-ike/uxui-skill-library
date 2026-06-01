@@ -1,7 +1,7 @@
 ---
 name: design-ui-builder
-description: Build the ui.md file in a 3-file split-architecture design system. Reads design.md (tokens, layout) + components.md (atoms/molecules/organisms), generates UI compositions in 4 categories — page (full screens), pattern (reusable cross-page structures like auth-split / app-shell / empty-state), section (marketing blocks like hero / pricing-table), flow (multi-step sequences like signup / checkout). All composition refs use cross-file prefix syntax {components.organism.*}, {components.molecule.*}, {components.atom.*}. Prefers organism-level refs over atoms (promote to molecule/organism if composing atoms directly). Triggers on "build ui", "build pages", "ui compositions", "create ui.md", "build patterns", "สร้าง pages", "ui layer", "page composition".
-version: 1.0.0
+description: Build the ui.md spec AND writes pages/<name>.html (self-contained, inlines component HTML) alongside ui.md spec in a 3-file split-architecture design system. Reads design.md (tokens, layout) + components.md (atoms/molecules/organisms) + components/*.html, generates UI compositions in 4 categories — page (full screens), pattern (reusable cross-page structures like auth-split / app-shell / empty-state), section (marketing blocks like hero / pricing-table), flow (multi-step sequences like signup / checkout). All composition refs use cross-file prefix syntax {components.organism.*}, {components.molecule.*}, {components.atom.*}. Prefers organism-level refs over atoms (promote to molecule/organism if composing atoms directly). Triggers on "build ui", "build pages", "ui compositions", "create ui.md", "build patterns", "สร้าง pages", "ui layer", "page composition".
+version: 2.0.0
 user-invokable: true
 args:
   - name: source-design
@@ -50,9 +50,12 @@ Final layer in the 3-file split. Reads design + components → outputs ui compos
 ### 1. Load sources
 - design.md: must exist + scope `'tokens-only'`
 - components.md: must exist + scope `'components-only'`
-- If either missing → ABORT with clear next-step ("Run design-builder" / "Run design-component-builder")
+- components/*.html: read all component HTML files (these provide the actual markup to inline into pages)
+- If design.md or components.md missing → ABORT with clear next-step ("Run design-builder" / "Run design-component-builder")
+- If components/*.html missing → WARN ("Run design-component-builder to generate component HTML first") but continue with spec-only mode
 - Read mood from design.md (informs pattern decisions like auth-split density, hero whitespace)
 - Read all atoms / molecules / organisms from components.md (build a manifest)
+- Build a component-HTML manifest: `{ <component-name>: <inline-markup> }` by reading components/<name>.html and extracting the actual component markup (NOT the demo wrapper / preview chrome)
 
 ### 2. Determine output file
 - Default: `./ui.md`
@@ -254,16 +257,63 @@ After the YAML, the markdown body MUST include:
 - [ ] Flows declare `back-button` with aria-label
 - [ ] Sections declare heading-level + landmark
 
-### 8. Save
-- Write `./ui.md`
-- Report to user: categories built, count per category, dangling refs found
-- Tell user next: run `design-md-audit` to validate cross-file refs
+### 8. Save ui.md + write per-page HTML files
+
+**8a. Write ui.md** (spec with cross-refs, unchanged behavior)
+- Write `./ui.md` as the canonical spec with all `{components.*}` and `{design.*}` cross-refs intact
+- ui.md remains the source-of-truth for composition logic
+
+**8b. Write pages/<page-name>.html** (self-contained, inlines component HTML)
+For each page in `ui.page.*`, write `./pages/<page-name>.html` with these rules:
+
+- **Self-contained**: each page.html must render standalone in a browser — NO `<iframe>`, NO `<link>` to component files, NO `<script>` that fetches components. Component HTML is COPIED inline.
+- **Inline component markup**: for every `{components.organism.<name>}` / `{components.molecule.<name>}` / `{components.atom.<name>}` ref in the page composition:
+  1. Look up `<name>` in the component-HTML manifest built in step 1
+  2. Extract the actual component markup from `components/<name>.html` — strip the demo wrapper (preview chrome, h1 titles, swatch grids, padding containers) — keep only the real component markup
+  3. Paste the markup inline at the corresponding slot position in the page HTML
+- **Token stylesheet**: include `<link rel="stylesheet" href="../tokens.css">` in `<head>` so the page picks up design tokens (CSS variables, base resets)
+- **Page-specific styles**: include a page-specific `<style>` block in `<head>` for the page's own layout (grid, slot positions, page-only overrides) — do NOT duplicate component styles (those should live in tokens.css or be inline-scoped already)
+- **a11y structure**: honor `a11y` block from ui.md spec — emit `<title>`, skip-link `<a href="#main">`, `<main id="main">`, `<header>`, `<nav aria-label="...">`, `<footer>`, exactly one `<h1>`, etc.
+- **Directory**: create `./pages/` if it doesn't exist
+
+**Skeleton for each `pages/<name>.html`:**
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><!-- from a11y.page-title format --></title>
+  <link rel="stylesheet" href="../tokens.css">
+  <style>
+    /* page-specific layout only (grid, slot positions) */
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+  <!-- inlined header markup from components/<header-name>.html -->
+  <!-- inlined nav markup from components/<nav-name>.html -->
+  <main id="main">
+    <h1><!-- a11y.h1 content --></h1>
+    <!-- inlined slot fills: organism/molecule/atom markup -->
+  </main>
+  <!-- inlined footer markup from components/<footer-name>.html -->
+</body>
+</html>
+```
+
+**8c. Report**
+- Report to user: categories built, count per category, list of `pages/*.html` written, dangling refs found, components inlined per page
+- Tell user next: run `design-md-audit` to validate cross-file refs; open any `pages/<name>.html` directly in a browser to preview
 
 ## Constraints
-- READ design.md + components.md once at start; don't re-read after each addition
-- Do NOT touch design.md or components.md — additive only on ui.md
+- READ design.md + components.md + components/*.html once at start; don't re-read after each addition
+- Do NOT touch design.md, components.md, or components/*.html — additive only on ui.md + pages/*.html
 - Do NOT invent components — every ref must resolve to something in components.md (otherwise flag as Known Gap)
 - Do NOT mix bare-path and prefixed refs — use prefixed everywhere
+- pages/*.html MUST be self-contained — NO iframe, NO `<link>` to component files, NO runtime fetch of components. Inline the markup.
+- pages/*.html MUST include `<link rel="stylesheet" href="../tokens.css">` — never duplicate token values inline
+- When inlining component markup, strip the demo wrapper (preview chrome, h1 titles, swatch grids) — keep only the real component markup
 
 ## Quality Bar
 A coding agent reading `ui.md` + `components.md` + `design.md` should be able to build the actual UI without further questions. Each page tells the agent:
@@ -273,3 +323,5 @@ A coding agent reading `ui.md` + `components.md` + `design.md` should be able to
 - What content goes where (slot fills)
 
 A designer reading just `ui.md` should understand the page inventory + flow structure without opening `components.md`.
+
+A stakeholder opening any `pages/<name>.html` directly in a browser sees the page render end-to-end without any build step, server, or extra files beyond `tokens.css`.

@@ -1,420 +1,276 @@
 ---
 name: design-component-builder
-description: Build the components.md file in a 3-file split-architecture design system. Reads design.md (tokens + mood), generates atomic component library (atom / molecule / organism) with full prop + state aliases (surface/content/edge/elevation/focus-halo × rest/hover/active/focus/disabled/selected). All refs use cross-file prefix syntax {design.semantic.*}. Mood-biased state mapping. Supports incremental tier addition (A→E) AND atomic-level reasoning. Triggers on "build components", "add components", "atomic components", "เพิ่ม component", "สร้าง components", "atomic design", "component layer".
-version: 3.0.0
+description: Build the components layer of a 3-file split-architecture design system. Reads design.md (tokens + mood), and outputs HTML files (components/<name>.html) + tokens.css alongside components.md spec. Each atomic component becomes a self-contained HTML file with all states/variants, referencing CSS custom properties mapped from semantic tokens. components.md serves as the index/spec pointing to the HTML files. Mood-biased state mapping. Default initial atomic scope: button, input, select, checkbox, radio, textarea, label, card, badge. Molecule/organism remain spec-only in components.md (Phase 3 work). Triggers on "build components", "add components", "atomic components", "เพิ่ม component", "สร้าง components", "atomic design", "component layer".
+version: 4.0.0
 user-invokable: true
 args:
   - name: source
-    description: Path to DESIGN.md (default ./DESIGN.md)
+    description: Path to design.md (default ./design.md)
     required: false
-  - name: tiers
-    description: "Comma-separated tiers to add: A,B,C,D,E or 'all'. Default: A"
+  - name: scope
+    description: "Comma-separated component names to build. Default: button,input,select,checkbox,radio,textarea,label,card,badge"
     required: false
 ---
 
-# 🧩 Design Component Builder
+# 🧩 Design Component Builder (v4)
 
-Tier-3 layer builder. Reads an existing `DESIGN.md` and appends `component:` tokens that follow its mood and refs.
+Tier-3 layer builder. Reads `design.md` and outputs:
+1. `tokens.css` — CSS custom properties mapped from semantic tokens
+2. `components/<name>.html` — self-contained HTML file per atomic component
+3. `components.html` — showcase aggregating all components via iframes
+4. `components.md` — index/spec pointing to the HTML files
 
 ## When to use
-- Have a `DESIGN.md` with primitive + semantic already built (via `design-builder`)
-- Want to add components incrementally, tier by tier
-- Mood already set — components should match it without re-asking
+- Have a `design.md` with primitive + semantic already built (via `design-builder`)
+- Want runnable, browser-previewable components (not just YAML)
+- Want components that ship as HTML+CSS, ready for design QA
 
 ## When NOT to use
-- No `DESIGN.md` yet → run `design-builder` first
+- No `design.md` yet → run `design-builder` first
 - Want to add icons → use `design-icon-builder`
 - Want to check what's there → use `design-md-audit`
 
 ## 3-tier atomic architecture
 
-| Layer | Examples | Purpose |
+| Layer | Examples | Output in v4 |
 |---|---|---|
-| **atom** | button, input, icon, badge, label, avatar | Smallest indivisible UI piece |
-| **molecule** | form-field, nav-item, search-bar, stat-tile | Atoms composed into a small unit |
-| **organism** | sidebar, topbar, hero, table | Molecules composed into a feature block |
+| **atom** | button, input, select, checkbox, radio, textarea, label, card, badge | **HTML file + components.md entry** |
+| **molecule** | form-field, nav-item, search-bar, stat-tile | components.md spec only (Phase 3) |
+| **organism** | sidebar, topbar, hero, table | components.md spec only (Phase 3) |
 
-Template + page tiers live in app code, NOT in DESIGN.md.
+Template + page tiers live in `ui.md` / app code, NOT in components.md.
 
-## Tier menu — atoms grouped by function
+## Default initial atomic scope (v4)
 
-| Tier | Atoms | Use when |
-|---|---|---|
-| **A** (MVP) | button, input, card | Always — required baseline |
-| **B** Form | checkbox, radio, toggle, select | Forms exist in the product |
-| **C** Feedback | badge, alert, toast, tooltip | User feedback is shown anywhere |
-| **D** Navigation | tab, nav-link, breadcrumb, pagination | Multi-page or in-page nav |
-| **E** Overlay | modal, drawer, popover, dropdown | Dialogs / menus used |
+`button, input, select, checkbox, radio, textarea, label, card, badge`
 
-Per-tier completeness: include all 4 OR skip entirely + declare in `## Known Gaps`. **Partial tier = audit fail.**
-
-## Alias names (per NAMING.md § 6)
-
-### Prop aliases
-| Use case | Alias |
-|---|---|
-| container fill | `surface` (was: bg) |
-| foreground text/icon | `content` (was: fg) |
-| outline / stroke | `edge` (was: border) |
-| depth shadow | `elevation` (was: shadow) |
-| focus halo | `focus-halo` (was: ring) |
-| inner spacing | `inset-x` / `inset-y` (was: padding-x/y) |
-| corner softness | `corner` (was: radius) |
-| composed type | `text-style` (was: typography) |
-
-### State aliases (canonical 7)
-```
-rest, hover, active, focus, disabled, selected, error
-```
-- `rest` (was: default) — idle
-- `active` (was: pressed) — CSS `:active`
-- `focus` (was: focused) — CSS `:focus`
-- `selected` (was: active for nav-current) — chosen / current
+Override via `scope` arg.
 
 ## Execution Steps
 
-### 1. Load source
-- Default source: `./design.md` (tokens-only file in split architecture)
-- Legacy fallback: `./DESIGN.md` (monolithic) — if found, INFO: "Run split-migrate via design-md-audit --migrate"
+### Step 1 — Read design.md + extract semantic tokens
+
+- Default source: `./design.md`
 - Parse YAML frontmatter — verify `scope: 'tokens-only'`
 - Verify `primitive:` AND `semantic:` blocks exist — ABORT if missing
 - Read `mood.primary` for state-mapping bias
-- Read `iconography:` to know if icon layer exists
+- Walk the `semantic:` tree and collect every leaf token with its dotted path:
+  - e.g. `semantic.colors.primary.default` → value `#3B82F6`
+  - e.g. `semantic.spacing.md` → value `16px`
+  - e.g. `semantic.radius.md` → value `8px`
+  - e.g. `semantic.typography.label.md` → composed value (font/size/weight/lh)
 
-### 1b. Determine output file
-- Default output: `./components.md` (separate file in split architecture)
-- If `components.md` already exists → MERGE new tiers; don't overwrite existing keys
-- frontmatter MUST include:
-  ```yaml
-  scope: 'components-only'
-  depends-on: ['./design.md']
-  ```
-- All refs MUST use prefix syntax: `{design.semantic.*}`, `{design.primitive.*}` (avoid primitive), `{components.atom.*}`, `{components.molecule.*}`
+Hold this flat token map in memory for Step 2.
 
-### 2. Pick tiers
-- If `tiers` arg provided, use it
-- Else ask user which tier(s) to add (multi-select)
-- Tier A always included unless DESIGN.md already has button+input+card
+### Step 2 — Write `tokens.css`
 
-### 3. Apply mood-biased state mapping
+Map each semantic token → CSS custom property using this convention:
 
-Default canonical mapping (already in NAMING.md § 5.2):
-```
-default  → semantic.<role>.default
-hover    → semantic.<role>.dark
-pressed  → semantic.<role>.darker
-focused  → semantic.<role>.default + ring
-disabled → semantic.secondary.light
-```
+- Path `semantic.colors.primary.default` → `--color-primary-default`
+- Path `semantic.colors.text.on-bgcolor` → `--color-text-on-bgcolor`
+- Path `semantic.spacing.md` → `--spacing-md`
+- Path `semantic.radius.md` → `--radius-md`
+- Path `semantic.typography.label.md.font-size` → `--typography-label-md-font-size` (flatten composed tokens)
 
-**Mood overrides:**
-| Mood | Override |
-|---|---|
-| `bold-tech` | hover bumps 2 stops (`darker` not `dark`), pressed adds inner shadow, focused ring `@60%` (thicker) |
-| `friendly-warm` | hover uses `soft-light` for bg shifts (gentler), pressed uses `light`, rings `@30%` |
-| `premium-editorial` | hover stays `default` + border color change only, pressed `dark`, rings `@20%` (very subtle) |
-| `playful-vivid` | hover scales/shifts saturation, pressed darker + slight scale, rings colored `@50%` |
-| `technical-dev` | hover `dark`, pressed `darker`, focused thick outline ring, no shadow change |
-| `calm-focused` | default canonical mapping (no override) |
-
-Apply this when emitting state values.
-
-### 4. Generate component YAML — atomic + alias shape
-
-Append `component:` block to DESIGN.md. If `component:` already exists, MERGE — don't overwrite.
+Use HTML/CSS comments showing source paths above each block.
 
 Structure:
+```css
+/* tokens.css — generated by design-component-builder v4 */
+/* Source: ./design.md (semantic layer) */
+
+:root {
+  /* --- colors --- */
+  /* source: {semantic.colors.primary.default} */
+  --color-primary-default: #3B82F6;
+  /* source: {semantic.colors.primary.dark} */
+  --color-primary-dark: #2563EB;
+  /* ... */
+
+  /* --- spacing --- */
+  /* source: {semantic.spacing.md} */
+  --spacing-md: 16px;
+  /* ... */
+
+  /* --- radius --- */
+  /* source: {semantic.radius.md} */
+  --radius-md: 8px;
+  /* ... */
+
+  /* --- typography --- */
+  /* source: {semantic.typography.label.md} */
+  --typography-label-md-font-size: 14px;
+  --typography-label-md-font-weight: 500;
+  --typography-label-md-line-height: 1.4;
+  /* ... */
+}
+
+/* Dark mode (if design.md declares mode: dark overrides) */
+[data-theme="dark"] {
+  /* source: {semantic.colors.primary.default} @ dark */
+  --color-primary-default: #...;
+}
+```
+
+**Write the file with the Write tool. Do not include the full file content in the chat response.**
+
+### Step 3 — For each component in scope, write `components/<name>.html`
+
+For every atomic component in scope (default: `button, input, select, checkbox, radio, textarea, label, card, badge`):
+
+**COMMON RULES for HTML components:**
+- Self-contained `.html` file: `<!DOCTYPE html> ... </html>`
+- `<link rel="stylesheet" href="../tokens.css">` in `<head>`
+- Component-specific CSS in `<style>` tag
+- NEVER use raw hex/px — only `var(--name)` from tokens.css
+- Class prefix `.ds-<component>` (e.g. `.ds-btn`, `.ds-input`)
+- Show ALL states/variants in `<body>` grouped with `<h2>`/`<h3>`
+- Use semantic HTML (`<button>`, `<input>`, `<select>`, etc.)
+- a11y: aria-* attrs, label-for, role attrs
+- HTML comment at top: `<!-- Component: <name> | Tokens used: --color-... | A11y: ... -->`
+- Open in browser standalone (with `../tokens.css` present) = works
+
+Apply mood-biased state mapping (see Mood Overrides below) when picking which token each state hooks into. States to cover per component:
+
+| Component | States / Variants |
+|---|---|
+| button | variants: primary, secondary, tertiary, ghost, destructive × states: rest, hover, active, focus, disabled |
+| input | states: rest, hover, focus, disabled, error |
+| select | states: rest, hover, focus, disabled, open, error |
+| checkbox | states: rest, hover, focus, disabled × checked / unchecked / indeterminate |
+| radio | states: rest, hover, focus, disabled × selected / unselected |
+| textarea | states: rest, hover, focus, disabled, error |
+| label | variants: rest, required, disabled |
+| card | variants: default (display), interactive — interactive gets rest/hover/active/focus |
+| badge | variants: solid, soft, outline × status: neutral, info, success, warning, error |
+
+**Always WRITE the file with the Write tool. Do NOT include file content in the chat response.**
+
+### Step 4 — Write `components.html` showcase
+
+Single page that aggregates every atomic component built in Step 3 via iframes.
+
+Structure:
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Components — Showcase</title>
+  <link rel="stylesheet" href="./tokens.css">
+  <style>
+    body { font-family: system-ui, sans-serif; padding: var(--spacing-lg, 24px); }
+    .showcase-section { margin-bottom: var(--spacing-xl, 32px); }
+    .showcase-section h2 { margin-bottom: var(--spacing-md, 16px); }
+    iframe {
+      width: 100%;
+      min-height: 400px;
+      border: 1px solid var(--color-border-default, #e5e5e5);
+      border-radius: var(--radius-md, 8px);
+    }
+  </style>
+</head>
+<body>
+  <h1>Design System — Components</h1>
+  <section class="showcase-section">
+    <h2>button</h2>
+    <iframe src="components/button.html" title="button component"></iframe>
+  </section>
+  <!-- repeat for each component in scope -->
+</body>
+</html>
+```
+
+**Write with the Write tool. Do not include full content in response.**
+
+### Step 5 — Write `components.md` as INDEX/SPEC
+
+`components.md` is now an INDEX pointing to the HTML files, plus the spec for molecule/organism layers (which remain YAML-only in v4).
+
+Frontmatter:
 ```yaml
-component:
-  atom:
-    <name>:
-      sizes:
-        md:
-          inset-x:    '{semantic.spacing.md}'
-          inset-y:    '{semantic.spacing.sm}'
-          corner:     '{semantic.radius.md}'
-          text-style: '{semantic.typography.label.md}'
-      <variant>:
-        surface:
-          rest:    '{semantic.colors.<role>.default}'
-          hover:   '{semantic.colors.<role>.<mood-stop>}'
-          active:  '{semantic.colors.<role>.dark}'
-          focus:   '{semantic.colors.<role>.default}'
-          disabled:'{semantic.colors.secondary.light}'
-        content:
-          rest:    '{semantic.colors.text.on-bgcolor}'
-          # ... full 5 states for interactive variants
-        edge:        # optional
-          rest: '...'
-        elevation:   # optional
-          rest: '...'
-        focus-halo:
-          focus: '{semantic.colors.<role>.light}@<mood-opacity>%'
-
-  molecule:
-    <name>:
-      composed-of:
-        <slot>: '{component.atom.<atom-name>.<variant>}'
-        # ... list atoms used
-      layout:
-        stack-gap: '{semantic.spacing.xs}'
-        direction: 'column'
-      <state-override>:                    # optional — molecule-level state override
-        <slot>.<prop>.<state>: '...'
-
-  organism:
-    <name>:
-      composed-of:
-        <slot>: '{component.molecule.<mol-name>.<variant>}'
-        # OR atom slots if no molecule needed
-      layout:
-        extent-x: 240                       # numeric or token ref
-        surface.rest: '{semantic.colors.surface.raised}'
-        edge.rest: '{semantic.colors.border.tertiary}'
-        inset: '{semantic.spacing.lg}'
-        stack-gap: '{semantic.spacing.md}'
+---
+scope: 'components-only'
+depends-on: ['./design.md']
+outputs:
+  - ./tokens.css
+  - ./components.html
+  - ./components/*.html
+version: 4.0.0
+---
 ```
 
-### Prop aliases — use these (not bg/fg/border)
-- **surface** = container fill (was `bg`)
-- **content** = text + icon foreground (was `fg`)
-- **edge** = outline (was `border`)
-- **elevation** = depth shadow (was `shadow`)
-- **focus-halo** = focus indicator (was `ring`)
+Body sections:
+1. **Atomic component index** — table linking each built component to its HTML file
+   ```
+   | Component | HTML file | States | A11y notes |
+   |---|---|---|---|
+   | button | [components/button.html](./components/button.html) | rest, hover, active, focus, disabled × 5 variants | hit-area-min 44px, role=button |
+   | input | [components/input.html](./components/input.html) | rest, hover, focus, disabled, error | label-for required, aria-describedby |
+   | ...
+   ```
+2. **Tokens.css mapping reference** — short table: semantic path → CSS custom property name
+3. **Molecule layer (Phase 3 — spec only)** — YAML block describing planned molecules (form-field, nav-item, search-bar) with `composed-of:` referencing atom HTML files. No HTML output in v4.
+4. **Organism layer (Phase 3 — spec only)** — YAML block describing planned organisms. No HTML output in v4.
+5. **Known Gaps** — list anything skipped from default scope.
 
-### State aliases — use these
-```
-rest, hover, active, focus, disabled, selected, error
-```
+**Write the file with the Write tool. Do not include full content in response.**
 
-## WCAG AA — required a11y attrs per atom
+## Mood-biased state mapping
 
-**Every atom MUST declare these accessibility attrs in its YAML spec.** Audit fails if missing.
+| Mood | Override |
+|---|---|
+| `bold-tech` | hover bumps 2 stops (`darker` not `dark`), active adds inner shadow, focus ring thick @60% |
+| `friendly-warm` | hover uses `soft-light` (gentler), active uses `light`, focus ring @30% |
+| `premium-editorial` | hover stays `default` + border color change only, active `dark`, focus ring @20% subtle |
+| `playful-vivid` | hover scales/shifts saturation, active darker + slight scale, focus ring colored @50% |
+| `technical-dev` | hover `dark`, active `darker`, focus thick outline, no shadow change |
+| `calm-focused` | canonical mapping (no override) |
 
-### atom.button
-```yaml
-a11y:
-  hit-area-min:  '{design.primitive.a11y.touch-target-min-px}'   # 44
-  role:          'button'
-  required-attrs: ['aria-label']   # if no visible text
-  forbidden:     ['onclick without keyboard handler']
-```
+Apply this when picking which `--color-*` token each state uses in the component HTML.
 
-Sizes that compute visual height < 44px MUST add invisible padding so total hit area ≥ 44.
+## Required a11y attrs per atom (WCAG AA)
 
-### atom.icon
-```yaml
-a11y:
-  required-one-of:
-    - 'aria-hidden="true"'    # decorative
-    - 'aria-label="<verb>"'   # functional (then role="img")
-  forbidden: ['ambiguous role']  # don't leave SVG unannotated
-```
+Each HTML file MUST include these:
 
-Decorative icons (inside button with text label) → `aria-hidden`.
-Functional icons (standalone, like icon-only button) → `aria-label` + `role="img"`.
+- **button** — `role="button"` (implicit on `<button>`), hit-area ≥44px (use padding to enforce on small sizes), `aria-label` if icon-only
+- **input** — `id`, `aria-describedby` linking to helper-text, `aria-invalid="true"` on error
+- **select** — same as input + `aria-expanded` on open state
+- **checkbox / radio** — `<label for>` association, `aria-checked` if using non-native, group with `role="radiogroup"` for radios
+- **textarea** — same as input
+- **label** — `for="<input-id>"` MUST point to the input
+- **card (interactive)** — `role="button"` or wrap in `<a>`, keyboard handler (tabindex=0)
+- **badge** — `aria-label` if status communicated by color alone
 
-### atom.input
-```yaml
-a11y:
-  required-attrs:
-    - 'id'                       # for label association
-    - 'aria-describedby'         # link to helper-text / error
-  required-slots:
-    - label                      # via <label for="..."> OR aria-label
-    - helper-text-id             # for aria-describedby target
-  error-state:
-    add-attrs: ['aria-invalid="true"', 'aria-describedby points to error message']
-```
+Each HTML file's top comment MUST list the a11y attrs used.
 
-### atom.label
-```yaml
-a11y:
-  required-attr: 'for'           # MUST associate with input id
-```
+## Validation checklist
 
-### atom.helper-text
-```yaml
-a11y:
-  required-attr: 'id'            # so input.aria-describedby can target it
-  error-state:
-    role: 'alert'                # screen reader announces immediately
-```
-
-### atom.avatar / atom.badge
-```yaml
-a11y:
-  required-one-of:
-    - 'aria-label="<person/status name>"'
-    - 'aria-hidden="true"'       # if decorative + labeled elsewhere
-```
-
-### atom.brand-mark
-```yaml
-a11y:
-  aria-hidden: 'true'            # decorative, brand wordmark adjacent reads it
-```
-
-## WCAG AA — required a11y attrs per molecule
-
-### molecule.nav-item
-```yaml
-a11y:
-  selected-state:
-    add-attr: 'aria-current="page"'   # OR "step", "location", "true" per context
-```
-
-### molecule.form-field
-```yaml
-a11y:
-  composed-a11y:
-    - 'label.for = input.id'
-    - 'input.aria-describedby = helper.id'
-  error-state:
-    - 'input.aria-invalid = "true"'
-    - 'helper.role = "alert"'
-```
-
-### molecule.search-bar
-```yaml
-a11y:
-  required-attrs:
-    - 'role="search"'
-    - 'input.aria-label = "Search ..."'
-  icon.aria-hidden: 'true'       # decorative — input has the label
-```
-
-### molecule.user-pill
-```yaml
-a11y:
-  avatar.aria-hidden: 'true'     # name label adjacent
-  required-attr: 'role="button" when interactive'
-```
-
-## WCAG AA — required a11y attrs per organism
-
-### organism.sidebar
-```yaml
-a11y:
-  landmark: 'nav'
-  required-attr: 'aria-label="Primary navigation"'
-```
-
-### organism.topbar
-```yaml
-a11y:
-  landmark: 'banner' OR 'header'
-```
-
-### organism.modal
-```yaml
-a11y:
-  role: 'dialog'
-  required-attrs:
-    - 'aria-modal="true"'
-    - 'aria-labelledby points to dialog title'
-  required-behavior:
-    - 'focus trap when open'
-    - 'restore focus on close'
-    - 'close on ESC'
-```
-- `rest` (was `default`)
-- `active` (was `pressed` — CSS `:active`)
-- `focus` (was `focused`)
-- `selected` (was `active` for nav-current)
-
-### 5. Required matrix per tier
-
-**Tier A — required variants/states (per-prop completeness):**
-
-Button:
-- 5 variants: `primary`, `secondary`, `tertiary`, `ghost`, `destructive`
-- Mandatory props: `bg`, `fg`
-- Optional: `border`, `shadow`, `ring` — include if visual design uses them (comment `# no shadow by design` when omitted)
-- All present props must have all 5 states: default, hover, pressed, focused, disabled
-
-Input:
-- 1 variant: `text`
-- Mandatory props: `bg`, `fg`, `border`
-- States: default, hover, focused, disabled (no pressed — input doesn't press)
-- Optional: `ring`, `helper-text`, `error` validation state
-
-Card:
-- 2 variants: `default` (display), `interactive`
-- `default` states: default, hover (2 only)
-- `interactive` states: full 5 states on all props
-
-**Tier B (Form):**
-- checkbox + radio: states include `selected` (in addition to interactive 4)
-- toggle: state `active` (boolean on/off, not selected)
-- select.trigger: same shape as input.text
-
-**Tier C (Feedback):**
-- badge: 3 variants (solid, soft, outline) — display only, 1 state each
-- alert: 4 status channels (info, success, warning, error), all display
-- toast: 4 status channels, all display
-- tooltip: 2 variants (default, inverse), 1 state each
-
-**Tier D (Navigation):**
-- tab: 2 variants (underline, pills), state `active` (= selected tab)
-- nav-link: state `active` (= current route)
-- breadcrumb: state `active` (= current crumb)
-- pagination: state `active` (= current page)
-
-**Tier E (Overlay):**
-- modal, drawer, popover: display variants — 1 default state
-- dropdown.item: state `selected` + full interactive
-
-### 6. Update body section
-
-Append `## Component Tokens` section with:
-- Tier table for each included tier (Component / Variants / Sizes)
-- Required matrix table
-- Canonical state→scale mapping (mood-adjusted)
-- Variant notes for design decisions worth recording
-
-### 7. Update Known Gaps
-
-If user skipped a tier:
-- Add line to `## Known Gaps`: `- **Tier <X> (<name>)** — skipped because <reason>`
-- Without this declaration, audit will flag the skip as Major
-
-### 8. Validate output
-- [ ] `component:` block has nested `atom:` / `molecule:` / `organism:` keys (3-tier)
-- [ ] All refs use `{semantic.*}` or `{component.atom.*}` / `{component.molecule.*}` — NEVER `{primitive.*}`, NEVER raw hex
-- [ ] Tier flow valid: organism → molecule/atom, molecule → atom. NO upward refs
-- [ ] Prop names use aliases: surface / content / edge / elevation / focus-halo (NOT bg/fg/border/shadow/ring)
-- [ ] State names use aliases: rest / hover / active / focus / disabled / selected / error (NOT default/pressed/focused)
-- [ ] State is LAST path segment
-- [ ] Per-prop completeness per tier kind
-- [ ] No partial tiers (all 4 in a tier or declared in Known Gaps)
-- [ ] Variants skipping a prop have inline `# comment` explaining why
-- [ ] Molecules have `composed-of:` block listing atoms used
-- [ ] Organisms have `composed-of:` block listing molecules (or atoms) used
-- [ ] No invented state names
-
-**WCAG AA (Critical):**
-- [ ] Every atom has `a11y:` block declaring required attrs / hit-area / role
-- [ ] atom.button has `hit-area-min: 44` — sizes that compute smaller add invisible padding
-- [ ] atom.icon has required-one-of `aria-hidden` or `aria-label`
-- [ ] atom.input has required `id`, `aria-describedby`, label association
-- [ ] molecule.nav-item declares `aria-current` on selected state
-- [ ] molecule.form-field composes label.for + input.aria-describedby
-- [ ] organism with role MUST declare landmark + aria-label
-
-### 9. Save
-- Edit DESIGN.md in place (additive — don't rewrite primitive/semantic)
-- Tell user which tiers added + total component count
+- [ ] `tokens.css` exists at repo root
+- [ ] Every CSS custom property has a source-path comment
+- [ ] Every component in scope has a `components/<name>.html` file
+- [ ] Every HTML file links `../tokens.css`
+- [ ] Every HTML file uses `var(--...)` — NO raw hex, NO raw px
+- [ ] Every HTML file has top comment listing tokens + a11y attrs
+- [ ] Every HTML file uses semantic HTML elements
+- [ ] Every HTML file shows ALL states/variants grouped by `<h2>/<h3>`
+- [ ] `components.html` exists and iframes every component
+- [ ] `components.md` index table links every HTML file
+- [ ] `components.md` frontmatter declares `scope: components-only`, `depends-on: ['./design.md']`
+- [ ] Molecule/organism remain YAML-only in components.md (no HTML output)
+- [ ] No raw hex/px anywhere except in `tokens.css`
+- [ ] Open `components.html` in browser → renders correctly
 
 ## Constraints
-- READ DESIGN.md once at start; don't re-read after each component
-- Do NOT touch primitive or semantic blocks — additive only
+- READ design.md once at start; don't re-read
+- Do NOT touch primitive/semantic blocks in design.md — additive only
 - Do NOT change mood — read it, apply it
-- If existing `component:` block already has a key, ask before overwriting
-- Keep YAML lean — short comments only, no prose in YAML
+- **Hard cutoff — no v3 backward compat.** v4 always outputs HTML+CSS. If user wants legacy YAML-only output, point them to v3.
+- Use the Write tool for every file; never paste full file contents into the chat response
 
 ## Quality Bar
-A second agent reading the resulting `component:` block should:
-- Know every state value without inferring
-- Be able to map any state to its semantic scale stop in one lookup
-- See the mood reflected in the mapping (e.g., friendly-warm uses soft-light hover instead of dark)
+A designer opening `components.html` in a browser should:
+- See every atomic component with every state/variant rendered live
+- Be able to inspect any element and see `var(--color-...)` instead of hex
+- See visible focus rings, hit areas, and disabled states matching the design.md mood
+- Click through to any `components/<name>.html` and see it work standalone

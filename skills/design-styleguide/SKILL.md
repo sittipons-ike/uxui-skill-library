@@ -1,20 +1,34 @@
 ---
 name: design-styleguide
-description: Render a human-readable Style Guide from a design system. Auto-detects split-architecture (design.md + components.md + ui.md) OR legacy monolithic DESIGN.md. Outputs HTML/Tailwind preview page AND/OR Figma canvas frames (via figma-console MCP). Shows semantic tokens + atomic components (atom/molecule/organism) + ui compositions (page/pattern/section/flow). Skips primitive layer (too technical for designers). Triggers on "style guide", "styleguide", "design system page", "team review page", "render design system", "สร้าง style guide", "ทำหน้า DS", "preview DS ให้ทีม".
-version: 2.0.0
+description: AGGREGATOR mode (default) — combines existing components/*.html + pages/*.html into single styleguide.html with TOC. LEGACY mode via --regenerate flag uses old MD-based rendering.
+version: 3.0.0
 user-invokable: true
 args:
   - name: source
-    description: Path to DESIGN.md (default ./DESIGN.md)
+    description: Path to DESIGN.md (default ./DESIGN.md) — only used in legacy mode
     required: false
   - name: output
     description: "html | figma | both — default: html"
+    required: false
+  - name: regenerate
+    description: "Flag — force LEGACY MD-based rendering instead of aggregator mode"
     required: false
 ---
 
 # 🎨 Design Styleguide
 
-Generate a human-readable Style Guide from a `DESIGN.md` so designers, PMs, and stakeholders can review and discuss the design system without reading YAML.
+Generate a human-readable Style Guide so designers, PMs, and stakeholders can review and discuss the design system without reading YAML.
+
+## Modes
+
+### Aggregator mode (DEFAULT — v3.0.0)
+Combines pre-rendered `components/*.html` and `pages/*.html` (built by `design-component-builder` / `design-ui-builder`) into a single `styleguide.html` with TOC, theme toggle, and search. Fast, no re-rendering, always in sync with the actual built artifacts.
+
+### Legacy mode (`--regenerate` flag)
+Renders styleguide.html directly from `design.md` / `components.md` / `ui.md` (or monolithic `DESIGN.md`). Use when you want a fresh render that does not depend on pre-built HTML files, or when component/page HTML files don't exist yet.
+
+### Figma mode
+Unchanged from v2 — paints frames on Figma canvas via `figma-console` MCP. Available in both modes.
 
 ## When to use
 - Designer wants to review tokens visually before approving the DESIGN.md
@@ -41,7 +55,96 @@ Generate a human-readable Style Guide from a `DESIGN.md` so designers, PMs, and 
 
 ## Execution Steps
 
-### 1. Load source
+### 1. Detect mode
+
+```
+if --regenerate flag is passed:
+  → LEGACY mode (skip to step 2-legacy)
+elif glob("./components/*.html") returns ≥1 file:
+  → AGGREGATOR mode (skip to step 2-aggregator)
+else:
+  → fall back to LEGACY mode (no pre-built HTML to aggregate)
+```
+
+State the chosen mode explicitly to the user before proceeding.
+
+### 2-aggregator. AGGREGATOR mode (default)
+
+#### 2a. Glob inputs
+- `components/*.html` — atomic components (one file per component)
+- `pages/*.html` — UI compositions (one file per page/pattern/section/flow)
+- Read filename → derive section name (e.g., `components/button-primary.html` → "Button Primary")
+- Categorize by frontmatter or filename hint:
+  - `components/atom-*.html` or `<meta name="tier" content="atom">` → Atoms
+  - `components/molecule-*.html` → Molecules
+  - `components/organism-*.html` → Organisms
+  - `pages/*.html` → Pages
+- If no tier hint → bucket as "Components" (uncategorized)
+
+#### 2b. Build single styleguide.html
+
+Output a self-contained `styleguide.html` next to the source directory with this structure:
+
+```html
+<!doctype html>
+<html data-theme="light">
+<head>
+  <!-- Tailwind CDN, inline styles for theme toggle + search -->
+</head>
+<body>
+  <header>
+    <h1>{Brand} Style Guide</h1>
+    <input type="search" id="filter" placeholder="Search sections…">
+    <button id="theme-toggle">🌓 Toggle theme</button>
+  </header>
+
+  <nav id="toc">
+    <details open><summary>Atoms</summary>
+      <ul><li><a href="#atom-button">Button</a></li>…</ul>
+    </details>
+    <details open><summary>Molecules</summary>…</details>
+    <details open><summary>Organisms</summary>…</details>
+    <details open><summary>Pages</summary>…</details>
+  </nav>
+
+  <main>
+    <section id="atom-button" data-name="button" data-tier="atom">
+      <h2>Button</h2>
+      <iframe src="components/button.html" loading="lazy"
+              width="100%" height="400" frameborder="0"></iframe>
+    </section>
+    <!-- one section per globbed file -->
+  </main>
+
+  <script>
+    // theme toggle: flip data-theme on <html>, persist in localStorage
+    // search: filter <section> by data-name on input
+    // each section also propagates data-theme to its iframe via postMessage
+  </script>
+</body>
+</html>
+```
+
+**Required features:**
+- **TOC (`<nav>`)** — grouped by tier (Atoms / Molecules / Organisms / Pages), each group collapsible via `<details>`
+- **Theme toggle** — sets `data-theme="light|dark"` on `<html>`, persists in `localStorage`, and posts message to each iframe so child docs can react
+- **Search box** — filters `<section>` elements by `data-name` attribute (case-insensitive substring match); also auto-collapses TOC groups with no matches
+- **Iframe lazy-loading** — `loading="lazy"` on every iframe so initial paint is fast even with 100+ components
+- **No external assets** — Tailwind CDN OK, but no copied CSS/JS files; everything inline in `styleguide.html` except the iframe sources
+
+#### 2c. Validate aggregator output
+- [ ] Every globbed file has a corresponding `<section>` + TOC entry
+- [ ] TOC groups are in canonical order: Atoms → Molecules → Organisms → Pages
+- [ ] Theme toggle persists across reload
+- [ ] Search filters in <200ms with 100 sections
+- [ ] All iframes have `loading="lazy"`
+- [ ] No broken iframe src (every src points to a real file)
+
+### 2-legacy. LEGACY mode (`--regenerate` or no pre-built HTML)
+
+Behavior unchanged from v2.0.0:
+
+#### Load source
 - **Split mode (preferred):** look for `./design.md` + `./components.md` + `./ui.md`. Load all that exist.
 - **Legacy mode:** look for `./DESIGN.md` (monolithic). Use if no split files.
 - Parse YAML frontmatter from each file; verify `scope:` matches filename
@@ -50,13 +153,13 @@ Generate a human-readable Style Guide from a `DESIGN.md` so designers, PMs, and 
 - Extract page/pattern/section/flow from ui.md (resolve `{components.*}` refs)
 - For monolithic legacy, all sections come from one file with bare-path refs
 
-### 2. Pick output mode
+#### Pick output mode
 Based on `output` arg (default `html`):
 - `html` — generate `STYLEGUIDE.html` next to DESIGN.md
 - `figma` — paint frames on current Figma canvas via `figma-console` MCP
 - `both` — do both
 
-### 3a. HTML output
+#### HTML output (legacy)
 
 Generate a single self-contained file `STYLEGUIDE.html`:
 - Tailwind CDN (no build step required)
@@ -91,7 +194,7 @@ Generate a single self-contained file `STYLEGUIDE.html`:
 - Copy-token button next to each swatch (clipboard semantic path)
 - Print stylesheet (designers print these for reviews)
 
-### 3b. Figma output
+### 3. Figma output (BOTH modes)
 
 Use `figma-console` MCP. Connection check first via `figma_get_status`.
 
@@ -122,7 +225,15 @@ Section: Do/Don't      (1440 × auto)
 - This lets designers right-click → "Detach instance" to use as starting point
 
 ### 4. Validate output
-Self-check before delivering:
+
+**Aggregator mode self-check:**
+- [ ] styleguide.html opens with no console errors
+- [ ] TOC has every globbed file represented
+- [ ] Theme toggle works + persists
+- [ ] Search filter works
+- [ ] All iframes load (no 404s)
+
+**Legacy mode self-check:**
 - [ ] No `{primitive.*}` refs visible in any output (resolve all to hex/px)
 - [ ] No YAML / code blocks visible
 - [ ] Every color swatch has: visual + label + resolved hex
@@ -132,8 +243,9 @@ Self-check before delivering:
 - [ ] Figma output: no duplicate page named "Style Guide v<n>" (increment if exists)
 
 ### 5. Deliver
-- HTML → tell user the file path + suggest `open STYLEGUIDE.html`
+- HTML → tell user the file path + suggest `open styleguide.html`
 - Figma → tell user the new page name + link to it via `figma_navigate`
+- State which mode ran (aggregator vs legacy) so user knows what to expect
 
 ## Output Format Rules
 - Designer-friendly: no jargon without definition
@@ -143,11 +255,12 @@ Self-check before delivering:
 - Use brand name from DESIGN.md frontmatter consistently
 
 ## Constraints
-- Read-only on DESIGN.md — never modify it
+- Read-only on DESIGN.md / components/*.html / pages/*.html — never modify them
 - HTML must be self-contained (single file, CDN dependencies OK)
 - Figma: never delete existing pages
-- If DESIGN.md is incomplete (Phase 1 only / no semantic), output what exists + note "Component layer not yet defined" in a Known Gaps section
-- If `primitive:` block is missing → cannot resolve hexes → ABORT with clear message
+- Aggregator mode: if a globbed file is malformed → skip with warning, don't abort
+- Legacy mode: if DESIGN.md is incomplete (Phase 1 only / no semantic), output what exists + note "Component layer not yet defined" in a Known Gaps section
+- Legacy mode: if `primitive:` block is missing → cannot resolve hexes → ABORT with clear message
 
 ## Quality Bar
 A designer should:

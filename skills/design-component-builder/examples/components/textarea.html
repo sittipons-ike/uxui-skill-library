@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<!-- ds-textarea | Tokens: --color-bg-default, --color-surface-default, --color-border-default, --color-border-strong, --color-primary-default, --color-danger-default, --color-text-default, --color-text-muted, --color-text-on-bgcolor, --radius-md, --space-2, --space-3, --space-4, --space-6, --shadow-focus, --font-sans, --text-sm, --text-md, --leading-md, --weight-semibold, --touch-min | A11y: <label for>, aria-invalid, aria-describedby for error + counter, aria-disabled, min-height >= --touch-min, focus ring uses --shadow-focus -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ds-textarea</title>
+<link rel="stylesheet" href="../tokens.css">
+<style>
+  body {
+    font-family: var(--font-sans);
+    font-size: var(--text-md);
+    line-height: var(--leading-md);
+    color: var(--color-text-default);
+    background: var(--color-bg-default);
+    padding: var(--space-6);
+    margin: 0;
+  }
+  h1 { font-size: 1.5rem; margin: 0 0 var(--space-2); }
+  h2 { font-size: 1.125rem; margin: var(--space-6) 0 var(--space-3); }
+  h3 { font-size: var(--text-sm); margin: var(--space-4) 0 var(--space-2); color: var(--color-text-muted); font-weight: var(--weight-semibold); text-transform: uppercase; letter-spacing: 0.04em; }
+  p.lead { color: var(--color-text-muted); margin: 0 0 var(--space-4); }
+  section { margin-bottom: var(--space-6); }
+
+  .ds-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    max-width: 480px;
+    margin-bottom: var(--space-4);
+  }
+  .ds-field__label {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    color: var(--color-text-default);
+  }
+  .ds-field__hint {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+  .ds-field__error {
+    font-size: var(--text-sm);
+    color: var(--color-danger-default);
+  }
+  .ds-field__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  .ds-field__counter {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ds-textarea {
+    font-family: var(--font-sans);
+    font-size: var(--text-md);
+    line-height: var(--leading-md);
+    color: var(--color-text-default);
+    background: var(--color-surface-default);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    min-height: calc(var(--touch-min) * 1.5);
+    width: 100%;
+    box-sizing: border-box;
+    resize: vertical;
+    outline: none;
+    transition: border-color 120ms ease, box-shadow 120ms ease;
+  }
+  .ds-textarea::placeholder {
+    color: var(--color-text-muted);
+  }
+  .ds-textarea:hover:not(:disabled):not(.is-error) {
+    border-color: var(--color-border-strong);
+  }
+  .ds-textarea:focus,
+  .ds-textarea.is-focus {
+    border-color: var(--color-primary-default);
+    box-shadow: var(--shadow-focus);
+  }
+  .ds-textarea.is-error,
+  .ds-textarea[aria-invalid="true"] {
+    border-color: var(--color-danger-default);
+  }
+  .ds-textarea.is-error:focus,
+  .ds-textarea[aria-invalid="true"]:focus {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-danger-default) 25%, transparent);
+  }
+  .ds-textarea:disabled,
+  .ds-textarea.is-disabled {
+    background: var(--color-bg-default);
+    color: var(--color-text-muted);
+    cursor: not-allowed;
+    resize: none;
+    opacity: 0.7;
+  }
+</style>
+</head>
+<body>
+  <h1>Textarea</h1>
+  <p class="lead">Multi-line text input. Minimum 3 rows. Optional character counter.</p>
+
+  <section>
+    <h2>States</h2>
+
+    <h3>Default</h3>
+    <div class="ds-field">
+      <label class="ds-field__label" for="ta-default">Feedback</label>
+      <textarea id="ta-default" class="ds-textarea" rows="3" placeholder="Tell us what you think..."></textarea>
+      <span class="ds-field__hint">Share any thoughts or suggestions.</span>
+    </div>
+
+    <h3>Focus</h3>
+    <div class="ds-field">
+      <label class="ds-field__label" for="ta-focus">Notes</label>
+      <textarea id="ta-focus" class="ds-textarea is-focus" rows="3" placeholder="Type here...">Draft in progress</textarea>
+    </div>
+
+    <h3>Error</h3>
+    <div class="ds-field">
+      <label class="ds-field__label" for="ta-error">Reason for refund</label>
+      <textarea id="ta-error" class="ds-textarea is-error" rows="3" aria-invalid="true" aria-describedby="ta-error-msg">too short</textarea>
+      <span class="ds-field__error" id="ta-error-msg" role="alert">Please provide at least 20 characters.</span>
+    </div>
+
+    <h3>Disabled</h3>
+    <div class="ds-field">
+      <label class="ds-field__label" for="ta-disabled">Description</label>
+      <textarea id="ta-disabled" class="ds-textarea is-disabled" rows="3" disabled aria-disabled="true">This field is locked.</textarea>
+    </div>
+  </section>
+
+  <section>
+    <h2>With character counter</h2>
+
+    <h3>Default + counter</h3>
+    <div class="ds-field">
+      <label class="ds-field__label" for="ta-count">Bio</label>
+      <textarea id="ta-count" class="ds-textarea" rows="4" maxlength="200" placeholder="A short bio..." aria-describedby="ta-count-meta"></textarea>
+      <div class="ds-field__meta" id="ta-count-meta">
+        <span class="ds-field__hint">Max 200 characters.</span>
+        <span class="ds-field__counter" aria-live="polite">0 / 200</span>
+      </div>
+    </div>
+
+    <h3>Error + counter (over limit)</h3>
+    <div class="ds-field">
+      <label class="ds-field__label" for="ta-count-err">Tweet draft</label>
+      <textarea id="ta-count-err" class="ds-textarea is-error" rows="3" aria-invalid="true" aria-describedby="ta-count-err-msg ta-count-err-meta">This message has run a little too long and exceeded the allowed limit by quite a few characters now.</textarea>
+      <div class="ds-field__meta" id="ta-count-err-meta">
+        <span class="ds-field__error" id="ta-count-err-msg" role="alert">Too long. Trim to fit.</span>
+        <span class="ds-field__counter" aria-live="polite">112 / 100</span>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Lightweight live counter for the default counter example
+    (function () {
+      var ta = document.getElementById('ta-count');
+      var meta = document.querySelector('#ta-count-meta .ds-field__counter');
+      if (!ta || !meta) return;
+      var max = ta.getAttribute('maxlength') || 200;
+      function update() { meta.textContent = ta.value.length + ' / ' + max; }
+      ta.addEventListener('input', update);
+      update();
+    })();
+  </script>
+</body>
+</html>

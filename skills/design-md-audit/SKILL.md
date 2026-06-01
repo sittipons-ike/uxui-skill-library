@@ -1,7 +1,7 @@
 ---
 name: design-md-audit
-description: Audit a design system across either the 3-file split architecture (design.md + components.md + ui.md) OR the legacy monolithic DESIGN.md. Resolves cross-file refs ({design.*} / {components.*} / {ui.*}), enforces strict downward ref direction (ui → components → design), checks scope keys match file roots, validates NAMING.md atomic + alias rules. Reports missing sections, broken refs, dangling refs (ui→missing component), upward refs (audit fail), scope violations, snake_case, Tailwind hex drift. Supports --migrate flag to split monolithic into 3 files. Triggers on "audit", "audit design system", "check design system", "review DS spec", "validate", "ตรวจ design", "audit DS".
-version: 5.0.0
+description: Audit a design system across either the 3-file split architecture (design.md + components.md + ui.md) OR the legacy monolithic DESIGN.md. Resolves cross-file refs ({design.*} / {components.*} / {ui.*}), enforces strict downward ref direction (ui → components → design), checks scope keys match file roots, validates NAMING.md atomic + alias rules. Reports missing sections, broken refs, dangling refs (ui→missing component), upward refs (audit fail), scope violations, snake_case, Tailwind hex drift. Adds HTML coverage check — verifies components/<name>.html exists for each atom in components.md + pages/<name>.html for each page in ui.md. Supports --migrate flag to split monolithic into 3 files. Triggers on "audit", "audit design system", "check design system", "review DS spec", "validate", "ตรวจ design", "audit DS".
+version: 5.1.0
 user-invokable: true
 args:
   - name: file
@@ -162,6 +162,26 @@ See `design-builder/NAMING.md § 12` for full format spec.
 - [ ] molecule.form-field error state declares `aria-invalid` + `role="alert"` on helper
 - [ ] organism.sidebar declares landmark `nav` + `aria-label`
 - [ ] organism.modal declares role `dialog`, `aria-modal`, focus-trap, ESC-close
+
+## Component HTML Coverage
+
+Verifies that the components.md spec is backed by real HTML preview files on disk. Run alongside the components.md atomic checks above.
+
+- [ ] `tokens.css` exists at the design system root (error if `components.md` is present but `tokens.css` missing — components depend on tokens being materialized as CSS variables)
+- [ ] For each atom name declared in `components.md` under `component.atom.*`, a file `components/<atom>.html` exists (error per missing atom — atoms without HTML cannot be visually verified or composed into molecules/organisms)
+- [ ] `components.html` showcase file exists at root (warning if missing — showcase is the team-facing index of all atoms; useful but not blocking)
+- [ ] For each page name declared in `ui.md` under `ui.page.*`, a file `pages/<page>.html` exists (error per missing page — pages declared in spec must have a renderable HTML counterpart)
+
+### Severity table
+
+| Check | Severity | Behavior on fail |
+|---|---|---|
+| `tokens.css` missing (when components.md present) | **error** | Counts toward Critical issues; blocks pass verdict |
+| `components/<atom>.html` missing (per atom) | **error** | Counts toward Critical issues per missing file; blocks pass verdict |
+| `components.html` showcase missing | **warning** | Surfaced as Minor; does not block pass verdict |
+| `pages/<page>.html` missing (per page) | **error** | Counts toward Critical issues per missing file; blocks pass verdict |
+
+Report missing files with both the spec source (e.g. `components.md: component.atom.button`) and the expected file path (`components/button.html`) so the user knows exactly which file to create.
 
 **Tier: ui.md (compositions)**
 - [ ] Every page declares `a11y.h1` slot exactly once

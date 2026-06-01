@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<!-- ds-button | Tokens: --color-primary-*, --color-secondary-*, --color-text-*, --color-bg-*, --color-border-*, --radius-md, --space-2, --space-3, --space-4, --shadow-sm, --shadow-focus, --font-sans, --text-sm, --text-md, --text-lg, --leading-md, --weight-semibold, --touch-min, --duration-fast | A11y: native <button>, aria-disabled, aria-busy for loading, :focus-visible halo >=3:1, hit area >=44px -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ds-button — Component Showcase</title>
+  <link rel="stylesheet" href="../tokens.css">
+  <style>
+    body {
+      font-family: var(--font-sans);
+      color: var(--color-text-default);
+      background: var(--color-bg-default);
+      padding: var(--space-6, 24px);
+      line-height: var(--leading-md);
+    }
+    h1 { font-size: var(--text-2xl, 24px); margin-bottom: var(--space-2); }
+    h2 { font-size: var(--text-lg); margin-top: var(--space-6, 24px); border-bottom: 1px solid var(--color-border-subtle); padding-bottom: var(--space-2); }
+    h3 { font-size: var(--text-md); margin-top: var(--space-4); color: var(--color-text-muted); font-weight: var(--weight-semibold); }
+    .row { display: flex; gap: var(--space-3); flex-wrap: wrap; align-items: center; padding: var(--space-2) 0; }
+    .desc { color: var(--color-text-muted); max-width: 60ch; }
+
+    /* ============ ds-button base ============ */
+    .ds-button {
+      /* layout */
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      min-height: var(--touch-min, 44px);
+      padding: var(--space-2) var(--space-4);
+      /* typography */
+      font-family: var(--font-sans);
+      font-size: var(--text-md);
+      line-height: var(--leading-md);
+      font-weight: var(--weight-semibold);
+      /* shape */
+      border-radius: var(--radius-md);
+      border: 1px solid transparent;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color var(--duration-fast, 150ms) ease,
+                  border-color var(--duration-fast, 150ms) ease,
+                  box-shadow var(--duration-fast, 150ms) ease,
+                  color var(--duration-fast, 150ms) ease;
+    }
+
+    .ds-button:focus { outline: none; }
+    .ds-button:focus-visible,
+    .ds-button.is-focus {
+      box-shadow: var(--shadow-focus, 0 0 0 3px rgba(59,130,246,0.5));
+    }
+
+    /* size modifiers */
+    .ds-button--sm {
+      min-height: var(--touch-min, 44px); /* maintain 44px hit area */
+      padding: var(--space-1, 4px) var(--space-3);
+      font-size: var(--text-sm);
+    }
+    .ds-button--md {
+      padding: var(--space-2) var(--space-4);
+      font-size: var(--text-md);
+    }
+    .ds-button--lg {
+      padding: var(--space-3) var(--space-5, 20px);
+      font-size: var(--text-lg);
+    }
+
+    /* variant: primary */
+    .ds-button--primary {
+      background: var(--color-primary-default);
+      color: var(--color-text-on-primary, #fff);
+      border-color: var(--color-primary-default);
+    }
+    .ds-button--primary:hover,
+    .ds-button--primary.is-hover {
+      background: var(--color-primary-hover);
+      border-color: var(--color-primary-hover);
+    }
+    .ds-button--primary:active,
+    .ds-button--primary.is-active {
+      background: var(--color-primary-active);
+      border-color: var(--color-primary-active);
+    }
+
+    /* variant: secondary */
+    .ds-button--secondary {
+      background: var(--color-bg-default);
+      color: var(--color-primary-default);
+      border-color: var(--color-border-default);
+    }
+    .ds-button--secondary:hover,
+    .ds-button--secondary.is-hover {
+      background: var(--color-bg-subtle);
+      border-color: var(--color-primary-default);
+    }
+    .ds-button--secondary:active,
+    .ds-button--secondary.is-active {
+      background: var(--color-bg-muted, var(--color-bg-subtle));
+    }
+
+    /* variant: ghost */
+    .ds-button--ghost {
+      background: transparent;
+      color: var(--color-primary-default);
+      border-color: transparent;
+    }
+    .ds-button--ghost:hover,
+    .ds-button--ghost.is-hover {
+      background: var(--color-bg-subtle);
+    }
+    .ds-button--ghost:active,
+    .ds-button--ghost.is-active {
+      background: var(--color-bg-muted, var(--color-bg-subtle));
+    }
+
+    /* disabled */
+    .ds-button:disabled,
+    .ds-button.is-disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    /* loading */
+    .ds-button.is-loading { cursor: progress; pointer-events: none; }
+    .ds-button.is-loading .ds-button__label { opacity: 0.6; }
+    .ds-button__spinner {
+      width: 1em;
+      height: 1em;
+      border: 2px solid currentColor;
+      border-right-color: transparent;
+      border-radius: 50%;
+      animation: ds-spin 0.7s linear infinite;
+      display: inline-block;
+    }
+    @keyframes ds-spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <h1>button</h1>
+  <p class="desc">Primary action button. 3 variants × 3 sizes × 6 states. All sizes maintain ≥44px touch target. Focus halo meets ≥3:1 contrast.</p>
+
+  <!-- Primary -->
+  <h2>Variant: Primary</h2>
+  <h3>Sizes (rest)</h3>
+  <div class="row">
+    <button type="button" class="ds-button ds-button--primary ds-button--sm"><span class="ds-button__label">Small</span></button>
+    <button type="button" class="ds-button ds-button--primary ds-button--md"><span class="ds-button__label">Medium</span></button>
+    <button type="button" class="ds-button ds-button--primary ds-button--lg"><span class="ds-button__label">Large</span></button>
+  </div>
+  <h3>States (md)</h3>
+  <div class="row">
+    <button type="button" class="ds-button ds-button--primary ds-button--md"><span class="ds-button__label">Rest</span></button>
+    <button type="button" class="ds-button ds-button--primary ds-button--md is-hover"><span class="ds-button__label">Hover</span></button>
+    <button type="button" class="ds-button ds-button--primary ds-button--md is-active"><span class="ds-button__label">Active</span></button>
+    <button type="button" class="ds-button ds-button--primary ds-button--md is-focus"><span class="ds-button__label">Focus-visible</span></button>
+    <button type="button" class="ds-button ds-button--primary ds-button--md" disabled aria-disabled="true"><span class="ds-button__label">Disabled</span></button>
+    <button type="button" class="ds-button ds-button--primary ds-button--md is-loading" aria-busy="true" aria-live="polite">
+      <span class="ds-button__spinner" aria-hidden="true"></span>
+      <span class="ds-button__label">Loading…</span>
+    </button>
+  </div>
+
+  <!-- Secondary -->
+  <h2>Variant: Secondary</h2>
+  <h3>Sizes (rest)</h3>
+  <div class="row">
+    <button type="button" class="ds-button ds-button--secondary ds-button--sm"><span class="ds-button__label">Small</span></button>
+    <button type="button" class="ds-button ds-button--secondary ds-button--md"><span class="ds-button__label">Medium</span></button>
+    <button type="button" class="ds-button ds-button--secondary ds-button--lg"><span class="ds-button__label">Large</span></button>
+  </div>
+  <h3>States (md)</h3>
+  <div class="row">
+    <button type="button" class="ds-button ds-button--secondary ds-button--md"><span class="ds-button__label">Rest</span></button>
+    <button type="button" class="ds-button ds-button--secondary ds-button--md is-hover"><span class="ds-button__label">Hover</span></button>
+    <button type="button" class="ds-button ds-button--secondary ds-button--md is-active"><span class="ds-button__label">Active</span></button>
+    <button type="button" class="ds-button ds-button--secondary ds-button--md is-focus"><span class="ds-button__label">Focus-visible</span></button>
+    <button type="button" class="ds-button ds-button--secondary ds-button--md" disabled aria-disabled="true"><span class="ds-button__label">Disabled</span></button>
+    <button type="button" class="ds-button ds-button--secondary ds-button--md is-loading" aria-busy="true" aria-live="polite">
+      <span class="ds-button__spinner" aria-hidden="true"></span>
+      <span class="ds-button__label">Loading…</span>
+    </button>
+  </div>
+
+  <!-- Ghost -->
+  <h2>Variant: Ghost</h2>
+  <h3>Sizes (rest)</h3>
+  <div class="row">
+    <button type="button" class="ds-button ds-button--ghost ds-button--sm"><span class="ds-button__label">Small</span></button>
+    <button type="button" class="ds-button ds-button--ghost ds-button--md"><span class="ds-button__label">Medium</span></button>
+    <button type="button" class="ds-button ds-button--ghost ds-button--lg"><span class="ds-button__label">Large</span></button>
+  </div>
+  <h3>States (md)</h3>
+  <div class="row">
+    <button type="button" class="ds-button ds-button--ghost ds-button--md"><span class="ds-button__label">Rest</span></button>
+    <button type="button" class="ds-button ds-button--ghost ds-button--md is-hover"><span class="ds-button__label">Hover</span></button>
+    <button type="button" class="ds-button ds-button--ghost ds-button--md is-active"><span class="ds-button__label">Active</span></button>
+    <button type="button" class="ds-button ds-button--ghost ds-button--md is-focus"><span class="ds-button__label">Focus-visible</span></button>
+    <button type="button" class="ds-button ds-button--ghost ds-button--md" disabled aria-disabled="true"><span class="ds-button__label">Disabled</span></button>
+    <button type="button" class="ds-button ds-button--ghost ds-button--md is-loading" aria-busy="true" aria-live="polite">
+      <span class="ds-button__spinner" aria-hidden="true"></span>
+      <span class="ds-button__label">Loading…</span>
+    </button>
+  </div>
+</body>
+</html>

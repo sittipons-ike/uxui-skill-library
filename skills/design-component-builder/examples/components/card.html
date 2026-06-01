@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<!-- ds-card | Tokens: --color-bgcolor-default, --color-bgcolor-subtle, --color-text-default, --color-text-muted, --color-edge-default, --color-primary-default, --radius-md, --space-3, --space-4, --space-5, --shadow-sm, --shadow-md, --shadow-lg, --shadow-focus, --font-sans, --text-md, --text-lg, --leading-md, --weight-semibold | A11y: interactive variant uses role=button + tabindex=0 + visible focus halo, semantic <article> wrappers, header uses heading level -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Card — Design System</title>
+  <link rel="stylesheet" href="../tokens.css" />
+  <style>
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-bgcolor-subtle);
+      color: var(--color-text-default);
+      padding: var(--space-5);
+      margin: 0;
+      line-height: var(--leading-md);
+    }
+    h1 { font-size: var(--text-lg); margin: 0 0 var(--space-2); }
+    h2 { font-size: var(--text-md); margin: var(--space-5) 0 var(--space-3); border-bottom: 1px solid var(--color-edge-default); padding-bottom: var(--space-2); }
+    h3 { font-size: var(--text-md); margin: var(--space-4) 0 var(--space-2); color: var(--color-text-muted); font-weight: var(--weight-semibold); }
+    .description { color: var(--color-text-muted); margin-bottom: var(--space-4); }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: var(--space-4);
+    }
+
+    /* Base card */
+    .ds-card {
+      background: var(--color-bgcolor-default);
+      color: var(--color-text-default);
+      border-radius: var(--radius-md);
+      font-family: var(--font-sans);
+      font-size: var(--text-md);
+      line-height: var(--leading-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .ds-card__header {
+      padding: var(--space-4);
+      border-bottom: 1px solid var(--color-edge-default);
+      font-weight: var(--weight-semibold);
+    }
+    .ds-card__body {
+      padding: var(--space-4);
+      flex: 1;
+      color: var(--color-text-default);
+    }
+    .ds-card__footer {
+      padding: var(--space-3) var(--space-4);
+      border-top: 1px solid var(--color-edge-default);
+      background: var(--color-bgcolor-subtle);
+      color: var(--color-text-muted);
+      display: flex;
+      gap: var(--space-3);
+      justify-content: flex-end;
+      align-items: center;
+      min-height: var(--touch-min);
+    }
+
+    /* Variant: default — subtle shadow */
+    .ds-card--default {
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Variant: elevated — stronger shadow, no border */
+    .ds-card--elevated {
+      box-shadow: var(--shadow-md);
+    }
+
+    /* Variant: outlined — border, no shadow */
+    .ds-card--outlined {
+      border: 1px solid var(--color-edge-default);
+      box-shadow: none;
+    }
+
+    /* Variant: interactive — clickable, hover/active/focus states */
+    .ds-card--interactive {
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      transition: box-shadow 150ms ease, transform 150ms ease;
+      border: 1px solid transparent;
+    }
+    .ds-card--interactive:hover,
+    .ds-card--interactive.is-hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+    .ds-card--interactive:active,
+    .ds-card--interactive.is-active {
+      box-shadow: var(--shadow-sm);
+      transform: translateY(0);
+    }
+    .ds-card--interactive:focus-visible,
+    .ds-card--interactive.is-focus {
+      outline: none;
+      box-shadow: var(--shadow-focus);
+      border-color: var(--color-primary-default);
+    }
+
+    .ds-link {
+      color: var(--color-primary-default);
+      font-weight: var(--weight-semibold);
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>card</h1>
+  <p class="description">Surface container that groups related content. Supports header, body, and footer slots across four variants.</p>
+
+  <h2>Variants</h2>
+
+  <section>
+    <h3>default</h3>
+    <div class="grid">
+      <article class="ds-card ds-card--default" aria-labelledby="card-default-title">
+        <header class="ds-card__header"><h4 id="card-default-title" style="margin:0;font-size:var(--text-md);">Default card</h4></header>
+        <div class="ds-card__body">Subtle elevation for primary content surfaces. Use as the baseline card style.</div>
+        <footer class="ds-card__footer"><a href="#" class="ds-link">Learn more</a></footer>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <h3>elevated</h3>
+    <div class="grid">
+      <article class="ds-card ds-card--elevated" aria-labelledby="card-elev-title">
+        <header class="ds-card__header"><h4 id="card-elev-title" style="margin:0;font-size:var(--text-md);">Elevated card</h4></header>
+        <div class="ds-card__body">Stronger shadow lifts the surface above the page for emphasis or modals.</div>
+        <footer class="ds-card__footer"><a href="#" class="ds-link">View details</a></footer>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <h3>outlined</h3>
+    <div class="grid">
+      <article class="ds-card ds-card--outlined" aria-labelledby="card-out-title">
+        <header class="ds-card__header"><h4 id="card-out-title" style="margin:0;font-size:var(--text-md);">Outlined card</h4></header>
+        <div class="ds-card__body">Flat surface with a visible border. Use for dense layouts where shadow would feel noisy.</div>
+        <footer class="ds-card__footer"><a href="#" class="ds-link">Open</a></footer>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <h3>interactive — rest / hover / active / focus</h3>
+    <div class="grid">
+      <article class="ds-card ds-card--interactive" role="button" tabindex="0" aria-label="Interactive card, rest state">
+        <header class="ds-card__header"><h4 style="margin:0;font-size:var(--text-md);">Rest</h4></header>
+        <div class="ds-card__body">Whole card is clickable. Tab to focus, Enter/Space to activate.</div>
+        <footer class="ds-card__footer">Click anywhere</footer>
+      </article>
+
+      <article class="ds-card ds-card--interactive is-hover" role="button" tabindex="0" aria-label="Interactive card, hover state">
+        <header class="ds-card__header"><h4 style="margin:0;font-size:var(--text-md);">Hover</h4></header>
+        <div class="ds-card__body">Elevation increases on pointer hover to signal interactivity.</div>
+        <footer class="ds-card__footer">Hover preview</footer>
+      </article>
+
+      <article class="ds-card ds-card--interactive is-active" role="button" tabindex="0" aria-label="Interactive card, active state">
+        <header class="ds-card__header"><h4 style="margin:0;font-size:var(--text-md);">Active</h4></header>
+        <div class="ds-card__body">Pressed state — elevation collapses to confirm tap.</div>
+        <footer class="ds-card__footer">Pressed</footer>
+      </article>
+
+      <article class="ds-card ds-card--interactive is-focus" role="button" tabindex="0" aria-label="Interactive card, focus state">
+        <header class="ds-card__header"><h4 style="margin:0;font-size:var(--text-md);">Focus</h4></header>
+        <div class="ds-card__body">Keyboard focus halo + primary border for visible focus state.</div>
+        <footer class="ds-card__footer">Keyboard focused</footer>
+      </article>
+    </div>
+  </section>
+
+  <h2>Slot demo — header + body + footer</h2>
+  <section>
+    <div class="grid">
+      <article class="ds-card ds-card--elevated" aria-labelledby="card-slot-title">
+        <header class="ds-card__header">
+          <h4 id="card-slot-title" style="margin:0;font-size:var(--text-md);">All three slots</h4>
+        </header>
+        <div class="ds-card__body">
+          Body slot accepts arbitrary content — paragraphs, lists, media. Spacing is driven by <code>--space-4</code> on header/body and <code>--space-3</code> on footer.
+        </div>
+        <footer class="ds-card__footer">
+          <a href="#" class="ds-link">Cancel</a>
+          <a href="#" class="ds-link">Confirm</a>
+        </footer>
+      </article>
+    </div>
+  </section>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<!-- ds-badge | Tokens: --color-success-*, --color-warning-*, --color-error-*, --color-info-*, --color-neutral-*, --color-text-on-bgcolor, --radius-full, --radius-md, --space-1, --space-2, --space-3, --font-sans, --text-sm, --text-md, --leading-sm, --weight-semibold | A11y: role=status, aria-label for icon/dot-only, aria-live for dynamic counts -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Badge — Design System</title>
+  <link rel="stylesheet" href="../tokens.css">
+  <style>
+    body {
+      font-family: var(--font-sans);
+      padding: var(--space-6, 24px);
+      background: var(--color-bg-default, #fff);
+      color: var(--color-text-default, #111);
+    }
+    h1 { font-size: var(--text-2xl, 24px); margin-bottom: var(--space-2, 8px); }
+    h2 { font-size: var(--text-lg, 18px); margin-top: var(--space-6, 24px); border-bottom: 1px solid var(--color-border-subtle, #eee); padding-bottom: var(--space-2, 8px); }
+    h3 { font-size: var(--text-md, 14px); margin-top: var(--space-4, 16px); color: var(--color-text-muted, #666); }
+    .row { display: flex; flex-wrap: wrap; gap: var(--space-3, 12px); align-items: center; margin-bottom: var(--space-3, 12px); }
+
+    .ds-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1, 4px);
+      font-family: var(--font-sans);
+      font-weight: var(--weight-semibold, 600);
+      line-height: var(--leading-sm, 1.2);
+      border-radius: var(--radius-full, 999px);
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    /* Sizes */
+    .ds-badge--sm {
+      font-size: var(--text-sm, 12px);
+      padding: var(--space-1, 4px) var(--space-2, 8px);
+      min-height: var(--space-5, 20px);
+    }
+    .ds-badge--md {
+      font-size: var(--text-md, 14px);
+      padding: var(--space-1, 4px) var(--space-3, 12px);
+      min-height: var(--space-6, 24px);
+    }
+
+    /* Variants */
+    .ds-badge--success {
+      background: var(--color-success-subtle, #e6f7ec);
+      color: var(--color-success-default, #1a7f3e);
+    }
+    .ds-badge--warning {
+      background: var(--color-warning-subtle, #fff7e6);
+      color: var(--color-warning-default, #b25e09);
+    }
+    .ds-badge--error {
+      background: var(--color-error-subtle, #fdecec);
+      color: var(--color-error-default, #c53030);
+    }
+    .ds-badge--info {
+      background: var(--color-info-subtle, #e6f1fc);
+      color: var(--color-info-default, #1d4ed8);
+    }
+    .ds-badge--neutral {
+      background: var(--color-neutral-subtle, #f1f2f4);
+      color: var(--color-neutral-default, #44464b);
+    }
+
+    /* Dot-only variant */
+    .ds-badge.is-dot-only {
+      padding: 0;
+      width: var(--space-2, 8px);
+      height: var(--space-2, 8px);
+      min-height: 0;
+      border-radius: var(--radius-full, 999px);
+    }
+    .ds-badge--sm.is-dot-only { width: var(--space-2, 8px); height: var(--space-2, 8px); }
+    .ds-badge--md.is-dot-only { width: var(--space-3, 10px); height: var(--space-3, 10px); }
+    .ds-badge.is-dot-only { background: currentColor; }
+    .ds-badge.is-dot-only.ds-badge--success { background: var(--color-success-default, #1a7f3e); }
+    .ds-badge.is-dot-only.ds-badge--warning { background: var(--color-warning-default, #b25e09); }
+    .ds-badge.is-dot-only.ds-badge--error   { background: var(--color-error-default, #c53030); }
+    .ds-badge.is-dot-only.ds-badge--info    { background: var(--color-info-default, #1d4ed8); }
+    .ds-badge.is-dot-only.ds-badge--neutral { background: var(--color-neutral-default, #44464b); }
+
+    /* Count variant */
+    .ds-badge.is-count {
+      min-width: var(--space-5, 20px);
+      justify-content: center;
+      padding: 0 var(--space-2, 6px);
+    }
+
+    /* Leading dot inside text badge */
+    .ds-badge__dot {
+      width: var(--space-2, 6px);
+      height: var(--space-2, 6px);
+      border-radius: var(--radius-full, 999px);
+      background: currentColor;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    /* Icon */
+    .ds-badge__icon {
+      width: 1em;
+      height: 1em;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Badge</h1>
+  <p>Status indicator for surfacing state, counts, and metadata. Variants map to semantic intent; dot-only and count forms support compact layouts.</p>
+
+  <h2>Variants (size=md, with icon)</h2>
+  <div class="row">
+    <span class="ds-badge ds-badge--md ds-badge--success" role="status">
+      <svg class="ds-badge__icon" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M6.5 10.5L3.7 7.7l-1 1L6.5 12.5l8-8-1-1z"/></svg>
+      Success
+    </span>
+    <span class="ds-badge ds-badge--md ds-badge--warning" role="status">
+      <svg class="ds-badge__icon" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 1L0 14h16zm0 5v4M8 12v1"/></svg>
+      Warning
+    </span>
+    <span class="ds-badge ds-badge--md ds-badge--error" role="status">
+      <svg class="ds-badge__icon" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="currentColor"/><path stroke="#fff" stroke-width="2" d="M5 5l6 6M11 5l-6 6"/></svg>
+      Error
+    </span>
+    <span class="ds-badge ds-badge--md ds-badge--info" role="status">
+      <svg class="ds-badge__icon" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="currentColor"/><path stroke="#fff" stroke-width="2" d="M8 7v5M8 4v1"/></svg>
+      Info
+    </span>
+    <span class="ds-badge ds-badge--md ds-badge--neutral" role="status">
+      Neutral
+    </span>
+  </div>
+
+  <h2>Variants (size=sm)</h2>
+  <div class="row">
+    <span class="ds-badge ds-badge--sm ds-badge--success" role="status"><span class="ds-badge__dot" aria-hidden="true"></span>Active</span>
+    <span class="ds-badge ds-badge--sm ds-badge--warning" role="status"><span class="ds-badge__dot" aria-hidden="true"></span>Pending</span>
+    <span class="ds-badge ds-badge--sm ds-badge--error" role="status"><span class="ds-badge__dot" aria-hidden="true"></span>Failed</span>
+    <span class="ds-badge ds-badge--sm ds-badge--info" role="status"><span class="ds-badge__dot" aria-hidden="true"></span>In review</span>
+    <span class="ds-badge ds-badge--sm ds-badge--neutral" role="status"><span class="ds-badge__dot" aria-hidden="true"></span>Draft</span>
+  </div>
+
+  <h2>Dot-only (status indicator)</h2>
+  <h3>size=md</h3>
+  <div class="row">
+    <span class="ds-badge ds-badge--md ds-badge--success is-dot-only" role="status" aria-label="Success"></span>
+    <span class="ds-badge ds-badge--md ds-badge--warning is-dot-only" role="status" aria-label="Warning"></span>
+    <span class="ds-badge ds-badge--md ds-badge--error is-dot-only" role="status" aria-label="Error"></span>
+    <span class="ds-badge ds-badge--md ds-badge--info is-dot-only" role="status" aria-label="Info"></span>
+    <span class="ds-badge ds-badge--md ds-badge--neutral is-dot-only" role="status" aria-label="Neutral"></span>
+  </div>
+  <h3>size=sm</h3>
+  <div class="row">
+    <span class="ds-badge ds-badge--sm ds-badge--success is-dot-only" role="status" aria-label="Success"></span>
+    <span class="ds-badge ds-badge--sm ds-badge--warning is-dot-only" role="status" aria-label="Warning"></span>
+    <span class="ds-badge ds-badge--sm ds-badge--error is-dot-only" role="status" aria-label="Error"></span>
+    <span class="ds-badge ds-badge--sm ds-badge--info is-dot-only" role="status" aria-label="Info"></span>
+    <span class="ds-badge ds-badge--sm ds-badge--neutral is-dot-only" role="status" aria-label="Neutral"></span>
+  </div>
+
+  <h2>Count badge</h2>
+  <div class="row">
+    <span class="ds-badge ds-badge--sm ds-badge--error is-count" role="status" aria-live="polite" aria-label="3 unread">3</span>
+    <span class="ds-badge ds-badge--sm ds-badge--info is-count" role="status" aria-live="polite" aria-label="12 notifications">12</span>
+    <span class="ds-badge ds-badge--sm ds-badge--neutral is-count" role="status" aria-live="polite" aria-label="99 plus items">99+</span>
+    <span class="ds-badge ds-badge--md ds-badge--error is-count" role="status" aria-live="polite" aria-label="5 errors">5</span>
+    <span class="ds-badge ds-badge--md ds-badge--success is-count" role="status" aria-live="polite" aria-label="24 completed">24</span>
+  </div>
+</body>
+</html>

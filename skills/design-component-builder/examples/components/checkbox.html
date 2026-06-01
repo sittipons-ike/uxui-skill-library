@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<!-- ds-checkbox | Tokens: --color-primary-default, --color-primary-hover, --color-text-on-bgcolor, --color-text-default, --color-text-muted, --color-bg-default, --color-border-default, --color-border-strong, --radius-sm, --space-2, --space-3, --shadow-focus, --font-sans, --text-md, --leading-md, --weight-medium, --touch-min | A11y: native <input type="checkbox">, <label for>, aria-checked="mixed" for indeterminate, aria-disabled, focus-visible ring -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Checkbox — Design System</title>
+<link rel="stylesheet" href="../tokens.css">
+<style>
+  body {
+    font-family: var(--font-sans);
+    color: var(--color-text-default);
+    background: var(--color-bg-default);
+    padding: var(--space-6, 2rem);
+    line-height: var(--leading-md);
+  }
+  h1 { font-size: var(--text-2xl, 1.5rem); margin-bottom: var(--space-2); }
+  h2 { font-size: var(--text-lg, 1.125rem); margin-top: var(--space-6, 2rem); margin-bottom: var(--space-3); }
+  h3 { font-size: var(--text-md); font-weight: var(--weight-medium); margin-top: var(--space-4, 1rem); margin-bottom: var(--space-2); color: var(--color-text-muted); }
+  .description { color: var(--color-text-muted); margin-bottom: var(--space-4, 1rem); }
+  section { margin-bottom: var(--space-6, 2rem); }
+  .row { display: flex; flex-direction: column; gap: var(--space-3); }
+
+  /* Hide native input but keep accessible */
+  .ds-checkbox {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: var(--touch-min, 44px);
+    cursor: pointer;
+    font-family: var(--font-sans);
+    font-size: var(--text-md);
+    line-height: var(--leading-md);
+    color: var(--color-text-default);
+    user-select: none;
+  }
+
+  .ds-checkbox__input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+  }
+
+  .ds-checkbox__box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 1.5px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    background: var(--color-bg-default);
+    transition: background-color 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+    flex-shrink: 0;
+  }
+
+  .ds-checkbox__box svg {
+    width: 0.875rem;
+    height: 0.875rem;
+    color: var(--color-text-on-bgcolor);
+    opacity: 0;
+    transition: opacity 120ms ease;
+  }
+
+  /* Checked state */
+  .ds-checkbox.is-checked .ds-checkbox__box,
+  .ds-checkbox.is-indeterminate .ds-checkbox__box {
+    background: var(--color-primary-default);
+    border-color: var(--color-primary-default);
+  }
+
+  .ds-checkbox.is-checked .ds-checkbox__check { opacity: 1; }
+  .ds-checkbox.is-indeterminate .ds-checkbox__dash { opacity: 1; }
+
+  /* Hover */
+  .ds-checkbox:hover .ds-checkbox__box {
+    border-color: var(--color-primary-default);
+  }
+  .ds-checkbox.is-checked:hover .ds-checkbox__box,
+  .ds-checkbox.is-indeterminate:hover .ds-checkbox__box {
+    background: var(--color-primary-hover, var(--color-primary-default));
+    border-color: var(--color-primary-hover, var(--color-primary-default));
+  }
+
+  /* Focus */
+  .ds-checkbox.is-focused .ds-checkbox__box,
+  .ds-checkbox__input:focus-visible + .ds-checkbox__box {
+    box-shadow: var(--shadow-focus);
+    outline: none;
+  }
+
+  /* Disabled */
+  .ds-checkbox.is-disabled {
+    cursor: not-allowed;
+    color: var(--color-text-muted);
+    opacity: 0.6;
+  }
+  .ds-checkbox.is-disabled .ds-checkbox__box {
+    background: var(--color-bg-muted, var(--color-bg-default));
+    border-color: var(--color-border-default);
+  }
+  .ds-checkbox.is-disabled.is-checked .ds-checkbox__box,
+  .ds-checkbox.is-disabled.is-indeterminate .ds-checkbox__box {
+    background: var(--color-border-default);
+    border-color: var(--color-border-default);
+  }
+
+  .ds-checkbox__label { display: inline-block; }
+</style>
+</head>
+<body>
+  <h1>Checkbox</h1>
+  <p class="description">Binary selection control supporting unchecked, checked, and indeterminate (mixed) states. Includes focused and disabled modifiers.</p>
+
+  <section>
+    <h2>Unchecked</h2>
+    <div class="row">
+      <h3>Default</h3>
+      <label class="ds-checkbox" for="cb-uncheck">
+        <input id="cb-uncheck" class="ds-checkbox__input" type="checkbox">
+        <span class="ds-checkbox__box" aria-hidden="true">
+          <svg class="ds-checkbox__check" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="ds-checkbox__label">Subscribe to newsletter</span>
+      </label>
+
+      <h3>Focused</h3>
+      <label class="ds-checkbox is-focused" for="cb-uncheck-focus">
+        <input id="cb-uncheck-focus" class="ds-checkbox__input" type="checkbox">
+        <span class="ds-checkbox__box" aria-hidden="true">
+          <svg class="ds-checkbox__check" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="ds-checkbox__label">Subscribe to newsletter</span>
+      </label>
+    </div>
+  </section>
+
+  <section>
+    <h2>Checked</h2>
+    <div class="row">
+      <h3>Default</h3>
+      <label class="ds-checkbox is-checked" for="cb-check">
+        <input id="cb-check" class="ds-checkbox__input" type="checkbox" checked>
+        <span class="ds-checkbox__box" aria-hidden="true">
+          <svg class="ds-checkbox__check" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="ds-checkbox__label">Accept terms and conditions</span>
+      </label>
+
+      <h3>Focused</h3>
+      <label class="ds-checkbox is-checked is-focused" for="cb-check-focus">
+        <input id="cb-check-focus" class="ds-checkbox__input" type="checkbox" checked>
+        <span class="ds-checkbox__box" aria-hidden="true">
+          <svg class="ds-checkbox__check" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="ds-checkbox__label">Accept terms and conditions</span>
+      </label>
+    </div>
+  </section>
+
+  <section>
+    <h2>Indeterminate</h2>
+    <div class="row">
+      <h3>Default</h3>
+      <label class="ds-checkbox is-indeterminate" for="cb-indet">
+        <input id="cb-indet" class="ds-checkbox__input" type="checkbox" aria-checked="mixed">
+        <span class="ds-checkbox__box" aria-hidden="true">
+          <svg class="ds-checkbox__dash" viewBox="0 0 16 16" fill="none"><path d="M4 8h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </span>
+        <span class="ds-checkbox__label">Select all items</span>
+      </label>
+
+      <h3>Focused</h3>
+      <label class="ds-checkbox is-indeterminate is-focused" for="cb-indet-focus">
+        <input id="cb-indet-focus" class="ds-checkbox__input" type="checkbox" aria-checked="mixed">
+        <span class="ds-checkbox__box" aria-hidden="true">
+          <svg class="ds-checkbox__dash" viewBox="0 0 16 16" fill="none"><path d="M4 8h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </span>
+        <span class="ds-checkbox__label">Select all items</span>
+      </label>
+    </div>
+  </section>
+
+  <section>
+    <h2>Disabled</h2>
+    <div class="row">
+      <h3>Unchecked, Disabled</h3>
+      <label class="ds-checkbox is-disabled" for="cb-dis-uncheck" aria-disabled="true">
+        <input id="cb-dis-uncheck" class="ds-checkbox__input" type="checkbox" disabled>
+        <span class="ds-checkbox__box" aria-hidden="true">
+          <svg class="ds-checkbox__check" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="ds-checkbox__label">Unavailable option</span>
+      </label>
+
+      <h3>Checked, Disabled</h3>
+      <label class="ds-checkbox is-disabled is-checked" for="cb-dis-check" aria-disabled="true">
+        <input id="cb-dis-check" class="ds-checkbox__input" type="checkbox" checked disabled>
+        <span class="ds-checkbox__box" aria-hidden="true">
+          <svg class="ds-checkbox__check" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="ds-checkbox__label">Locked preference</span>
+      </label>
+
+      <h3>Indeterminate, Disabled</h3>
+      <label class="ds-checkbox is-disabled is-indeterminate" for="cb-dis-indet" aria-disabled="true">
+        <input id="cb-dis-indet" class="ds-checkbox__input" type="checkbox" disabled aria-checked="mixed">
+        <span class="ds-checkbox__box" aria-hidden="true">
+          <svg class="ds-checkbox__dash" viewBox="0 0 16 16" fill="none"><path d="M4 8h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </span>
+        <span class="ds-checkbox__label">Partial selection (locked)</span>
+      </label>
+
+      <h3>Disabled + Focused</h3>
+      <label class="ds-checkbox is-disabled is-focused" for="cb-dis-focus" aria-disabled="true">
+        <input id="cb-dis-focus" class="ds-checkbox__input" type="checkbox" disabled>
+        <span class="ds-checkbox__box" aria-hidden="true">
+          <svg class="ds-checkbox__check" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="ds-checkbox__label">Unavailable option</span>
+      </label>
+    </div>
+  </section>
+</body>
+</html>

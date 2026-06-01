@@ -1,0 +1,206 @@
+<!-- ds-input | Tokens: --color-primary-default, --color-text-on-bgcolor, --color-border-default, --color-border-error, --color-bg-disabled, --radius-md, --space-2, --space-3, --shadow-focus, --font-sans, --text-md, --leading-md, --weight-regular, --touch-min | A11y: label-for/id pairing, aria-invalid on error, aria-describedby for hints, disabled attr -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ds-input — Component Showcase</title>
+  <link rel="stylesheet" href="../tokens.css">
+  <style>
+    body {
+      font-family: var(--font-sans);
+      font-size: var(--text-md);
+      line-height: var(--leading-md);
+      color: var(--color-text-on-bgcolor);
+      padding: var(--space-6, 2rem);
+      max-width: 960px;
+      margin: 0 auto;
+      background: var(--color-bg-default, #fff);
+    }
+    h1 { font-size: var(--text-2xl, 1.5rem); margin-bottom: var(--space-2); }
+    h2 { font-size: var(--text-lg, 1.125rem); margin-top: var(--space-6, 2rem); border-bottom: 1px solid var(--color-border-default); padding-bottom: var(--space-2); }
+    h3 { font-size: var(--text-md); margin-top: var(--space-4, 1rem); color: var(--color-text-muted, #555); font-weight: var(--weight-semibold); }
+    .desc { color: var(--color-text-muted, #555); margin-bottom: var(--space-4, 1rem); }
+    .field-row { display: flex; flex-direction: column; gap: var(--space-2); margin-bottom: var(--space-4, 1rem); max-width: 360px; }
+    .field-row label { font-size: var(--text-sm, 0.875rem); font-weight: var(--weight-semibold); }
+    .hint { font-size: var(--text-sm, 0.875rem); color: var(--color-text-muted, #555); }
+    .hint.is-error { color: var(--color-border-error, #d33); }
+
+    /* ===== Base .ds-input ===== */
+    .ds-input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
+    .ds-input {
+      font-family: var(--font-sans);
+      font-size: var(--text-md);
+      line-height: var(--leading-md);
+      font-weight: var(--weight-regular);
+      color: var(--color-text-on-bgcolor);
+      background: var(--color-bg-default, #fff);
+      border: 1px solid var(--color-border-default);
+      border-radius: var(--radius-md);
+      padding: var(--space-2) var(--space-3);
+      min-height: var(--touch-min, 44px);
+      width: 100%;
+      box-sizing: border-box;
+      transition: border-color 120ms ease, box-shadow 120ms ease;
+      outline: none;
+    }
+    .ds-input::placeholder { color: var(--color-text-muted, #888); }
+
+    /* ===== Sizes ===== */
+    .ds-input--sm {
+      font-size: var(--text-sm, 0.875rem);
+      padding: var(--space-1, 0.25rem) var(--space-2);
+      min-height: 32px;
+    }
+    .ds-input--md { /* default */ }
+    .ds-input--lg {
+      font-size: var(--text-lg, 1.125rem);
+      padding: var(--space-3) var(--space-4, 1rem);
+      min-height: 52px;
+    }
+
+    /* ===== States ===== */
+    .ds-input:hover:not(:disabled):not(.is-error) {
+      border-color: var(--color-primary-default);
+    }
+    .ds-input:focus,
+    .ds-input.is-focus {
+      border-color: var(--color-primary-default);
+      box-shadow: var(--shadow-focus, 0 0 0 3px rgba(59,130,246,0.4));
+    }
+    .ds-input.is-error,
+    .ds-input[aria-invalid="true"] {
+      border-color: var(--color-border-error, #d33);
+    }
+    .ds-input.is-error:focus {
+      box-shadow: 0 0 0 3px rgba(221,51,51,0.25);
+    }
+    .ds-input:disabled,
+    .ds-input.is-disabled {
+      background: var(--color-bg-disabled, #f3f3f3);
+      color: var(--color-text-muted, #888);
+      cursor: not-allowed;
+      border-color: var(--color-border-default);
+    }
+
+    /* ===== Leading icon slot ===== */
+    .ds-input-wrap.has-leading-icon .ds-input { padding-left: calc(var(--space-3) + 1.25rem + var(--space-2)); }
+    .ds-input__icon {
+      position: absolute;
+      left: var(--space-3);
+      width: 1.25rem;
+      height: 1.25rem;
+      pointer-events: none;
+      color: var(--color-text-muted, #888);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>input</h1>
+  <p class="desc">Text input field with type, size, and state variants. Supports an optional leading icon slot.</p>
+
+  <!-- ===== Types ===== -->
+  <section>
+    <h2>Types</h2>
+
+    <h3>type=text</h3>
+    <div class="field-row">
+      <label for="in-text">Full name</label>
+      <div class="ds-input-wrap">
+        <input id="in-text" type="text" class="ds-input ds-input--md" placeholder="Jane Doe">
+      </div>
+    </div>
+
+    <h3>type=email</h3>
+    <div class="field-row">
+      <label for="in-email">Email</label>
+      <div class="ds-input-wrap">
+        <input id="in-email" type="email" class="ds-input ds-input--md" placeholder="you@example.com" autocomplete="email">
+      </div>
+    </div>
+
+    <h3>type=password</h3>
+    <div class="field-row">
+      <label for="in-pw">Password</label>
+      <div class="ds-input-wrap">
+        <input id="in-pw" type="password" class="ds-input ds-input--md" placeholder="••••••••" autocomplete="current-password">
+      </div>
+    </div>
+
+    <h3>type=search (with leading icon)</h3>
+    <div class="field-row">
+      <label for="in-search">Search</label>
+      <div class="ds-input-wrap has-leading-icon">
+        <span class="ds-input__icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </span>
+        <input id="in-search" type="search" class="ds-input ds-input--md" placeholder="Search...">
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Sizes ===== -->
+  <section>
+    <h2>Sizes</h2>
+
+    <h3>size=sm</h3>
+    <div class="field-row">
+      <label for="in-sm">Small</label>
+      <div class="ds-input-wrap"><input id="in-sm" type="text" class="ds-input ds-input--sm" placeholder="Small input"></div>
+    </div>
+
+    <h3>size=md (default)</h3>
+    <div class="field-row">
+      <label for="in-md">Medium</label>
+      <div class="ds-input-wrap"><input id="in-md" type="text" class="ds-input ds-input--md" placeholder="Medium input"></div>
+    </div>
+
+    <h3>size=lg</h3>
+    <div class="field-row">
+      <label for="in-lg">Large</label>
+      <div class="ds-input-wrap"><input id="in-lg" type="text" class="ds-input ds-input--lg" placeholder="Large input"></div>
+    </div>
+  </section>
+
+  <!-- ===== States ===== -->
+  <section>
+    <h2>States</h2>
+
+    <h3>default</h3>
+    <div class="field-row">
+      <label for="in-default">Username</label>
+      <div class="ds-input-wrap"><input id="in-default" type="text" class="ds-input ds-input--md" placeholder="janedoe"></div>
+    </div>
+
+    <h3>focus</h3>
+    <div class="field-row">
+      <label for="in-focus">Username (focused)</label>
+      <div class="ds-input-wrap"><input id="in-focus" type="text" class="ds-input ds-input--md is-focus" value="janedoe"></div>
+      <span class="hint">Demonstrates focus ring via .is-focus class.</span>
+    </div>
+
+    <h3>error</h3>
+    <div class="field-row">
+      <label for="in-error">Email</label>
+      <div class="ds-input-wrap">
+        <input id="in-error" type="email" class="ds-input ds-input--md is-error" value="not-an-email" aria-invalid="true" aria-describedby="in-error-hint">
+      </div>
+      <span id="in-error-hint" class="hint is-error">Please enter a valid email address.</span>
+    </div>
+
+    <h3>disabled</h3>
+    <div class="field-row">
+      <label for="in-disabled">Account ID</label>
+      <div class="ds-input-wrap"><input id="in-disabled" type="text" class="ds-input ds-input--md" value="ACCT-00421" disabled></div>
+    </div>
+  </section>
+</body>
+</html>

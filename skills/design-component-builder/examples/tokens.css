@@ -1,0 +1,202 @@
+/* ============================================================================
+ * tokens.css — Design System CSS Variables
+ * ----------------------------------------------------------------------------
+ * OUTPUT from `design-component-builder` skill.
+ * Customized from `design.md` semantic tokens (Tailwind v3.4+ palette).
+ *
+ * DO NOT EDIT BY HAND.
+ *   - Edit `design.md` instead, then re-run `design-component-builder`.
+ *   - Manual edits here will be overwritten next time the skill runs.
+ *
+ * Each variable is annotated with its source path in `design.md`, e.g.
+ *   --color-primary-default  /* {design.semantic.color.primary.default} *\/
+ *
+ * Defaults: Tailwind blue.600 primary on slate neutrals.
+ *   - Light theme in :root
+ *   - Dark theme in [data-theme="dark"]
+ *
+ * Consumed by all 9 atomic components (Button, Input, Card, Badge, Avatar,
+ * Modal, Tooltip, Tabs, Toast). Component CSS references these vars only —
+ * never hard-codes hex / px values.
+ * ========================================================================= */
+
+:root {
+  /* ── Colors · Brand ────────────────────────────────────────────────────── */
+  --color-primary-default: #2563eb;   /* {design.semantic.color.primary.default}  · blue.600 */
+  --color-primary-dark:    #1d4ed8;   /* {design.semantic.color.primary.dark}     · blue.700 */
+  --color-primary-darker:  #1e40af;   /* {design.semantic.color.primary.darker}   · blue.800 */
+  --color-primary-soft:    #dbeafe;   /* {design.semantic.color.primary.soft}     · blue.100 */
+  --color-primary-subtle:  #eff6ff;   /* {design.semantic.color.primary.subtle}   · blue.50  */
+
+  --color-secondary-default: #475569; /* {design.semantic.color.secondary.default} · slate.600 */
+  --color-secondary-dark:    #334155; /* {design.semantic.color.secondary.dark}    · slate.700 */
+  --color-secondary-darker:  #1e293b; /* {design.semantic.color.secondary.darker}  · slate.800 */
+  --color-secondary-soft:    #e2e8f0; /* {design.semantic.color.secondary.soft}    · slate.200 */
+  --color-secondary-subtle:  #f1f5f9; /* {design.semantic.color.secondary.subtle}  · slate.100 */
+
+  --color-accent-default: #0891b2;    /* {design.semantic.color.accent.default}   · cyan.600 */
+  --color-accent-dark:    #0e7490;    /* {design.semantic.color.accent.dark}      · cyan.700 */
+  --color-accent-darker:  #155e75;    /* {design.semantic.color.accent.darker}    · cyan.800 */
+  --color-accent-soft:    #cffafe;    /* {design.semantic.color.accent.soft}      · cyan.100 */
+  --color-accent-subtle:  #ecfeff;    /* {design.semantic.color.accent.subtle}    · cyan.50  */
+
+  /* ── Colors · Text ─────────────────────────────────────────────────────── */
+  --color-text-primary:   #0f172a;    /* {design.semantic.color.text.primary}     · slate.900 */
+  --color-text-secondary: #334155;    /* {design.semantic.color.text.secondary}   · slate.700 */
+  --color-text-tertiary:  #64748b;    /* {design.semantic.color.text.tertiary}    · slate.500 */
+  --color-text-on-bgcolor: #ffffff;   /* {design.semantic.color.text.on-bgcolor}  · white     */
+  --color-text-disable:   #94a3b8;    /* {design.semantic.color.text.disable}     · slate.400 */
+  --color-text-inverse:   #f8fafc;    /* {design.semantic.color.text.inverse}     · slate.50  */
+
+  --color-text-state-error:   #b91c1c; /* {design.semantic.color.text.state.error}   · red.700    */
+  --color-text-state-warning: #b45309; /* {design.semantic.color.text.state.warning} · amber.700  */
+  --color-text-state-success: #15803d; /* {design.semantic.color.text.state.success} · green.700  */
+  --color-text-state-info:    #1d4ed8; /* {design.semantic.color.text.state.info}    · blue.700   */
+
+  /* ── Colors · Border ───────────────────────────────────────────────────── */
+  --color-border-default: #e2e8f0;    /* {design.semantic.color.border.default}   · slate.200 */
+  --color-border-disable: #f1f5f9;    /* {design.semantic.color.border.disable}   · slate.100 */
+  --color-border-focus:   #2563eb;    /* {design.semantic.color.border.focus}     · blue.600  */
+  --color-border-error:   #dc2626;    /* {design.semantic.color.border.error}     · red.600   */
+
+  /* ── Colors · Surface ──────────────────────────────────────────────────── */
+  --color-surface-base:   #ffffff;    /* {design.semantic.color.surface.base}     · white     */
+  --color-surface-raised: #ffffff;    /* {design.semantic.color.surface.raised}   · white     */
+  --color-surface-sunken: #f8fafc;    /* {design.semantic.color.surface.sunken}   · slate.50  */
+  --color-surface-page:   #f8fafc;    /* {design.semantic.color.surface.page}     · slate.50  */
+
+  /* ── Colors · Status ───────────────────────────────────────────────────── */
+  --color-status-success-default: #16a34a; /* {design.semantic.color.status.success.default} · green.600 */
+  --color-status-success-soft:    #dcfce7; /* {design.semantic.color.status.success.soft}    · green.100 */
+  --color-status-warning-default: #d97706; /* {design.semantic.color.status.warning.default} · amber.600 */
+  --color-status-warning-soft:    #fef3c7; /* {design.semantic.color.status.warning.soft}    · amber.100 */
+  --color-status-error-default:   #dc2626; /* {design.semantic.color.status.error.default}   · red.600   */
+  --color-status-error-soft:      #fee2e2; /* {design.semantic.color.status.error.soft}      · red.100   */
+  --color-status-info-default:    #2563eb; /* {design.semantic.color.status.info.default}    · blue.600  */
+  --color-status-info-soft:       #dbeafe; /* {design.semantic.color.status.info.soft}       · blue.100  */
+
+  /* ── Radius ────────────────────────────────────────────────────────────── */
+  --radius-none: 0;                   /* {design.semantic.radius.none} */
+  --radius-sm:   4px;                 /* {design.semantic.radius.sm}   */
+  --radius-md:   8px;                 /* {design.semantic.radius.md}   */
+  --radius-lg:   12px;                /* {design.semantic.radius.lg}   */
+  --radius-xl:   16px;                /* {design.semantic.radius.xl}   */
+  --radius-pill: 9999px;              /* {design.semantic.radius.pill} */
+
+  /* ── Spacing (4px base) ────────────────────────────────────────────────── */
+  --space-1:  4px;                    /* {design.semantic.space.1}  */
+  --space-2:  8px;                    /* {design.semantic.space.2}  */
+  --space-3:  12px;                   /* {design.semantic.space.3}  */
+  --space-4:  16px;                   /* {design.semantic.space.4}  */
+  --space-5:  20px;                   /* {design.semantic.space.5}  */
+  --space-6:  24px;                   /* {design.semantic.space.6}  */
+  --space-8:  32px;                   /* {design.semantic.space.8}  */
+  --space-10: 40px;                   /* {design.semantic.space.10} */
+  --space-12: 48px;                   /* {design.semantic.space.12} */
+  --space-16: 64px;                   /* {design.semantic.space.16} */
+
+  /* ── Shadow ────────────────────────────────────────────────────────────── */
+  --shadow-sm:    0 1px 2px 0 rgba(15, 23, 42, 0.05);                                        /* {design.semantic.shadow.sm}    */
+  --shadow-md:    0 4px 6px -1px rgba(15, 23, 42, 0.10), 0 2px 4px -2px rgba(15, 23, 42, 0.05); /* {design.semantic.shadow.md}    */
+  --shadow-lg:    0 10px 15px -3px rgba(15, 23, 42, 0.10), 0 4px 6px -4px rgba(15, 23, 42, 0.05);/* {design.semantic.shadow.lg}    */
+  --shadow-focus: 0 0 0 3px rgba(37, 99, 235, 0.40);                                          /* {design.semantic.shadow.focus} */
+
+  /* ── Typography · Family ───────────────────────────────────────────────── */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;  /* {design.semantic.font.sans} */
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;             /* {design.semantic.font.mono} */
+
+  /* ── Typography · Size ─────────────────────────────────────────────────── */
+  --text-xs:  12px;                   /* {design.semantic.text.xs}  */
+  --text-sm:  14px;                   /* {design.semantic.text.sm}  */
+  --text-md:  16px;                   /* {design.semantic.text.md}  */
+  --text-lg:  18px;                   /* {design.semantic.text.lg}  */
+  --text-xl:  20px;                   /* {design.semantic.text.xl}  */
+  --text-2xl: 24px;                   /* {design.semantic.text.2xl} */
+
+  /* ── Typography · Line height ──────────────────────────────────────────── */
+  --leading-tight:   1.25;            /* {design.semantic.leading.tight}   */
+  --leading-normal:  1.5;             /* {design.semantic.leading.normal}  */
+  --leading-relaxed: 1.75;            /* {design.semantic.leading.relaxed} */
+
+  /* ── Typography · Weight ───────────────────────────────────────────────── */
+  --weight-regular:  400;             /* {design.semantic.weight.regular}  */
+  --weight-medium:   500;             /* {design.semantic.weight.medium}   */
+  --weight-semibold: 600;             /* {design.semantic.weight.semibold} */
+  --weight-bold:     700;             /* {design.semantic.weight.bold}     */
+
+  /* ── Typography · Letter spacing ───────────────────────────────────────── */
+  --tracking-tight:  -0.01em;         /* {design.semantic.tracking.tight}  */
+  --tracking-normal: 0;               /* {design.semantic.tracking.normal} */
+  --tracking-wide:   0.02em;          /* {design.semantic.tracking.wide}   */
+
+  /* ── A11y ──────────────────────────────────────────────────────────────── */
+  --touch-min:  44px;                 /* {design.semantic.a11y.touch-min}  · WCAG 2.5.5 target size */
+  --focus-ring: 2px;                  /* {design.semantic.a11y.focus-ring} · WCAG 2.4.7 outline     */
+}
+
+/* ============================================================================
+ * Dark theme overrides — only color tokens shift; spacing/radius/type stable.
+ * Activate with `<html data-theme="dark">` or `<body data-theme="dark">`.
+ * ========================================================================= */
+
+[data-theme="dark"] {
+  /* ── Colors · Brand ────────────────────────────────────────────────────── */
+  --color-primary-default: #3b82f6;   /* {design.semantic.color.primary.default}  · blue.500  */
+  --color-primary-dark:    #2563eb;   /* {design.semantic.color.primary.dark}     · blue.600  */
+  --color-primary-darker:  #1d4ed8;   /* {design.semantic.color.primary.darker}   · blue.700  */
+  --color-primary-soft:    #1e3a8a;   /* {design.semantic.color.primary.soft}     · blue.900  */
+  --color-primary-subtle:  #172554;   /* {design.semantic.color.primary.subtle}   · blue.950  */
+
+  --color-secondary-default: #94a3b8; /* {design.semantic.color.secondary.default} · slate.400 */
+  --color-secondary-dark:    #cbd5e1; /* {design.semantic.color.secondary.dark}    · slate.300 */
+  --color-secondary-darker:  #e2e8f0; /* {design.semantic.color.secondary.darker}  · slate.200 */
+  --color-secondary-soft:    #334155; /* {design.semantic.color.secondary.soft}    · slate.700 */
+  --color-secondary-subtle:  #1e293b; /* {design.semantic.color.secondary.subtle}  · slate.800 */
+
+  --color-accent-default: #22d3ee;    /* {design.semantic.color.accent.default}   · cyan.400  */
+  --color-accent-dark:    #06b6d4;    /* {design.semantic.color.accent.dark}      · cyan.500  */
+  --color-accent-darker:  #0891b2;    /* {design.semantic.color.accent.darker}    · cyan.600  */
+  --color-accent-soft:    #164e63;    /* {design.semantic.color.accent.soft}      · cyan.900  */
+  --color-accent-subtle:  #083344;    /* {design.semantic.color.accent.subtle}    · cyan.950  */
+
+  /* ── Colors · Text ─────────────────────────────────────────────────────── */
+  --color-text-primary:   #f8fafc;    /* {design.semantic.color.text.primary}     · slate.50  */
+  --color-text-secondary: #cbd5e1;    /* {design.semantic.color.text.secondary}   · slate.300 */
+  --color-text-tertiary:  #94a3b8;    /* {design.semantic.color.text.tertiary}    · slate.400 */
+  --color-text-on-bgcolor: #ffffff;   /* {design.semantic.color.text.on-bgcolor}  · white     */
+  --color-text-disable:   #475569;    /* {design.semantic.color.text.disable}     · slate.600 */
+  --color-text-inverse:   #0f172a;    /* {design.semantic.color.text.inverse}     · slate.900 */
+
+  --color-text-state-error:   #f87171; /* {design.semantic.color.text.state.error}   · red.400    */
+  --color-text-state-warning: #fbbf24; /* {design.semantic.color.text.state.warning} · amber.400  */
+  --color-text-state-success: #4ade80; /* {design.semantic.color.text.state.success} · green.400  */
+  --color-text-state-info:    #60a5fa; /* {design.semantic.color.text.state.info}    · blue.400   */
+
+  /* ── Colors · Border ───────────────────────────────────────────────────── */
+  --color-border-default: #334155;    /* {design.semantic.color.border.default}   · slate.700 */
+  --color-border-disable: #1e293b;    /* {design.semantic.color.border.disable}   · slate.800 */
+  --color-border-focus:   #3b82f6;    /* {design.semantic.color.border.focus}     · blue.500  */
+  --color-border-error:   #ef4444;    /* {design.semantic.color.border.error}     · red.500   */
+
+  /* ── Colors · Surface ──────────────────────────────────────────────────── */
+  --color-surface-base:   #0f172a;    /* {design.semantic.color.surface.base}     · slate.900 */
+  --color-surface-raised: #1e293b;    /* {design.semantic.color.surface.raised}   · slate.800 */
+  --color-surface-sunken: #020617;    /* {design.semantic.color.surface.sunken}   · slate.950 */
+  --color-surface-page:   #020617;    /* {design.semantic.color.surface.page}     · slate.950 */
+
+  /* ── Colors · Status ───────────────────────────────────────────────────── */
+  --color-status-success-default: #22c55e; /* {design.semantic.color.status.success.default} · green.500 */
+  --color-status-success-soft:    #14532d; /* {design.semantic.color.status.success.soft}    · green.900 */
+  --color-status-warning-default: #f59e0b; /* {design.semantic.color.status.warning.default} · amber.500 */
+  --color-status-warning-soft:    #78350f; /* {design.semantic.color.status.warning.soft}    · amber.900 */
+  --color-status-error-default:   #ef4444; /* {design.semantic.color.status.error.default}   · red.500   */
+  --color-status-error-soft:      #7f1d1d; /* {design.semantic.color.status.error.soft}      · red.900   */
+  --color-status-info-default:    #3b82f6; /* {design.semantic.color.status.info.default}    · blue.500  */
+  --color-status-info-soft:       #1e3a8a; /* {design.semantic.color.status.info.soft}       · blue.900  */
+
+  /* ── Shadow (deeper for dark surfaces) ─────────────────────────────────── */
+  --shadow-sm:    0 1px 2px 0 rgba(0, 0, 0, 0.40);                                            /* {design.semantic.shadow.sm}    */
+  --shadow-md:    0 4px 6px -1px rgba(0, 0, 0, 0.50), 0 2px 4px -2px rgba(0, 0, 0, 0.40);     /* {design.semantic.shadow.md}    */
+  --shadow-lg:    0 10px 15px -3px rgba(0, 0, 0, 0.60), 0 4px 6px -4px rgba(0, 0, 0, 0.40);   /* {design.semantic.shadow.lg}    */
+  --shadow-focus: 0 0 0 3px rgba(59, 130, 246, 0.50);                                         /* {design.semantic.shadow.focus} */
+}

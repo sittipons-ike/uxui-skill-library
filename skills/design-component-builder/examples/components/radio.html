@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<!-- ds-radio | Tokens: --color-primary-default, --color-bgcolor-default, --color-text-on-bgcolor, --color-border-default, --color-text-muted, --radius-full, --space-2, --space-3, --space-4, --shadow-focus, --font-sans, --text-md, --leading-md, --weight-semibold, --touch-min | A11y: native input[type=radio] inside fieldset+legend, label-for binding, focus-visible halo, disabled state preserves contrast, grouped by name attribute for keyboard arrow navigation -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Radio · Design System</title>
+  <link rel="stylesheet" href="../tokens.css">
+  <style>
+    body {
+      font-family: var(--font-sans);
+      font-size: var(--text-md);
+      line-height: var(--leading-md);
+      color: var(--color-text-on-bgcolor);
+      background: var(--color-bgcolor-default);
+      padding: var(--space-6, 32px);
+      margin: 0;
+    }
+    h1 { font-weight: var(--weight-semibold); margin: 0 0 var(--space-2) 0; }
+    h2 { font-weight: var(--weight-semibold); margin: var(--space-6, 32px) 0 var(--space-3) 0; }
+    h3 { font-weight: var(--weight-semibold); margin: var(--space-4) 0 var(--space-2) 0; font-size: var(--text-md); color: var(--color-text-muted); }
+    p.desc { color: var(--color-text-muted); margin: 0 0 var(--space-4) 0; }
+    section { margin-bottom: var(--space-6, 32px); }
+
+    .ds-radio-group {
+      border: none;
+      padding: 0;
+      margin: 0 0 var(--space-4) 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+    .ds-radio-group legend {
+      font-weight: var(--weight-semibold);
+      margin-bottom: var(--space-2);
+      padding: 0;
+    }
+
+    .ds-radio {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-3);
+      min-height: var(--touch-min, 44px);
+      cursor: pointer;
+      user-select: none;
+      color: var(--color-text-on-bgcolor);
+    }
+
+    .ds-radio input[type="radio"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      margin: 0;
+      border: 2px solid var(--color-border-default);
+      border-radius: var(--radius-full, 999px);
+      background: var(--color-bgcolor-default);
+      display: inline-grid;
+      place-content: center;
+      cursor: pointer;
+      transition: border-color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .ds-radio input[type="radio"]::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: var(--radius-full, 999px);
+      background: var(--color-bgcolor-default);
+      transform: scale(0);
+      transition: transform 0.15s ease;
+    }
+
+    /* Selected */
+    .ds-radio input[type="radio"]:checked {
+      border-color: var(--color-primary-default);
+      background: var(--color-primary-default);
+    }
+    .ds-radio input[type="radio"]:checked::before {
+      transform: scale(1);
+    }
+
+    /* Focused (focus-visible) */
+    .ds-radio input[type="radio"]:focus-visible,
+    .ds-radio.is-focused input[type="radio"] {
+      outline: none;
+      box-shadow: var(--shadow-focus, 0 0 0 3px rgba(59,130,246,0.4));
+    }
+
+    /* Disabled */
+    .ds-radio input[type="radio"]:disabled,
+    .ds-radio.is-disabled input[type="radio"] {
+      border-color: var(--color-border-default);
+      background: var(--color-bgcolor-muted, #f3f4f6);
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+    .ds-radio input[type="radio"]:disabled:checked,
+    .ds-radio.is-disabled input[type="radio"]:checked {
+      background: var(--color-border-default);
+    }
+    .ds-radio.is-disabled,
+    .ds-radio:has(input:disabled) {
+      cursor: not-allowed;
+      color: var(--color-text-muted);
+    }
+  </style>
+</head>
+<body>
+  <h1>radio</h1>
+  <p class="desc">Single-select control within a group. Always render inside a fieldset/legend for accessibility. Group via shared <code>name</code> attribute to enable keyboard arrow navigation.</p>
+
+  <section>
+    <h2>Group · Unselected (default)</h2>
+    <fieldset class="ds-radio-group" aria-describedby="grp1-desc">
+      <legend>Notification frequency</legend>
+      <label class="ds-radio" for="r1a">
+        <input type="radio" id="r1a" name="freq1" value="instant">
+        <span>Instant</span>
+      </label>
+      <label class="ds-radio" for="r1b">
+        <input type="radio" id="r1b" name="freq1" value="daily">
+        <span>Daily digest</span>
+      </label>
+      <label class="ds-radio" for="r1c">
+        <input type="radio" id="r1c" name="freq1" value="weekly">
+        <span>Weekly summary</span>
+      </label>
+    </fieldset>
+  </section>
+
+  <section>
+    <h2>Group · Selected</h2>
+    <fieldset class="ds-radio-group">
+      <legend>Plan tier</legend>
+      <label class="ds-radio" for="r2a">
+        <input type="radio" id="r2a" name="plan2" value="free">
+        <span>Free</span>
+      </label>
+      <label class="ds-radio" for="r2b">
+        <input type="radio" id="r2b" name="plan2" value="pro" checked>
+        <span>Pro</span>
+      </label>
+      <label class="ds-radio" for="r2c">
+        <input type="radio" id="r2c" name="plan2" value="enterprise">
+        <span>Enterprise</span>
+      </label>
+    </fieldset>
+  </section>
+
+  <section>
+    <h2>Group · Focused (keyboard-navigated)</h2>
+    <p class="desc">Tab into the group to see the focus halo on the selected option.</p>
+    <fieldset class="ds-radio-group">
+      <legend>Theme</legend>
+      <label class="ds-radio is-focused" for="r3a">
+        <input type="radio" id="r3a" name="theme3" value="light" checked>
+        <span>Light</span>
+      </label>
+      <label class="ds-radio" for="r3b">
+        <input type="radio" id="r3b" name="theme3" value="dark">
+        <span>Dark</span>
+      </label>
+      <label class="ds-radio" for="r3c">
+        <input type="radio" id="r3c" name="theme3" value="system">
+        <span>Match system</span>
+      </label>
+    </fieldset>
+  </section>
+
+  <section>
+    <h2>Group · Disabled</h2>
+    <fieldset class="ds-radio-group" disabled aria-disabled="true">
+      <legend>Region (locked by admin)</legend>
+      <label class="ds-radio is-disabled" for="r4a">
+        <input type="radio" id="r4a" name="region4" value="us" disabled>
+        <span>United States</span>
+      </label>
+      <label class="ds-radio is-disabled" for="r4b">
+        <input type="radio" id="r4b" name="region4" value="eu" checked disabled>
+        <span>European Union</span>
+      </label>
+      <label class="ds-radio is-disabled" for="r4c">
+        <input type="radio" id="r4c" name="region4" value="apac" disabled>
+        <span>Asia Pacific</span>
+      </label>
+    </fieldset>
+  </section>
+
+  <section>
+    <h2>Group · Disabled + Focused</h2>
+    <fieldset class="ds-radio-group" disabled aria-disabled="true">
+      <legend>Archived option</legend>
+      <label class="ds-radio is-disabled is-focused" for="r5a">
+        <input type="radio" id="r5a" name="arch5" value="a" checked disabled>
+        <span>Option A</span>
+      </label>
+      <label class="ds-radio is-disabled" for="r5b">
+        <input type="radio" id="r5b" name="arch5" value="b" disabled>
+        <span>Option B</span>
+      </label>
+      <label class="ds-radio is-disabled" for="r5c">
+        <input type="radio" id="r5c" name="arch5" value="c" disabled>
+        <span>Option C</span>
+      </label>
+    </fieldset>
+  </section>
+</body>
+</html>
