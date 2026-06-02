@@ -36,6 +36,11 @@ DS spec layer migrating from `.md` → JSON manifests (DTCG-aligned).
 
 🎉 **DS v6 — JSON Manifest Migration COMPLETE** (all 11 phases done)
 
+**Phase 7+ (Figma integration):**
+- ✅ Phase 7A: `design-push-figma-tokens v1.0` — sync DS tokens to Figma Variables (light/dark modes, idempotent)
+- ⏳ Phase 7B (optional): Tokens Studio export format
+- ⏳ Phase 8: `design-push-figma-components` — push HTML atoms as Figma frames
+
 ---
 
 # 🔒 SECURITY RULES

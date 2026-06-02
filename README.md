@@ -73,6 +73,7 @@ claude plugin install uxui-skills
 | `design-styleguide` v3 | aggregator mode default (อ่าน components/*.html → single styleguide.html with TOC + theme toggle) หรือ `--regenerate` ใช้ legacy MD mode |
 | `design-remix` | mix design จาก brand references (Linear typography + Notion spacing ฯลฯ) |
 | `design-export-dtcg` v1 | export DS tokens → W3C DTCG `tokens.json` + Style Dictionary config (cross-platform: iOS/Android/Flutter/web/Tailwind) |
+| `design-push-figma-tokens` v1 | sync DS tokens (design.md / tokens.json) → Figma Variable Collection (light/dark modes, idempotent, alias-aware) |
 
 **ต้อง setup ก่อนใช้** ⚠️
 
