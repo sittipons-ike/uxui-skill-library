@@ -74,6 +74,7 @@ claude plugin install uxui-skills
 | `design-remix` | mix design จาก brand references (Linear typography + Notion spacing ฯลฯ) |
 | `design-export-dtcg` v1 | export DS tokens → W3C DTCG `tokens.json` + Style Dictionary config (cross-platform: iOS/Android/Flutter/web/Tailwind) |
 | `design-push-figma-tokens` v1 | sync DS tokens (design.md / tokens.json) → Figma Variable Collection (light/dark modes, idempotent, alias-aware) |
+| `design-push-figma-components` v1 | push 5 atoms (button, input, badge, label, card) → Figma Component Sets with auto-layout + Variable bindings (variant × size × state matrix; rest + disabled states; hover/focus via designer Interactions) |
 
 **ต้อง setup ก่อนใช้** ⚠️
 
