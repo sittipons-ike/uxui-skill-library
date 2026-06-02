@@ -54,7 +54,7 @@ v4.1 introduces a **2-tier CSS custom property strategy** inspired by Material 3
 
 | Tier | Prefix | Purpose | Who reads it | Who uses it |
 |---|---|---|---|---|
-| **sys** | `--sys-*` | Semantic, cross-component intent (e.g. `--sys-color-primary`, `--sys-spacing-md`, `--sys-radius-md`) | Agent reads to UNDERSTAND intent ("this is the primary brand color") | NOT used directly in component CSS |
+| **sys** | `--sys-*` | Semantic, cross-component intent (e.g. `--sys-color-primary`, `--sys-space-md`, `--sys-radius-md`) | Agent reads to UNDERSTAND intent ("this is the primary brand color") | NOT used directly in component CSS |
 | **comp** | `--{component}-*` | Component-scoped aliases pointing to sys (e.g. `--btn-bg`, `--btn-bg-hover`, `--input-border`) | Agent reads to understand component-local naming | Agent USES in component CSS via `var(--btn-bg)` |
 
 ### Why 2 tiers (priority order)
@@ -68,9 +68,9 @@ v4.1 introduces a **2-tier CSS custom property strategy** inspired by Material 3
 
 - **sys tier** — `--sys-{category}-{role}[-{variant}]`
   - `--sys-color-primary`, `--sys-color-primary-hover`, `--sys-color-bg-surface`, `--sys-color-text-on-primary`
-  - `--sys-spacing-xs|sm|md|lg|xl`, `--sys-radius-sm|md|lg`, `--sys-font-size-sm|md|lg`
+  - `--sys-space-xs|sm|md|lg|xl`, `--sys-radius-sm|md|lg`, `--sys-font-size-sm|md|lg`
 - **comp tier** — `--{component}-{property}[-{state}]`
-  - `--btn-bg`, `--btn-bg-hover`, `--btn-bg-disabled`, `--btn-fg`, `--btn-border`, `--btn-radius`, `--btn-padding-x`
+  - `--btn-bg`, `--btn-bg-hover`, `--btn-bg-disabled`, `--btn-fg`, `--btn-border`, `--btn-radius`, `--btn-px`
   - `--input-bg`, `--input-border`, `--input-border-focus`, `--input-border-error`
 
 ### Example pattern
@@ -81,21 +81,21 @@ v4.1 introduces a **2-tier CSS custom property strategy** inspired by Material 3
   --sys-color-primary: #3B82F6;
   --sys-color-primary-hover: #2563EB;
   --sys-color-text-on-primary: #FFFFFF;
-  --sys-spacing-md: 16px;
+  --sys-space-md: 16px;
   --sys-radius-md: 8px;
 
   /* --- comp tier (component-scoped aliases → sys) --- */
   --btn-bg: var(--sys-color-primary);
   --btn-bg-hover: var(--sys-color-primary-hover);
   --btn-fg: var(--sys-color-text-on-primary);
-  --btn-padding-x: var(--sys-spacing-md);
+  --btn-px: var(--sys-space-md);
   --btn-radius: var(--sys-radius-md);
 }
 
 .ds-btn {
   background: var(--btn-bg);    /* ✅ uses comp alias */
   color: var(--btn-fg);
-  padding: 0 var(--btn-padding-x);
+  padding: 0 var(--btn-px);
   border-radius: var(--btn-radius);
 }
 .ds-btn:hover { background: var(--btn-bg-hover); }
@@ -142,7 +142,7 @@ Mapping convention (sys tier):
 - Path `semantic.colors.primary.default` → `--sys-color-primary`
 - Path `semantic.colors.primary.hover` → `--sys-color-primary-hover`
 - Path `semantic.colors.text.on-bgcolor` → `--sys-color-text-on-bgcolor`
-- Path `semantic.spacing.md` → `--sys-spacing-md`
+- Path `semantic.spacing.md` → `--sys-space-md`
 - Path `semantic.radius.md` → `--sys-radius-md`
 - Path `semantic.typography.label.md.font-size` → `--sys-font-size-label-md` (flatten composed tokens)
 
@@ -170,7 +170,7 @@ Structure:
 
   /* --- sys: spacing --- */
   /* source: {semantic.spacing.md} */
-  --sys-spacing-md: 16px;
+  --sys-space-md: 16px;
   /* ... */
 
   /* --- sys: radius --- */
@@ -192,7 +192,7 @@ Structure:
   --btn-bg: var(--sys-color-primary);
   --btn-bg-hover: var(--sys-color-primary-hover);
   --btn-fg: var(--sys-color-text-on-primary);
-  --btn-padding-x: var(--sys-spacing-md);
+  --btn-px: var(--sys-space-md);
   --btn-radius: var(--sys-radius-md);
 
   /* --- comp: input --- */

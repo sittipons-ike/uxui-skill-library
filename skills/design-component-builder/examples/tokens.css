@@ -19,7 +19,7 @@
 
    RULE OF THUMB:
      - Component CSS  →  use comp tier   (--btn-bg, --input-border)
-     - Global layout  →  use sys tier    (--sys-space-4, --sys-color-text-primary)
+     - Global layout  →  use sys tier    (--sys-space-md, --sys-color-text-primary)
      - Never hardcode hex/px in component CSS. Always go through a token.
 
    DARK MODE:
@@ -85,16 +85,12 @@
   --sys-radius-pill: 9999px;              /* USE: pill button, avatar, switch */
 
   /* --- Space (4px base scale) ------------------------------------------- */
-  --sys-space-1:  4px;                    /* USE: hairline gap, icon-text gap */
-  --sys-space-2:  8px;                    /* USE: tight stack, badge padding */
-  --sys-space-3:  12px;                   /* USE: button py, input py */
-  --sys-space-4:  16px;                   /* USE: card padding, button px (default) */
-  --sys-space-5:  20px;                   /* USE: section gap */
-  --sys-space-6:  24px;                   /* USE: card padding (comfortable), modal padding */
-  --sys-space-8:  32px;                   /* USE: large card, section vertical rhythm */
-  --sys-space-10: 40px;                   /* USE: page section gap */
-  --sys-space-12: 48px;                   /* USE: hero spacing */
-  --sys-space-16: 64px;                   /* USE: top-level page rhythm */
+  --sys-space-xs:  4px;                   /* USE: hairline gap, icon-text gap */
+  --sys-space-sm:  8px;                   /* USE: tight stack, badge padding, compact button/input py */
+  --sys-space-md:  16px;                  /* USE: card padding, button px (default), standard gap */
+  --sys-space-lg:  24px;                  /* USE: card padding (comfortable), modal padding, section gap */
+  --sys-space-xl:  32px;                  /* USE: large card, section vertical rhythm */
+  --sys-space-2xl: 48px;                  /* USE: hero spacing, top-level page rhythm */
 
   /* --- Shadow ------------------------------------------------------------ */
   --sys-shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.05);                          /* USE: subtle lift (card resting) */
@@ -146,8 +142,8 @@
   --btn-radius:        var(--sys-radius-md);
   --btn-shadow:        var(--sys-shadow-md);
   --btn-shadow-focus:  var(--sys-shadow-focus);
-  --btn-px:            var(--sys-space-4);
-  --btn-py:            var(--sys-space-3);
+  --btn-px:            var(--sys-space-md);
+  --btn-py:            var(--sys-space-sm);
   --btn-h:             var(--sys-touch-min);
   --btn-font:          var(--sys-text-md);
   --btn-weight:        var(--sys-weight-semibold);
@@ -162,8 +158,8 @@
   --input-placeholder:   var(--sys-color-text-tertiary);
   --input-radius:        var(--sys-radius-md);
   --input-shadow-focus:  var(--sys-shadow-focus);
-  --input-px:            var(--sys-space-3);
-  --input-py:            var(--sys-space-3);
+  --input-px:            var(--sys-space-sm);
+  --input-py:            var(--sys-space-sm);
   --input-h:             var(--sys-touch-min);
   --input-font:          var(--sys-text-md);
 
@@ -174,8 +170,8 @@
   --select-text:            var(--sys-color-text-primary);
   --select-placeholder:     var(--sys-color-text-tertiary);
   --select-radius:          var(--sys-radius-md);
-  --select-px:              var(--sys-space-3);
-  --select-py:              var(--sys-space-3);
+  --select-px:              var(--sys-space-sm);
+  --select-py:              var(--sys-space-sm);
   --select-h:               var(--sys-touch-min);
   --select-font:            var(--sys-text-md);
   --select-arrow:           var(--sys-color-text-secondary);
@@ -207,8 +203,8 @@
   --textarea-text:         var(--sys-color-text-primary);
   --textarea-placeholder:  var(--sys-color-text-tertiary);
   --textarea-radius:       var(--sys-radius-md);
-  --textarea-px:           var(--sys-space-3);
-  --textarea-py:           var(--sys-space-3);
+  --textarea-px:           var(--sys-space-sm);
+  --textarea-py:           var(--sys-space-sm);
   --textarea-font:         var(--sys-text-md);
   --textarea-min-h:        96px;
 
@@ -225,7 +221,7 @@
   --card-border:  var(--sys-color-border-default);
   --card-radius:  var(--sys-radius-lg);
   --card-shadow:  var(--sys-shadow-sm);
-  --card-padding: var(--sys-space-6);
+  --card-padding: var(--sys-space-lg);
 
   /* --- Badge ------------------------------------------------------------- */
   --badge-bg-success:  var(--sys-color-status-success-soft);
@@ -241,8 +237,8 @@
   --badge-text-neutral: var(--sys-color-text-secondary);
 
   --badge-radius: var(--sys-radius-pill);
-  --badge-px:     var(--sys-space-2);
-  --badge-py:     var(--sys-space-1);
+  --badge-px:     var(--sys-space-sm);
+  --badge-py:     var(--sys-space-xs);
   --badge-font:   var(--sys-text-xs);
   --badge-weight: var(--sys-weight-medium);
 }
