@@ -1,7 +1,7 @@
 ---
 name: design-builder
-description: Build the BASE of a design system — outputs design.md (tokens-only file). DUAL-PATH (v6.0.0):accepts brand inputs from scratch OR ingests client-given assets (palette, mood, brand refs, typography). Phase 0 inventory check detects what user already has, then asks ONLY for missing pieces. Includes primitive + semantic + mood + iconography-placeholder. Biases token defaults by mood. Tailwind v3.4+ palette for primitives. Part of a 3-file split architecture (design.md + components.md + ui.md). Supports light/dark modes. Triggers on "build design system", "create design.md", "design system from scratch", "brand design guide", "มี palette แล้ว", "ใช้ brand kit ที่มี", "have palette ready", "สร้าง design system", "ออกแบบ DS ใหม่".
-version: 6.0.0
+description: Build the BASE of a design system — outputs design.md (tokens-only file). DUAL-PATH (v6.0.0):accepts brand inputs from scratch OR ingests client-given assets (palette, mood, brand refs, typography). Phase 0 inventory check detects what user already has, then asks ONLY for missing pieces. Includes primitive + semantic + mood + iconography-placeholder. Biases token defaults by mood. Tailwind v3.4+ palette for primitives. Part of a 4-file split architecture (design.md + components.json + ui.json + patterns.json). Component layer, icons, UI compositions, and patterns are built by separate skills (design-component-builder, design-icon-builder, design-ui-builder). Supports light/dark modes. Triggers on "build design system", "create design.md", "design system from scratch", "brand design guide", "มี palette แล้ว", "ใช้ brand kit ที่มี", "have palette ready", "สร้าง design system", "ออกแบบ DS ใหม่".
+version: 6.1.0
 user-invokable: true
 ---
 
@@ -20,17 +20,17 @@ Generate a complete `DESIGN.md` from brand inputs. Output follows the structure 
 - Want to combine styles from existing references → use `design-remix`
 - Want to check completeness → use `design-md-audit`
 
-## Pipeline — 3-file split architecture
+## Pipeline — 4-file split architecture (JSON manifest)
 ```
-design-builder            →  design.md      (primitive + semantic + mood + iconography placeholder)
-design-component-builder  →  components.md  (atom + molecule + organism, refs {design.*})
-design-icon-builder       →  design.md      (populates iconography block + ## Iconography)
-design-ui-builder         →  ui.md          (page + pattern + section + flow, refs {components.*})
-design-md-audit           →  audits all 3 files + cross-file refs
-design-styleguide         →  HTML / Figma render of all 3
+design-builder            →  design.md        (YAML-in-MD, designer-facing, tokens-only)
+design-component-builder  →  components.json  (DTCG-aligned manifest, agent-facing)
+design-icon-builder       →  design.md        (iconography block + ./icons/*.svg)
+design-ui-builder         →  ui.json + patterns.json  (split: pages/flows vs reusable shells)
+design-md-audit           →  audits design.md + all .json + cross-file refs
+design-styleguide         →  renders styleguide.html (reads JSON when present, falls back to MD)
 ```
 
-**Output file rule:** this skill writes ONLY `design.md`. Never `components.md` or `ui.md`. Cross-file ref syntax: see NAMING.md § 0a.
+**Output file rule:** this skill writes ONLY `design.md`. Never `components.json`, `ui.json`, or `patterns.json` — those are emitted by downstream skills. Cross-file ref syntax uses `{file.path}` brace notation (DTCG-aligned): see NAMING.md § 0a and `schemas/ref-resolver.md`.
 
 ## Execution Steps
 
@@ -721,17 +721,18 @@ Before delivering, self-check:
 - [ ] Known Gaps section is honest (not empty)
 
 ### 4. Save location
-- Default: `./design.md` (tokens-only file in 3-file split architecture)
+- Default: `./design.md` (tokens-only file in 4-file split architecture)
 - If `./design.md` exists: save to `./design-library/<brand>/design.md` and tell user
-- Tell user next steps: `design-component-builder` → `./components.md`; `design-ui-builder` → `./ui.md`
+- Tell user next steps: run `design-component-builder` next (emits `./components.json`) and/or `design-icon-builder` (populates iconography block + downloads icons). After components exist, `design-ui-builder` emits `./ui.json` + `./patterns.json`.
 - frontmatter MUST include `scope: 'tokens-only'`
 
 ## Output Format Rules
 - Use markdown (no HTML)
-- Token references inline: `{colors.primary}` style
+- Token references inline: `{design.semantic.colors.primary.default}` style (fully-qualified cross-file refs; unprefixed `{semantic.*}` still works in-file for backward compat, but prefixed form is preferred so downstream JSON manifests resolve correctly)
 - Code blocks for examples (CSS/Tailwind/JSX as requested)
 - Visual examples as ASCII or color hex swatches in markdown
 - Maximum 2 heading levels deep (##, ###)
+- **Output file rule:** writes ONLY `design.md` (YAML-in-MD format). Downstream JSON manifests (`components.json` / `ui.json` / `patterns.json`) are built by other skills — never emit them from this skill.
 
 ## Constraints
 - Do NOT invent brand history or unverifiable facts about the company

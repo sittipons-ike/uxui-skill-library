@@ -1,7 +1,7 @@
 ---
 name: design-icon-builder
-description: Populate the iconography layer of design.md (3-file split architecture) AND optionally fetch real SVG files from a free icon library (Phosphor/Tabler/Heroicons/Lucide/Iconoir/Material Symbols/Bootstrap/Remix) via CDN — no npm install needed. Picks library by mood, downloads 12 starter icons, writes them to ./icons/, and locks library+version into design.md. Falls back to monolithic DESIGN.md if split files not present. Triggers on "build icons", "icon system", "iconography", "fetch icons", "download icons", "เพิ่ม icon set", "ดึง icon มาใช้", "ทำ icon style guide".
-version: 2.1.0
+description: Populate the iconography layer of design.md (3-file split architecture) AND optionally fetch real SVG files from a free icon library (Phosphor/Tabler/Heroicons/Lucide/Iconoir/Material Symbols/Bootstrap/Remix) via CDN — no npm install needed. Picks library by mood, downloads 12 starter icons, writes them to ./icons/, and locks library+version into design.md. Falls back to monolithic DESIGN.md if split files not present. Note: icons remain in design.md (resource layer per atomic-design industry practice — Material/Carbon/Tailwind separate icons from components). After running, design-component-builder reads design.md + writes components.json (DTCG-aligned manifest). Triggers on "build icons", "icon system", "iconography", "fetch icons", "download icons", "เพิ่ม icon set", "ดึง icon มาใช้", "ทำ icon style guide".
+version: 2.2.0
 user-invokable: true
 args:
   - name: source
@@ -31,7 +31,14 @@ Fills the `iconography` block in `DESIGN.md` with mood-driven defaults. Optional
 
 ## When NOT to use
 - No mood declared in DESIGN.md → run `design-builder` first
-- Want to add components → use `design-component-builder`
+- Want to add components → use `design-component-builder` (emits `components.json`, DTCG-aligned manifest)
+
+## Pipeline position
+This skill writes the **iconography layer of `design.md`** only. Icons stay in `design.md` as a resource layer — NOT migrated to JSON — because icons are visual assets (SVG files + style tokens), not interactive components with props/states. This mirrors industry practice (Material Symbols, Carbon, Tailwind ship icons separately from component libraries).
+
+**Hand-off:**
+- ⬅ Upstream: `design-builder` writes primitive + semantic + mood in `design.md`
+- ➡ Downstream: `design-component-builder` reads `design.md` (incl. iconography) and emits `components.json` — atoms can reference `{design.iconography.*}` via cross-file refs
 
 ## Mood → Library map (with CDN routes)
 

@@ -26,8 +26,13 @@ DS spec layer migrating from `.md` → JSON manifests (DTCG-aligned).
 - ✅ Phase 1B: architecture doc
 - ✅ Phase 2A: design-component-builder v5 (JSON output)
 - ✅ Phase 2B: design-ui-builder v4
-- ⏳ Phase 2C-3B: doc updates + audit + styleguide
-- ⏳ Phase 4-6: migration tool + verify + DTCG export
+- ✅ Phase 2C: design-builder v6.1 (doc-only pipeline refs)
+- ✅ Phase 2D: design-icon-builder v2.2 (doc-only)
+- ✅ Phase 3B: design-styleguide v3.1 (JSON-aware + MD fallback)
+- ⏳ Phase 3A: design-md-audit v3 (JSON schema validation)
+- ⏳ Phase 4: migration tool (`--migrate-to-json`)
+- ⏳ Phase 5: E2E verify on sample DS
+- ⏳ Phase 6 (deferred): DTCG Style Dictionary export
 
 ---
 

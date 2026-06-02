@@ -104,7 +104,11 @@ DS spec layer กำลังย้ายจาก `.md` → JSON manifests (DTC
 - ✅ Phase 1A + 1B: schemas + docs
 - ✅ Phase 2A: `design-component-builder v5` (emits `components.json`)
 - ✅ Phase 2B: `design-ui-builder v4` (emits `ui.json` + `patterns.json`)
-- ⏳ Phase 2C-D, 3A-B, 4-6 pending
+- ✅ Phase 2C: `design-builder v6.1` (doc-only pipeline refs)
+- ✅ Phase 2D: `design-icon-builder v2.2` (doc-only)
+- ✅ Phase 3B: `design-styleguide v3.1` (reads JSON, falls back MD)
+- ⏳ Phase 3A: `design-md-audit v3` (JSON schema validation) — next
+- ⏳ Phase 4-6: migration tool + E2E verify + DTCG export
 
 ---
 
