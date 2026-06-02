@@ -1,7 +1,7 @@
 ---
 name: design-md-audit
-description: Audit a design system across three input modes — (1) v6 JSON-primary (design.md + components.json + patterns.json + ui.json) validated against JSON Schema Draft-07 in schemas/*.schema.json, (2) v5 MD-split (design.md + components.md + ui.md), (3) legacy monolithic DESIGN.md. Auto-detects input mix; prefers JSON when both JSON and MD manifests are present (warns 'stale spec'). Resolves brace refs via regex ^\{(design|components|patterns|ui)\.([a-z0-9_.\-]+)\}$, enforces strict downward direction (ui → patterns → components → design), enforces $meta.scope per manifest (components-only / ui-only / patterns-only), runs diff-merge (base → variant → size → state, last-write-wins) on every variant×size×state combo and validates the merged result. Carries forward v5.1 checks — NAMING.md atomic + alias rules, WCAG AA contrast pair matrix, HTML coverage (components/<name>.html, pages/<name>.html, patterns/<name>.html), Known Gaps reserved keywords. Reports missing sections, schema violations, broken refs, dangling refs, upward refs, scope violations, snake_case, Tailwind hex drift. Supports --migrate flag to split monolithic into 3 files. Triggers on "audit", "audit design system", "check design system", "review DS spec", "validate", "ตรวจ design", "audit DS".
-version: 6.0.0
+description: Audit a design system across three input modes — (1) v6 JSON-primary (design.md + components.json + patterns.json + ui.json) validated against JSON Schema Draft-07 in schemas/*.schema.json, (2) v5 MD-split (design.md + components.md + ui.md), (3) legacy monolithic DESIGN.md. Auto-detects input mix; prefers JSON when both JSON and MD manifests are present (warns 'stale spec'). Resolves brace refs via regex ^\{(design|components|patterns|ui)\.([a-z0-9_.\-]+)\}$, enforces strict downward direction (ui → patterns → components → design), enforces $meta.scope per manifest (components-only / ui-only / patterns-only), runs diff-merge (base → variant → size → state, last-write-wins) on every variant×size×state combo and validates the merged result. Carries forward v5.1 checks — NAMING.md atomic + alias rules, WCAG AA contrast pair matrix, HTML coverage (components/<name>.html, pages/<name>.html, patterns/<name>.html), Known Gaps reserved keywords. Reports missing sections, schema violations, broken refs, dangling refs, upward refs, scope violations, snake_case, Tailwind hex drift. Supports --migrate flag to split monolithic into 3 files. Supports --migrate-to-json flag to convert legacy MD spec (components.md + ui.md + monolithic DESIGN.md) into v6 JSON manifests (components.json + ui.json + patterns.json) with pattern auto-extraction. Triggers on "audit", "audit design system", "check design system", "review DS spec", "validate", "ตรวจ design", "audit DS".
+version: 6.1.0
 user-invokable: true
 args:
   - name: file
@@ -9,6 +9,9 @@ args:
     required: false
   - name: json
     description: Set false to force MD-only audit (skips JSON Schema validation + ref resolver). Default true. Use for v5 / legacy repos that have not migrated.
+    required: false
+  - name: migrate-to-json
+    description: Set true to skip audit and run migration instead — converts legacy MD spec (components.md / ui.md / monolithic DESIGN.md) into v6 JSON manifests (components.json + ui.json + patterns.json). Idempotent and non-destructive (never deletes .md files). Default false.
     required: false
 ---
 
@@ -23,6 +26,7 @@ v6 is the **first dual-format release**: it audits JSON manifests (`components.j
 - Pre-handoff QA before coding agents consume the spec
 - After running `design-builder`, `design-component-builder`, `design-ui-builder`, or `design-remix` to verify quality
 - Mid-migration from v5 (MD) to v6 (JSON) to make sure refs still resolve
+- Migrating from v5 MD spec to v6 JSON manifests (use `--migrate-to-json`)
 
 ## When NOT to use
 - File doesn't exist yet → use `design-builder`
@@ -67,6 +71,132 @@ Files detected:
   pages/*.html       4 files
   patterns/*.html    3 files
 ```
+
+---
+
+## Migration Mode (`--migrate-to-json`)
+
+When invoked with `--migrate-to-json` (or its legacy alias `--migrate` from v5 monolithic-split mode), this skill **skips audit entirely** and instead converts legacy MD spec files into v6 JSON manifests. The audit can then be re-run on the resulting JSON layout for validation.
+
+### Trigger condition
+- CLI flag `--migrate-to-json=true` OR `migrate-to-json: true` arg
+- Legacy alias `--migrate` is preserved from v5 (was used for monolithic→split). In v6.1 it is treated as `--migrate-to-json` and chains automatically (monolithic DESIGN.md → 3-file MD split → JSON in one run).
+
+### Pre-flight checks
+Before doing anything, verify:
+- [ ] At least one legacy MD source exists: `components.md` OR `ui.md` OR monolithic `DESIGN.md`
+- [ ] `design.md` is present (or `DESIGN.md` for legacy) — design tokens are required as the migration root
+- [ ] If only JSON manifests exist (no legacy MD) → **no-op**: emit warning "Already JSON-primary mode — nothing to migrate. Did you mean to run audit (no flag)?"
+- [ ] If `design.md` AND `DESIGN.md` both exist → error: "Ambiguous root — delete one before migrating"
+- [ ] Write permission to entry directory (migration emits new files)
+
+### Conversion algorithm
+
+**Step 1 — Input detection**
+- Locate `components.md` and/or `ui.md` and/or monolithic `DESIGN.md`
+- If only `DESIGN.md` exists: first split to 3-file MD layout (existing `--migrate` behavior from v5), then proceed to JSON conversion
+- If `design.md` already exists: **skip its migration** — design.md remains YAML-in-MD by design decision (tokens are designer-facing, not coder-facing)
+
+**Step 2 — components.md → components.json**
+- Parse YAML frontmatter `component:` block + markdown body
+- For each atom entry in components.md, build a JSON entry per `schemas/components.schema.json`:
+  - `id` — kebab-case derived from the atom name
+  - `summary` — first sentence of the matching `### <name>` section in the body
+  - `render`:
+    - `tag` — inferred from atomic type (`button` → `button`, `input` → `input`, `card` → `div`, etc.)
+    - `role` — ARIA role where applicable
+    - `classes` — initial array (Tailwind utilities or `--comp-*` aliases)
+    - `slots` — extracted from any `slots:` YAML key, else `[]`
+    - `html_template` — `./components/<id>.html` if that file exists; otherwise mark `"TBD"` (and report in the manual-review section)
+  - `tokens` — mapped from existing token refs, prefixed with `--comp-*` aliases per NAMING.md
+  - `variants` / `sizes` / `states` — diff-only entries parsed from the YAML state aliases (rest / hover / active / focus / disabled / selected / error)
+  - `a11y` — extracted from the a11y notes section
+- Molecule / organism entries with MD spec but no HTML → emit as `{ "status": "planned" }`
+- Emit `$meta`:
+  - `scope: "components-only"`
+  - `schema: "uxui/components/v1"`
+  - `version: "1.0.0"`
+  - `depends_on: ["./design.md", "./tokens.css"]`
+  - `dtcg_version: "2024-09"`
+
+**Step 3 — ui.md → ui.json + patterns.json (EXTRACTION)**
+- `ui.json` receives: `page`, `section`, and `flow` entries
+- `patterns.json` receives: extracted **pattern** entries (reusable shells like `auth-split`, `app-shell`, `empty-state`)
+- Heuristic for pattern extraction:
+  - Sections in `ui.md` tagged with `pattern:` / `shell:` / `reusable:` YAML keys → `patterns.json`
+  - Sections whose `composes:` block references **2+ pages** → `patterns.json` (cross-page reuse signal)
+  - All other section / page / flow entries → `ui.json`
+- Confidence levels (reported per extracted pattern):
+  - **HIGH** — explicit `pattern:` YAML key in `ui.md`
+  - **MEDIUM** — name matches a known pattern (`auth-split`, `app-shell`, `empty-state`, `dashboard-shell`, `marketing-shell`, etc.)
+  - **LOW** — heuristic-based guess (cross-page reuse only); flag for manual review
+- Emit `$meta` per scope:
+  - `ui.json` → `scope: "ui-only"`, `schema: "uxui/ui/v1"`, `depends_on: ["./design.md", "./components.json", "./patterns.json"]`
+  - `patterns.json` → `scope: "patterns-only"`, `schema: "uxui/patterns/v1"`, `depends_on: ["./design.md", "./components.json"]`
+
+**Step 4 — Report output**
+- Machine-readable summary → **stdout** (JSON line for scripting / chaining)
+- Human report → **stderr** (rich format, see example below)
+
+### Pattern extraction heuristic (decision tree)
+
+```
+For each section in ui.md:
+  1. Has explicit `pattern: true` or `type: pattern` YAML key?
+     → patterns.json, confidence: HIGH
+  2. Name in known-pattern list (auth-split, app-shell, empty-state, ...)?
+     → patterns.json, confidence: MEDIUM
+  3. composes: block references 2+ pages?
+     → patterns.json, confidence: LOW (flag for review)
+  4. Else:
+     → ui.json (page / section / flow per its original category)
+```
+
+### Idempotency contract
+- Re-runs on unchanged MD sources produce byte-identical JSON (deterministic key ordering, stable timestamps)
+- If MD source changed since last migration: emit a diff log showing what JSON keys changed (added / removed / updated)
+- Never throws on re-run — overwrites JSON with the new content, never appends
+
+### Non-destructive guarantee
+- **NEVER deletes any `.md` file** — legacy MD stays in place after migration
+- Existing JSON files are overwritten only if they would change (idempotent)
+- Report explicitly lists "preserved" MD files so user knows they're safe and can delete manually after verification
+
+### Report format (printed to stderr)
+
+```
+📦 Migration Report — v5 MD → v6 JSON
+
+✅ components.json (9 atoms, 0 molecules, 0 organisms) — HIGH confidence
+✅ ui.json (4 pages, 2 sections, 1 flow) — HIGH confidence
+✨ patterns.json (3 patterns extracted) — MEDIUM confidence:
+   • auth-split (matched known pattern name)
+   • app-shell (matched known pattern name)
+   • landing-hero ⚠️ LOW confidence — manual review recommended
+
+📁 Files written:
+   ./components.json  (4.2 KB)
+   ./ui.json          (1.8 KB)
+   ./patterns.json    (3.1 KB)
+
+📋 Untouched (preserved):
+   ./components.md  (legacy spec — delete after verification)
+   ./ui.md          (legacy spec — delete after verification)
+
+⚠️ Manual review required:
+   • patterns.json: verify "landing-hero" classification (LOW confidence)
+   • components.json: 3 atoms missing render.html_template (no HTML files in components/)
+
+Next: run /design-md-audit to validate
+```
+
+### When NOT to use
+- Repo is already JSON-primary (no `components.md` / `ui.md` / `DESIGN.md` present) → no-op, emit warning
+- User wants to audit current spec (no flag, default behavior)
+- User wants to build a new design system from scratch → use `design-builder` / `design-component-builder` / `design-ui-builder` instead
+
+### Recommended path for v5 → v6 teams
+`--migrate-to-json` is the recommended migration route. It supersedes the older `--migrate` flag (which only split monolithic → 3-file MD): the new flag handles both legs in one run (monolithic → split MD → JSON manifests). After migration, re-run the audit (no flag) to validate the resulting JSON layout against schemas.
 
 ---
 
@@ -350,6 +480,10 @@ Report missing files with both the spec source (e.g. `components.json#/atom/butt
 
 ## Execution Steps
 
+### 0.5. Check migration flag
+- If `--migrate-to-json` (or legacy `--migrate`) is set → **route to Migration Mode** (see [§ Migration Mode](#migration-mode---migrate-to-json)); SKIP all audit steps below
+- Otherwise → continue to audit
+
 ### 1. Detect input mode
 - Scan entry directory for `design.md`, `components.{json,md}`, `patterns.json`, `ui.{json,md}`, `DESIGN.md`
 - Apply the detection table above to pick one of: JSON-primary / MD-primary / Hybrid / Legacy MD-only
@@ -491,9 +625,17 @@ v6 is the **bridge release** between MD-only (v5) and JSON-only (v7).
 | Legacy unprefixed refs (`{semantic.*}`) | accepted silently | accepted with **deprecation Warning** | rejected (INVALID_SYNTAX) |
 | `--format=md` legacy flag | accepted | accepted | removed |
 | `json=false` arg | n/a | ✓ forces MD-only audit | ✓ deprecated then removed |
+| `--migrate` (mono → 3-file MD) | n/a | ✓ accepted, aliased to `--migrate-to-json` (chains mono → MD → JSON) | removed |
+| `--migrate-to-json` (MD → JSON) | n/a | ✓ **recommended v5→v6 path** (v6.1+) | ✓ |
 | Patterns layer | n/a | ✓ JSON-only (no MD form ever) | ✓ |
 
-**Upgrade guidance:** repos on v5 split-architecture should run this audit first, fix any Critical issues, then run `design-component-builder` v6+ to emit `components.json`. Once JSON exists, delete `components.md` (audit will warn until you do).
+**Upgrade guidance (recommended path for v5 → v6 teams):**
+1. Run `/design-md-audit --migrate-to-json` to convert `components.md` + `ui.md` (+ monolithic `DESIGN.md` if present) into `components.json` + `ui.json` + `patterns.json` in one run. Migration is idempotent and non-destructive — `.md` files are preserved.
+2. Manually review LOW-confidence pattern extractions flagged in the migration report.
+3. Re-run `/design-md-audit` (no flag) to validate the resulting JSON layout against schemas.
+4. After verification, delete `components.md` and `ui.md` to silence the hybrid-mode warning.
+
+**Alternative manual path:** repos can also fix Critical audit issues first, then re-run `design-component-builder` v6+ to emit `components.json` from scratch. The `--migrate-to-json` route is faster and preserves all hand-written prose.
 
 ---
 

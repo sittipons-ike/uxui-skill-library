@@ -69,7 +69,7 @@ claude plugin install uxui-skills
 | `design-component-builder` v5 | สร้าง `components.json` (DTCG-aligned manifest) + `tokens.css` 2-tier + `components/<name>.html` + `components.html` showcase. Legacy `--format=md` ยังใช้ได้ใน v5–v6 |
 | `design-icon-builder` | populate iconography layer + ดึง SVG จริงจาก Phosphor/Tabler/Heroicons ฯลฯ |
 | `design-ui-builder` v4 | สร้าง `ui.json` + `patterns.json` (NEW) + `pages/<name>.html` (self-contained) + `patterns/<name>.html` (NEW — reusable shells with slot contracts) |
-| `design-md-audit` v6 | audit DS — JSON Schema validation + ref resolver (brace regex + downward direction + scope) + diff-merge validation + HTML coverage + hybrid input (JSON / MD / Legacy) |
+| `design-md-audit` v6.1 | audit DS (JSON Schema + ref resolver + diff-merge + HTML coverage + hybrid input) + **`--migrate-to-json`** flag (convert legacy MD spec → v6 JSON manifests with auto-extracted patterns) |
 | `design-styleguide` v3 | aggregator mode default (อ่าน components/*.html → single styleguide.html with TOC + theme toggle) หรือ `--regenerate` ใช้ legacy MD mode |
 | `design-remix` | mix design จาก brand references (Linear typography + Notion spacing ฯลฯ) |
 
@@ -108,7 +108,8 @@ DS spec layer กำลังย้ายจาก `.md` → JSON manifests (DTC
 - ✅ Phase 2D: `design-icon-builder v2.2` (doc-only)
 - ✅ Phase 3B: `design-styleguide v3.1` (reads JSON, falls back MD)
 - ✅ Phase 3A: `design-md-audit v6.0` (JSON Schema validation + hybrid mode + ref resolver)
-- ⏳ Phase 4-6: migration tool + E2E verify + DTCG export
+- ✅ Phase 4: `design-md-audit v6.1` (`--migrate-to-json` flag — convert legacy MD → v6 JSON with pattern auto-extraction)
+- ⏳ Phase 5-6: E2E verify + DTCG export
 
 ---
 
