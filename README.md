@@ -109,7 +109,8 @@ DS spec layer กำลังย้ายจาก `.md` → JSON manifests (DTC
 - ✅ Phase 3B: `design-styleguide v3.1` (reads JSON, falls back MD)
 - ✅ Phase 3A: `design-md-audit v6.0` (JSON Schema validation + hybrid mode + ref resolver)
 - ✅ Phase 4: `design-md-audit v6.1` (`--migrate-to-json` flag — convert legacy MD → v6 JSON with pattern auto-extraction)
-- ⏳ Phase 5-6: E2E verify + DTCG export
+- ✅ Phase 5: E2E verify ([docs/VERIFICATION-v6.md](docs/VERIFICATION-v6.md)) — all schemas + examples PASS after fixes
+- ⏳ Phase 6 (deferred): DTCG export — เมื่อทีมเริ่ม multi-platform
 
 ---
 

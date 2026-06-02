@@ -3,7 +3,7 @@
     "schema": "uxui/patterns/v1",
     "scope": "patterns-only",
     "depends_on": ["./design.md", "./components.json"],
-    "dtcg_version": "draft-2",
+    "dtcg_version": "2024-09",
     "version": "1.0.0",
     "generated_by": "design-pattern-builder@0.1.0",
     "generated_at": "2026-06-02T00:00:00Z"

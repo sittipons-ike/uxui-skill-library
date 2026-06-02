@@ -98,8 +98,8 @@
           "description": "Short description of what this slot is for. Shown in tooling/style guides."
         },
         "default": {
-          "description": "Optional default content for this slot when unfilled. Can be a ref string or inline value.",
-          "oneOf": [
+          "description": "Optional default content for this slot when unfilled. Can be a ref string or inline value. anyOf (not oneOf) because brace-refs match both Ref pattern AND plain string — they are valid in either branch.",
+          "anyOf": [
             { "$ref": "#/definitions/Ref" },
             { "type": "string" }
           ]
@@ -165,9 +165,9 @@
         },
         "tokens": {
           "type": "object",
-          "description": "Pattern-level token references (e.g. background surface, gutter spacing). Values should be refs to {design.semantic.*}.",
+          "description": "Pattern-level token references (e.g. background surface, gutter spacing). Values should be refs to {design.semantic.*}. anyOf (not oneOf) because brace-refs match both Ref pattern AND plain string.",
           "additionalProperties": {
-            "oneOf": [
+            "anyOf": [
               { "$ref": "#/definitions/Ref" },
               { "type": "string" },
               { "type": "number" }

@@ -1,6 +1,6 @@
 {
   "$meta": {
-    "schema": "../schemas/components.schema.json",
+    "schema": "uxui/components/v1",
     "scope": "components-only",
     "depends_on": ["./design.md", "./tokens.css"],
     "dtcg_version": "2024-09",

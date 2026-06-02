@@ -3,7 +3,7 @@
     "schema": "uxui/ui/v1",
     "scope": "ui-only",
     "depends_on": ["./design.md", "./components.json", "./patterns.json"],
-    "dtcg_version": "draft-2024-08-09",
+    "dtcg_version": "2024-09",
     "version": "1.0.0",
     "generated_by": "design-ui-builder@1.0.0",
     "generated_at": "2026-06-02T00:00:00Z"
