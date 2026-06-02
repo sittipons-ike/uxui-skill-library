@@ -1,4 +1,4 @@
-<!-- ds-input | Tokens: --color-primary-default, --color-text-on-bgcolor, --color-border-default, --color-border-error, --color-bg-disabled, --radius-md, --space-2, --space-3, --shadow-focus, --font-sans, --text-md, --leading-md, --weight-regular, --touch-min | A11y: label-for/id pairing, aria-invalid on error, aria-describedby for hints, disabled attr -->
+<!-- ds-input | Comp tokens: --input-bg, --input-border, --input-border-focus, --input-border-error, --input-text, --input-placeholder, --input-radius, --input-px, --input-py, --input-h, --input-font, --input-font-size, --input-font-size-sm, --input-font-size-lg, --input-line-height, --input-font-weight, --input-px-sm, --input-py-sm, --input-h-sm, --input-px-lg, --input-py-lg, --input-h-lg, --input-bg-disabled, --input-text-disabled, --input-shadow-focus, --input-shadow-focus-error, --input-icon-color, --input-icon-size, --input-icon-gap | A11y: label-for/id pairing, aria-invalid on error, aria-describedby for hints, disabled attr -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,23 +8,23 @@
   <link rel="stylesheet" href="../tokens.css">
   <style>
     body {
-      font-family: var(--font-sans);
-      font-size: var(--text-md);
-      line-height: var(--leading-md);
-      color: var(--color-text-on-bgcolor);
-      padding: var(--space-6, 2rem);
+      font-family: var(--input-font);
+      font-size: var(--input-font-size);
+      line-height: var(--input-line-height);
+      color: var(--input-text);
+      padding: var(--page-px);
       max-width: 960px;
       margin: 0 auto;
-      background: var(--color-bg-default, #fff);
+      background: var(--page-bg);
     }
-    h1 { font-size: var(--text-2xl, 1.5rem); margin-bottom: var(--space-2); }
-    h2 { font-size: var(--text-lg, 1.125rem); margin-top: var(--space-6, 2rem); border-bottom: 1px solid var(--color-border-default); padding-bottom: var(--space-2); }
-    h3 { font-size: var(--text-md); margin-top: var(--space-4, 1rem); color: var(--color-text-muted, #555); font-weight: var(--weight-semibold); }
-    .desc { color: var(--color-text-muted, #555); margin-bottom: var(--space-4, 1rem); }
-    .field-row { display: flex; flex-direction: column; gap: var(--space-2); margin-bottom: var(--space-4, 1rem); max-width: 360px; }
-    .field-row label { font-size: var(--text-sm, 0.875rem); font-weight: var(--weight-semibold); }
-    .hint { font-size: var(--text-sm, 0.875rem); color: var(--color-text-muted, #555); }
-    .hint.is-error { color: var(--color-border-error, #d33); }
+    h1 { font-size: var(--page-title-size); margin-bottom: var(--page-title-mb); }
+    h2 { font-size: var(--section-title-size); margin-top: var(--section-title-mt); border-bottom: 1px solid var(--section-divider); padding-bottom: var(--section-title-pb); }
+    h3 { font-size: var(--input-font-size); margin-top: var(--subsection-title-mt); color: var(--text-muted); font-weight: var(--subsection-title-weight); }
+    .desc { color: var(--text-muted); margin-bottom: var(--desc-mb); }
+    .field-row { display: flex; flex-direction: column; gap: var(--field-gap); margin-bottom: var(--field-mb); max-width: 360px; }
+    .field-row label { font-size: var(--label-font-size); font-weight: var(--label-font-weight); }
+    .hint { font-size: var(--hint-font-size); color: var(--text-muted); }
+    .hint.is-error { color: var(--input-border-error); }
 
     /* ===== Base .ds-input ===== */
     .ds-input-wrap {
@@ -34,69 +34,69 @@
       width: 100%;
     }
     .ds-input {
-      font-family: var(--font-sans);
-      font-size: var(--text-md);
-      line-height: var(--leading-md);
-      font-weight: var(--weight-regular);
-      color: var(--color-text-on-bgcolor);
-      background: var(--color-bg-default, #fff);
-      border: 1px solid var(--color-border-default);
-      border-radius: var(--radius-md);
-      padding: var(--space-2) var(--space-3);
-      min-height: var(--touch-min, 44px);
+      font-family: var(--input-font);
+      font-size: var(--input-font-size);
+      line-height: var(--input-line-height);
+      font-weight: var(--input-font-weight);
+      color: var(--input-text);
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: var(--input-radius);
+      padding: var(--input-py) var(--input-px);
+      min-height: var(--input-h);
       width: 100%;
       box-sizing: border-box;
       transition: border-color 120ms ease, box-shadow 120ms ease;
       outline: none;
     }
-    .ds-input::placeholder { color: var(--color-text-muted, #888); }
+    .ds-input::placeholder { color: var(--input-placeholder); }
 
     /* ===== Sizes ===== */
     .ds-input--sm {
-      font-size: var(--text-sm, 0.875rem);
-      padding: var(--space-1, 0.25rem) var(--space-2);
-      min-height: 32px;
+      font-size: var(--input-font-size-sm);
+      padding: var(--input-py-sm) var(--input-px-sm);
+      min-height: var(--input-h-sm);
     }
     .ds-input--md { /* default */ }
     .ds-input--lg {
-      font-size: var(--text-lg, 1.125rem);
-      padding: var(--space-3) var(--space-4, 1rem);
-      min-height: 52px;
+      font-size: var(--input-font-size-lg);
+      padding: var(--input-py-lg) var(--input-px-lg);
+      min-height: var(--input-h-lg);
     }
 
     /* ===== States ===== */
     .ds-input:hover:not(:disabled):not(.is-error) {
-      border-color: var(--color-primary-default);
+      border-color: var(--input-border-focus);
     }
     .ds-input:focus,
     .ds-input.is-focus {
-      border-color: var(--color-primary-default);
-      box-shadow: var(--shadow-focus, 0 0 0 3px rgba(59,130,246,0.4));
+      border-color: var(--input-border-focus);
+      box-shadow: var(--input-shadow-focus);
     }
     .ds-input.is-error,
     .ds-input[aria-invalid="true"] {
-      border-color: var(--color-border-error, #d33);
+      border-color: var(--input-border-error);
     }
     .ds-input.is-error:focus {
-      box-shadow: 0 0 0 3px rgba(221,51,51,0.25);
+      box-shadow: var(--input-shadow-focus-error);
     }
     .ds-input:disabled,
     .ds-input.is-disabled {
-      background: var(--color-bg-disabled, #f3f3f3);
-      color: var(--color-text-muted, #888);
+      background: var(--input-bg-disabled);
+      color: var(--input-text-disabled);
       cursor: not-allowed;
-      border-color: var(--color-border-default);
+      border-color: var(--input-border);
     }
 
     /* ===== Leading icon slot ===== */
-    .ds-input-wrap.has-leading-icon .ds-input { padding-left: calc(var(--space-3) + 1.25rem + var(--space-2)); }
+    .ds-input-wrap.has-leading-icon .ds-input { padding-left: calc(var(--input-px) + var(--input-icon-size) + var(--input-icon-gap)); }
     .ds-input__icon {
       position: absolute;
-      left: var(--space-3);
-      width: 1.25rem;
-      height: 1.25rem;
+      left: var(--input-px);
+      width: var(--input-icon-size);
+      height: var(--input-icon-size);
       pointer-events: none;
-      color: var(--color-text-muted, #888);
+      color: var(--input-icon-color);
       display: inline-flex;
       align-items: center;
       justify-content: center;

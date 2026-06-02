@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- ds-checkbox | Tokens: --color-primary-default, --color-primary-hover, --color-text-on-bgcolor, --color-text-default, --color-text-muted, --color-bg-default, --color-border-default, --color-border-strong, --radius-sm, --space-2, --space-3, --shadow-focus, --font-sans, --text-md, --leading-md, --weight-medium, --touch-min | A11y: native <input type="checkbox">, <label for>, aria-checked="mixed" for indeterminate, aria-disabled, focus-visible ring -->
+<!-- ds-checkbox | Comp tokens: --checkbox-size, --checkbox-border-width, --checkbox-border, --checkbox-border-hover, --checkbox-radius, --checkbox-bg, --checkbox-bg-checked, --checkbox-bg-checked-hover, --checkbox-bg-disabled, --checkbox-border-disabled, --checkbox-bg-disabled-checked, --checkbox-check, --checkbox-check-size, --checkbox-gap, --checkbox-min-height, --checkbox-label-color, --checkbox-label-color-disabled, --checkbox-font, --checkbox-font-size, --checkbox-line-height, --checkbox-focus-ring, --checkbox-transition, --checkbox-disabled-opacity | Page tokens: --page-bg, --page-fg, --page-fg-muted, --page-padding, --page-gap-sm, --page-gap-md, --page-gap-lg | A11y: native <input type="checkbox">, <label for>, aria-checked="mixed" for indeterminate, aria-disabled, focus-visible ring -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -7,30 +7,30 @@
 <link rel="stylesheet" href="../tokens.css">
 <style>
   body {
-    font-family: var(--font-sans);
-    color: var(--color-text-default);
-    background: var(--color-bg-default);
-    padding: var(--space-6, 2rem);
-    line-height: var(--leading-md);
+    font-family: var(--checkbox-font);
+    color: var(--page-fg);
+    background: var(--page-bg);
+    padding: var(--page-padding);
+    line-height: var(--checkbox-line-height);
   }
-  h1 { font-size: var(--text-2xl, 1.5rem); margin-bottom: var(--space-2); }
-  h2 { font-size: var(--text-lg, 1.125rem); margin-top: var(--space-6, 2rem); margin-bottom: var(--space-3); }
-  h3 { font-size: var(--text-md); font-weight: var(--weight-medium); margin-top: var(--space-4, 1rem); margin-bottom: var(--space-2); color: var(--color-text-muted); }
-  .description { color: var(--color-text-muted); margin-bottom: var(--space-4, 1rem); }
-  section { margin-bottom: var(--space-6, 2rem); }
-  .row { display: flex; flex-direction: column; gap: var(--space-3); }
+  h1 { font-size: var(--page-heading-xl); margin-bottom: var(--page-gap-sm); }
+  h2 { font-size: var(--page-heading-lg); margin-top: var(--page-gap-lg); margin-bottom: var(--page-gap-md); }
+  h3 { font-size: var(--checkbox-font-size); font-weight: var(--page-heading-weight); margin-top: var(--page-gap-md); margin-bottom: var(--page-gap-sm); color: var(--page-fg-muted); }
+  .description { color: var(--page-fg-muted); margin-bottom: var(--page-gap-md); }
+  section { margin-bottom: var(--page-gap-lg); }
+  .row { display: flex; flex-direction: column; gap: var(--page-gap-md); }
 
   /* Hide native input but keep accessible */
   .ds-checkbox {
     display: inline-flex;
     align-items: center;
-    gap: var(--space-2);
-    min-height: var(--touch-min, 44px);
+    gap: var(--checkbox-gap);
+    min-height: var(--checkbox-min-height);
     cursor: pointer;
-    font-family: var(--font-sans);
-    font-size: var(--text-md);
-    line-height: var(--leading-md);
-    color: var(--color-text-default);
+    font-family: var(--checkbox-font);
+    font-size: var(--checkbox-font-size);
+    line-height: var(--checkbox-line-height);
+    color: var(--checkbox-label-color);
     user-select: none;
   }
 
@@ -46,19 +46,19 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 1.25rem;
-    height: 1.25rem;
-    border: 1.5px solid var(--color-border-strong);
-    border-radius: var(--radius-sm);
-    background: var(--color-bg-default);
-    transition: background-color 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+    width: var(--checkbox-size);
+    height: var(--checkbox-size);
+    border: var(--checkbox-border-width) solid var(--checkbox-border);
+    border-radius: var(--checkbox-radius);
+    background: var(--checkbox-bg);
+    transition: var(--checkbox-transition);
     flex-shrink: 0;
   }
 
   .ds-checkbox__box svg {
-    width: 0.875rem;
-    height: 0.875rem;
-    color: var(--color-text-on-bgcolor);
+    width: var(--checkbox-check-size);
+    height: var(--checkbox-check-size);
+    color: var(--checkbox-check);
     opacity: 0;
     transition: opacity 120ms ease;
   }
@@ -66,8 +66,8 @@
   /* Checked state */
   .ds-checkbox.is-checked .ds-checkbox__box,
   .ds-checkbox.is-indeterminate .ds-checkbox__box {
-    background: var(--color-primary-default);
-    border-color: var(--color-primary-default);
+    background: var(--checkbox-bg-checked);
+    border-color: var(--checkbox-bg-checked);
   }
 
   .ds-checkbox.is-checked .ds-checkbox__check { opacity: 1; }
@@ -75,35 +75,35 @@
 
   /* Hover */
   .ds-checkbox:hover .ds-checkbox__box {
-    border-color: var(--color-primary-default);
+    border-color: var(--checkbox-border-hover);
   }
   .ds-checkbox.is-checked:hover .ds-checkbox__box,
   .ds-checkbox.is-indeterminate:hover .ds-checkbox__box {
-    background: var(--color-primary-hover, var(--color-primary-default));
-    border-color: var(--color-primary-hover, var(--color-primary-default));
+    background: var(--checkbox-bg-checked-hover);
+    border-color: var(--checkbox-bg-checked-hover);
   }
 
   /* Focus */
   .ds-checkbox.is-focused .ds-checkbox__box,
   .ds-checkbox__input:focus-visible + .ds-checkbox__box {
-    box-shadow: var(--shadow-focus);
+    box-shadow: var(--checkbox-focus-ring);
     outline: none;
   }
 
   /* Disabled */
   .ds-checkbox.is-disabled {
     cursor: not-allowed;
-    color: var(--color-text-muted);
-    opacity: 0.6;
+    color: var(--checkbox-label-color-disabled);
+    opacity: var(--checkbox-disabled-opacity);
   }
   .ds-checkbox.is-disabled .ds-checkbox__box {
-    background: var(--color-bg-muted, var(--color-bg-default));
-    border-color: var(--color-border-default);
+    background: var(--checkbox-bg-disabled);
+    border-color: var(--checkbox-border-disabled);
   }
   .ds-checkbox.is-disabled.is-checked .ds-checkbox__box,
   .ds-checkbox.is-disabled.is-indeterminate .ds-checkbox__box {
-    background: var(--color-border-default);
-    border-color: var(--color-border-default);
+    background: var(--checkbox-bg-disabled-checked);
+    border-color: var(--checkbox-bg-disabled-checked);
   }
 
   .ds-checkbox__label { display: inline-block; }

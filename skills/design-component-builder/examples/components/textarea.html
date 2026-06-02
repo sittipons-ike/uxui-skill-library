@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- ds-textarea | Tokens: --color-bg-default, --color-surface-default, --color-border-default, --color-border-strong, --color-primary-default, --color-danger-default, --color-text-default, --color-text-muted, --color-text-on-bgcolor, --radius-md, --space-2, --space-3, --space-4, --space-6, --shadow-focus, --font-sans, --text-sm, --text-md, --leading-md, --weight-semibold, --touch-min | A11y: <label for>, aria-invalid, aria-describedby for error + counter, aria-disabled, min-height >= --touch-min, focus ring uses --shadow-focus -->
+<!-- ds-textarea | Comp tokens: --textarea-bg, --textarea-bg-disabled, --textarea-border, --textarea-border-hover, --textarea-border-focus, --textarea-border-error, --textarea-radius, --textarea-px, --textarea-py, --textarea-min-h, --textarea-font, --textarea-fs, --textarea-lh, --textarea-color, --textarea-color-placeholder, --textarea-color-disabled, --textarea-focus-ring, --textarea-error-ring, --textarea-transition, --textarea-gap, --textarea-max-w, --textarea-label-fs, --textarea-label-fw, --textarea-hint-fs, --textarea-hint-color, --textarea-error-fs, --textarea-error-color, --textarea-counter-fs, --textarea-counter-color, --textarea-disabled-opacity | Page tokens: --page-bg, --page-color, --page-font, --page-fs, --page-lh, --page-pad, --page-h1-fs, --page-h2-fs, --page-h3-fs, --page-section-gap | A11y: <label for>, aria-invalid, aria-describedby for error + counter, aria-disabled, min-height >= touch target, focus ring on focus -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -8,94 +8,94 @@
 <link rel="stylesheet" href="../tokens.css">
 <style>
   body {
-    font-family: var(--font-sans);
-    font-size: var(--text-md);
-    line-height: var(--leading-md);
-    color: var(--color-text-default);
-    background: var(--color-bg-default);
-    padding: var(--space-6);
+    font-family: var(--page-font);
+    font-size: var(--page-fs);
+    line-height: var(--page-lh);
+    color: var(--page-color);
+    background: var(--page-bg);
+    padding: var(--page-pad);
     margin: 0;
   }
-  h1 { font-size: 1.5rem; margin: 0 0 var(--space-2); }
-  h2 { font-size: 1.125rem; margin: var(--space-6) 0 var(--space-3); }
-  h3 { font-size: var(--text-sm); margin: var(--space-4) 0 var(--space-2); color: var(--color-text-muted); font-weight: var(--weight-semibold); text-transform: uppercase; letter-spacing: 0.04em; }
-  p.lead { color: var(--color-text-muted); margin: 0 0 var(--space-4); }
-  section { margin-bottom: var(--space-6); }
+  h1 { font-size: var(--page-h1-fs); margin: 0 0 var(--textarea-gap); }
+  h2 { font-size: var(--page-h2-fs); margin: var(--page-section-gap) 0 var(--textarea-py); }
+  h3 { font-size: var(--page-h3-fs); margin: var(--textarea-py) 0 var(--textarea-gap); color: var(--textarea-hint-color); font-weight: var(--textarea-label-fw); text-transform: uppercase; letter-spacing: 0.04em; }
+  p.lead { color: var(--textarea-hint-color); margin: 0 0 var(--textarea-py); }
+  section { margin-bottom: var(--page-section-gap); }
 
   .ds-field {
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
-    max-width: 480px;
-    margin-bottom: var(--space-4);
+    gap: var(--textarea-gap);
+    max-width: var(--textarea-max-w);
+    margin-bottom: var(--textarea-py);
   }
   .ds-field__label {
-    font-size: var(--text-sm);
-    font-weight: var(--weight-semibold);
-    color: var(--color-text-default);
+    font-size: var(--textarea-label-fs);
+    font-weight: var(--textarea-label-fw);
+    color: var(--textarea-color);
   }
   .ds-field__hint {
-    font-size: var(--text-sm);
-    color: var(--color-text-muted);
+    font-size: var(--textarea-hint-fs);
+    color: var(--textarea-hint-color);
   }
   .ds-field__error {
-    font-size: var(--text-sm);
-    color: var(--color-danger-default);
+    font-size: var(--textarea-error-fs);
+    color: var(--textarea-error-color);
   }
   .ds-field__meta {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: var(--space-3);
+    gap: var(--textarea-px);
   }
   .ds-field__counter {
-    font-size: var(--text-sm);
-    color: var(--color-text-muted);
+    font-size: var(--textarea-counter-fs);
+    color: var(--textarea-counter-color);
     font-variant-numeric: tabular-nums;
   }
 
   .ds-textarea {
-    font-family: var(--font-sans);
-    font-size: var(--text-md);
-    line-height: var(--leading-md);
-    color: var(--color-text-default);
-    background: var(--color-surface-default);
-    border: 1px solid var(--color-border-default);
-    border-radius: var(--radius-md);
-    padding: var(--space-3);
-    min-height: calc(var(--touch-min) * 1.5);
+    font-family: var(--textarea-font);
+    font-size: var(--textarea-fs);
+    line-height: var(--textarea-lh);
+    color: var(--textarea-color);
+    background: var(--textarea-bg);
+    border: 1px solid var(--textarea-border);
+    border-radius: var(--textarea-radius);
+    padding: var(--textarea-py) var(--textarea-px);
+    min-height: var(--textarea-min-h);
     width: 100%;
     box-sizing: border-box;
     resize: vertical;
     outline: none;
-    transition: border-color 120ms ease, box-shadow 120ms ease;
+    transition: var(--textarea-transition);
   }
   .ds-textarea::placeholder {
-    color: var(--color-text-muted);
+    color: var(--textarea-color-placeholder);
   }
   .ds-textarea:hover:not(:disabled):not(.is-error) {
-    border-color: var(--color-border-strong);
+    border-color: var(--textarea-border-hover);
   }
   .ds-textarea:focus,
   .ds-textarea.is-focus {
-    border-color: var(--color-primary-default);
-    box-shadow: var(--shadow-focus);
+    border-color: var(--textarea-border-focus);
+    box-shadow: var(--textarea-focus-ring);
   }
   .ds-textarea.is-error,
   .ds-textarea[aria-invalid="true"] {
-    border-color: var(--color-danger-default);
+    border-color: var(--textarea-border-error);
   }
   .ds-textarea.is-error:focus,
   .ds-textarea[aria-invalid="true"]:focus {
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-danger-default) 25%, transparent);
+    box-shadow: var(--textarea-error-ring);
   }
   .ds-textarea:disabled,
   .ds-textarea.is-disabled {
-    background: var(--color-bg-default);
-    color: var(--color-text-muted);
+    background: var(--textarea-bg-disabled);
+    color: var(--textarea-color-disabled);
     cursor: not-allowed;
     resize: none;
-    opacity: 0.7;
+    opacity: var(--textarea-disabled-opacity);
   }
 </style>
 </head>

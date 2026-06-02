@@ -1,202 +1,302 @@
 /* ============================================================================
- * tokens.css — Design System CSS Variables
- * ----------------------------------------------------------------------------
- * OUTPUT from `design-component-builder` skill.
- * Customized from `design.md` semantic tokens (Tailwind v3.4+ palette).
- *
- * DO NOT EDIT BY HAND.
- *   - Edit `design.md` instead, then re-run `design-component-builder`.
- *   - Manual edits here will be overwritten next time the skill runs.
- *
- * Each variable is annotated with its source path in `design.md`, e.g.
- *   --color-primary-default  /* {design.semantic.color.primary.default} *\/
- *
- * Defaults: Tailwind blue.600 primary on slate neutrals.
- *   - Light theme in :root
- *   - Dark theme in [data-theme="dark"]
- *
- * Consumed by all 9 atomic components (Button, Input, Card, Badge, Avatar,
- * Modal, Tooltip, Tabs, Toast). Component CSS references these vars only —
- * never hard-codes hex / px values.
- * ========================================================================= */
+   DESIGN TOKENS — 2-TIER ARCHITECTURE
+   ============================================================================
 
-:root {
-  /* ── Colors · Brand ────────────────────────────────────────────────────── */
-  --color-primary-default: #2563eb;   /* {design.semantic.color.primary.default}  · blue.600 */
-  --color-primary-dark:    #1d4ed8;   /* {design.semantic.color.primary.dark}     · blue.700 */
-  --color-primary-darker:  #1e40af;   /* {design.semantic.color.primary.darker}   · blue.800 */
-  --color-primary-soft:    #dbeafe;   /* {design.semantic.color.primary.soft}     · blue.100 */
-  --color-primary-subtle:  #eff6ff;   /* {design.semantic.color.primary.subtle}   · blue.50  */
+   STRATEGY (Material 3 + Carbon hybrid):
 
-  --color-secondary-default: #475569; /* {design.semantic.color.secondary.default} · slate.600 */
-  --color-secondary-dark:    #334155; /* {design.semantic.color.secondary.dark}    · slate.700 */
-  --color-secondary-darker:  #1e293b; /* {design.semantic.color.secondary.darker}  · slate.800 */
-  --color-secondary-soft:    #e2e8f0; /* {design.semantic.color.secondary.soft}    · slate.200 */
-  --color-secondary-subtle:  #f1f5f9; /* {design.semantic.color.secondary.subtle}  · slate.100 */
+   Tier 1 — sys (semantic, cross-component)
+     Prefix: --sys-*
+     Purpose: single source of truth for all design decisions.
+     Use when: building a NEW component that doesn't have comp aliases yet,
+               or defining a global concern (page bg, body text, focus ring).
 
-  --color-accent-default: #0891b2;    /* {design.semantic.color.accent.default}   · cyan.600 */
-  --color-accent-dark:    #0e7490;    /* {design.semantic.color.accent.dark}      · cyan.700 */
-  --color-accent-darker:  #155e75;    /* {design.semantic.color.accent.darker}    · cyan.800 */
-  --color-accent-soft:    #cffafe;    /* {design.semantic.color.accent.soft}      · cyan.100 */
-  --color-accent-subtle:  #ecfeff;    /* {design.semantic.color.accent.subtle}    · cyan.50  */
+   Tier 2 — comp (component-scoped aliases)
+     Prefix: --{component}-* (e.g. --btn-, --input-, --card-)
+     Purpose: short, intent-loaded aliases that point to sys tier.
+     Use when: styling an EXISTING component. Prefer comp over sys.
+     Why: --btn-bg-hover is obvious to read, ~40% fewer tokens than
+          var(--sys-color-primary-dark), and stays DRY (single pointer).
 
-  /* ── Colors · Text ─────────────────────────────────────────────────────── */
-  --color-text-primary:   #0f172a;    /* {design.semantic.color.text.primary}     · slate.900 */
-  --color-text-secondary: #334155;    /* {design.semantic.color.text.secondary}   · slate.700 */
-  --color-text-tertiary:  #64748b;    /* {design.semantic.color.text.tertiary}    · slate.500 */
-  --color-text-on-bgcolor: #ffffff;   /* {design.semantic.color.text.on-bgcolor}  · white     */
-  --color-text-disable:   #94a3b8;    /* {design.semantic.color.text.disable}     · slate.400 */
-  --color-text-inverse:   #f8fafc;    /* {design.semantic.color.text.inverse}     · slate.50  */
+   RULE OF THUMB:
+     - Component CSS  →  use comp tier   (--btn-bg, --input-border)
+     - Global layout  →  use sys tier    (--sys-space-4, --sys-color-text-primary)
+     - Never hardcode hex/px in component CSS. Always go through a token.
 
-  --color-text-state-error:   #b91c1c; /* {design.semantic.color.text.state.error}   · red.700    */
-  --color-text-state-warning: #b45309; /* {design.semantic.color.text.state.warning} · amber.700  */
-  --color-text-state-success: #15803d; /* {design.semantic.color.text.state.success} · green.700  */
-  --color-text-state-info:    #1d4ed8; /* {design.semantic.color.text.state.info}    · blue.700   */
+   DARK MODE:
+     Only sys tier is re-declared under [data-theme="dark"].
+     Comp aliases auto-resolve via CSS var() — no duplication needed.
 
-  /* ── Colors · Border ───────────────────────────────────────────────────── */
-  --color-border-default: #e2e8f0;    /* {design.semantic.color.border.default}   · slate.200 */
-  --color-border-disable: #f1f5f9;    /* {design.semantic.color.border.disable}   · slate.100 */
-  --color-border-focus:   #2563eb;    /* {design.semantic.color.border.focus}     · blue.600  */
-  --color-border-error:   #dc2626;    /* {design.semantic.color.border.error}     · red.600   */
+   PHASE 3 EXPORT:
+     sys tier maps 1:1 to Style Dictionary (W3C DTCG) for cross-platform
+     export (iOS, Android, Flutter). Comp tier stays web-only.
+   ============================================================================ */
 
-  /* ── Colors · Surface ──────────────────────────────────────────────────── */
-  --color-surface-base:   #ffffff;    /* {design.semantic.color.surface.base}     · white     */
-  --color-surface-raised: #ffffff;    /* {design.semantic.color.surface.raised}   · white     */
-  --color-surface-sunken: #f8fafc;    /* {design.semantic.color.surface.sunken}   · slate.50  */
-  --color-surface-page:   #f8fafc;    /* {design.semantic.color.surface.page}     · slate.50  */
-
-  /* ── Colors · Status ───────────────────────────────────────────────────── */
-  --color-status-success-default: #16a34a; /* {design.semantic.color.status.success.default} · green.600 */
-  --color-status-success-soft:    #dcfce7; /* {design.semantic.color.status.success.soft}    · green.100 */
-  --color-status-warning-default: #d97706; /* {design.semantic.color.status.warning.default} · amber.600 */
-  --color-status-warning-soft:    #fef3c7; /* {design.semantic.color.status.warning.soft}    · amber.100 */
-  --color-status-error-default:   #dc2626; /* {design.semantic.color.status.error.default}   · red.600   */
-  --color-status-error-soft:      #fee2e2; /* {design.semantic.color.status.error.soft}      · red.100   */
-  --color-status-info-default:    #2563eb; /* {design.semantic.color.status.info.default}    · blue.600  */
-  --color-status-info-soft:       #dbeafe; /* {design.semantic.color.status.info.soft}       · blue.100  */
-
-  /* ── Radius ────────────────────────────────────────────────────────────── */
-  --radius-none: 0;                   /* {design.semantic.radius.none} */
-  --radius-sm:   4px;                 /* {design.semantic.radius.sm}   */
-  --radius-md:   8px;                 /* {design.semantic.radius.md}   */
-  --radius-lg:   12px;                /* {design.semantic.radius.lg}   */
-  --radius-xl:   16px;                /* {design.semantic.radius.xl}   */
-  --radius-pill: 9999px;              /* {design.semantic.radius.pill} */
-
-  /* ── Spacing (4px base) ────────────────────────────────────────────────── */
-  --space-1:  4px;                    /* {design.semantic.space.1}  */
-  --space-2:  8px;                    /* {design.semantic.space.2}  */
-  --space-3:  12px;                   /* {design.semantic.space.3}  */
-  --space-4:  16px;                   /* {design.semantic.space.4}  */
-  --space-5:  20px;                   /* {design.semantic.space.5}  */
-  --space-6:  24px;                   /* {design.semantic.space.6}  */
-  --space-8:  32px;                   /* {design.semantic.space.8}  */
-  --space-10: 40px;                   /* {design.semantic.space.10} */
-  --space-12: 48px;                   /* {design.semantic.space.12} */
-  --space-16: 64px;                   /* {design.semantic.space.16} */
-
-  /* ── Shadow ────────────────────────────────────────────────────────────── */
-  --shadow-sm:    0 1px 2px 0 rgba(15, 23, 42, 0.05);                                        /* {design.semantic.shadow.sm}    */
-  --shadow-md:    0 4px 6px -1px rgba(15, 23, 42, 0.10), 0 2px 4px -2px rgba(15, 23, 42, 0.05); /* {design.semantic.shadow.md}    */
-  --shadow-lg:    0 10px 15px -3px rgba(15, 23, 42, 0.10), 0 4px 6px -4px rgba(15, 23, 42, 0.05);/* {design.semantic.shadow.lg}    */
-  --shadow-focus: 0 0 0 3px rgba(37, 99, 235, 0.40);                                          /* {design.semantic.shadow.focus} */
-
-  /* ── Typography · Family ───────────────────────────────────────────────── */
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;  /* {design.semantic.font.sans} */
-  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;             /* {design.semantic.font.mono} */
-
-  /* ── Typography · Size ─────────────────────────────────────────────────── */
-  --text-xs:  12px;                   /* {design.semantic.text.xs}  */
-  --text-sm:  14px;                   /* {design.semantic.text.sm}  */
-  --text-md:  16px;                   /* {design.semantic.text.md}  */
-  --text-lg:  18px;                   /* {design.semantic.text.lg}  */
-  --text-xl:  20px;                   /* {design.semantic.text.xl}  */
-  --text-2xl: 24px;                   /* {design.semantic.text.2xl} */
-
-  /* ── Typography · Line height ──────────────────────────────────────────── */
-  --leading-tight:   1.25;            /* {design.semantic.leading.tight}   */
-  --leading-normal:  1.5;             /* {design.semantic.leading.normal}  */
-  --leading-relaxed: 1.75;            /* {design.semantic.leading.relaxed} */
-
-  /* ── Typography · Weight ───────────────────────────────────────────────── */
-  --weight-regular:  400;             /* {design.semantic.weight.regular}  */
-  --weight-medium:   500;             /* {design.semantic.weight.medium}   */
-  --weight-semibold: 600;             /* {design.semantic.weight.semibold} */
-  --weight-bold:     700;             /* {design.semantic.weight.bold}     */
-
-  /* ── Typography · Letter spacing ───────────────────────────────────────── */
-  --tracking-tight:  -0.01em;         /* {design.semantic.tracking.tight}  */
-  --tracking-normal: 0;               /* {design.semantic.tracking.normal} */
-  --tracking-wide:   0.02em;          /* {design.semantic.tracking.wide}   */
-
-  /* ── A11y ──────────────────────────────────────────────────────────────── */
-  --touch-min:  44px;                 /* {design.semantic.a11y.touch-min}  · WCAG 2.5.5 target size */
-  --focus-ring: 2px;                  /* {design.semantic.a11y.focus-ring} · WCAG 2.4.7 outline     */
-}
 
 /* ============================================================================
- * Dark theme overrides — only color tokens shift; spacing/radius/type stable.
- * Activate with `<html data-theme="dark">` or `<body data-theme="dark">`.
- * ========================================================================= */
+   SECTION 1 — SYS TIER (semantic foundation)
+   ============================================================================ */
+
+:root {
+  /* --- Color · Brand ----------------------------------------------------- */
+  --sys-color-primary:        #2563eb;   /* USE: primary action color (blue.600) */
+  --sys-color-primary-dark:   #1d4ed8;   /* USE: primary on hover (blue.700) */
+  --sys-color-primary-darker: #1e40af;   /* USE: primary on active/pressed (blue.800) */
+  --sys-color-primary-soft:   #dbeafe;   /* USE: primary tint bg, selected row (blue.100) */
+
+  /* --- Color · Text ------------------------------------------------------ */
+  --sys-color-text-primary:     #0f172a; /* USE: body & heading text (slate.900) */
+  --sys-color-text-secondary:   #475569; /* USE: secondary/meta text (slate.600) */
+  --sys-color-text-tertiary:    #94a3b8; /* USE: placeholder, hint (slate.400) */
+  --sys-color-text-on-bgcolor:  #ffffff; /* USE: text on filled brand/status bg */
+  --sys-color-text-disable:     #cbd5e1; /* USE: disabled label/value (slate.300) */
+  --sys-color-text-link:        #2563eb; /* USE: inline link text */
+
+  /* --- Color · Border ---------------------------------------------------- */
+  --sys-color-border-default:  #e2e8f0;  /* USE: card, input, divider (slate.200) */
+  --sys-color-border-strong:   #cbd5e1;  /* USE: emphasized divider (slate.300) */
+  --sys-color-border-focus:    #2563eb;  /* USE: focused input border */
+  --sys-color-border-error:    #dc2626;  /* USE: invalid input border (red.600) */
+  --sys-color-border-disable:  #e2e8f0;  /* USE: disabled control border */
+
+  /* --- Color · Surface --------------------------------------------------- */
+  --sys-color-surface-base:    #ffffff;  /* USE: card, modal, page bg */
+  --sys-color-surface-raised:  #ffffff;  /* USE: floating panel (popover, dropdown) */
+  --sys-color-surface-sunken:  #f8fafc;  /* USE: app shell / page bg behind cards (slate.50) */
+  --sys-color-surface-muted:   #f1f5f9;  /* USE: subtle row hover, tag bg (slate.100) */
+  --sys-color-surface-overlay: rgba(15, 23, 42, 0.5); /* USE: modal scrim */
+
+  /* --- Color · Status ---------------------------------------------------- */
+  --sys-color-status-success:  #16a34a;  /* USE: success bg/icon (green.600) */
+  --sys-color-status-warning:  #d97706;  /* USE: warning bg/icon (amber.600) */
+  --sys-color-status-error:    #dc2626;  /* USE: error bg/icon (red.600) */
+  --sys-color-status-info:     #2563eb;  /* USE: info bg/icon (blue.600) */
+
+  --sys-color-status-success-soft: #dcfce7; /* USE: success tint bg (green.100) */
+  --sys-color-status-warning-soft: #fef3c7; /* USE: warning tint bg (amber.100) */
+  --sys-color-status-error-soft:   #fee2e2; /* USE: error tint bg (red.100) */
+  --sys-color-status-info-soft:    #dbeafe; /* USE: info tint bg (blue.100) */
+
+  /* --- Radius ------------------------------------------------------------ */
+  --sys-radius-none: 0;                   /* USE: edge-to-edge surface */
+  --sys-radius-sm:   4px;                 /* USE: badge, tag, checkbox */
+  --sys-radius-md:   8px;                 /* USE: button, input, card (default) */
+  --sys-radius-lg:   12px;                /* USE: modal, large card */
+  --sys-radius-xl:   16px;                /* USE: hero card, feature surface */
+  --sys-radius-pill: 9999px;              /* USE: pill button, avatar, switch */
+
+  /* --- Space (4px base scale) ------------------------------------------- */
+  --sys-space-1:  4px;                    /* USE: hairline gap, icon-text gap */
+  --sys-space-2:  8px;                    /* USE: tight stack, badge padding */
+  --sys-space-3:  12px;                   /* USE: button py, input py */
+  --sys-space-4:  16px;                   /* USE: card padding, button px (default) */
+  --sys-space-5:  20px;                   /* USE: section gap */
+  --sys-space-6:  24px;                   /* USE: card padding (comfortable), modal padding */
+  --sys-space-8:  32px;                   /* USE: large card, section vertical rhythm */
+  --sys-space-10: 40px;                   /* USE: page section gap */
+  --sys-space-12: 48px;                   /* USE: hero spacing */
+  --sys-space-16: 64px;                   /* USE: top-level page rhythm */
+
+  /* --- Shadow ------------------------------------------------------------ */
+  --sys-shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.05);                          /* USE: subtle lift (card resting) */
+  --sys-shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.10), 0 2px 4px -2px rgba(15, 23, 42, 0.10); /* USE: button, raised card */
+  --sys-shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.10), 0 4px 6px -4px rgba(15, 23, 42, 0.10); /* USE: modal, popover */
+  --sys-shadow-focus: 0 0 0 3px rgba(37, 99, 235, 0.35);                        /* USE: focus ring (a11y) */
+
+  /* --- Typography · Family ---------------------------------------------- */
+  --sys-font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --sys-font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+  /* --- Typography · Size ------------------------------------------------- */
+  --sys-text-xs:  12px;                   /* USE: caption, badge */
+  --sys-text-sm:  14px;                   /* USE: secondary label, helper text */
+  --sys-text-md:  16px;                   /* USE: body, input, button (default) */
+  --sys-text-lg:  18px;                   /* USE: subhead */
+  --sys-text-xl:  20px;                   /* USE: card title */
+  --sys-text-2xl: 24px;                   /* USE: page heading */
+
+  /* --- Typography · Leading --------------------------------------------- */
+  --sys-leading-tight:   1.25;             /* USE: heading */
+  --sys-leading-normal:  1.5;              /* USE: body (default) */
+  --sys-leading-relaxed: 1.75;             /* USE: long-form reading */
+
+  /* --- Typography · Weight ---------------------------------------------- */
+  --sys-weight-regular:  400;              /* USE: body */
+  --sys-weight-medium:   500;              /* USE: label, secondary action */
+  --sys-weight-semibold: 600;              /* USE: button, heading */
+  --sys-weight-bold:     700;              /* USE: emphasis, page title */
+
+  /* --- Interaction ------------------------------------------------------- */
+  --sys-touch-min: 44px;                   /* USE: min hit target (WCAG 2.5.5) */
+  --sys-focus-ring: var(--sys-shadow-focus); /* USE: outline alternative on focus */
+}
+
+
+/* ============================================================================
+   SECTION 2 — COMP TIER (component aliases — USE THESE in component CSS)
+   ============================================================================ */
+
+:root {
+  /* --- Button ------------------------------------------------------------ */
+  --btn-bg:            var(--sys-color-primary);
+  --btn-bg-hover:      var(--sys-color-primary-dark);
+  --btn-bg-active:     var(--sys-color-primary-darker);
+  --btn-bg-disabled:   var(--sys-color-border-disable);
+  --btn-text:          var(--sys-color-text-on-bgcolor);
+  --btn-text-disabled: var(--sys-color-text-disable);
+  --btn-radius:        var(--sys-radius-md);
+  --btn-shadow:        var(--sys-shadow-md);
+  --btn-shadow-focus:  var(--sys-shadow-focus);
+  --btn-px:            var(--sys-space-4);
+  --btn-py:            var(--sys-space-3);
+  --btn-h:             var(--sys-touch-min);
+  --btn-font:          var(--sys-text-md);
+  --btn-weight:        var(--sys-weight-semibold);
+
+  /* --- Input ------------------------------------------------------------- */
+  --input-bg:            var(--sys-color-surface-base);
+  --input-bg-disabled:   var(--sys-color-surface-muted);
+  --input-border:        var(--sys-color-border-default);
+  --input-border-focus:  var(--sys-color-border-focus);
+  --input-border-error:  var(--sys-color-border-error);
+  --input-text:          var(--sys-color-text-primary);
+  --input-placeholder:   var(--sys-color-text-tertiary);
+  --input-radius:        var(--sys-radius-md);
+  --input-shadow-focus:  var(--sys-shadow-focus);
+  --input-px:            var(--sys-space-3);
+  --input-py:            var(--sys-space-3);
+  --input-h:             var(--sys-touch-min);
+  --input-font:          var(--sys-text-md);
+
+  /* --- Select ------------------------------------------------------------ */
+  --select-bg:              var(--sys-color-surface-base);
+  --select-border:          var(--sys-color-border-default);
+  --select-border-focus:    var(--sys-color-border-focus);
+  --select-text:            var(--sys-color-text-primary);
+  --select-placeholder:     var(--sys-color-text-tertiary);
+  --select-radius:          var(--sys-radius-md);
+  --select-px:              var(--sys-space-3);
+  --select-py:              var(--sys-space-3);
+  --select-h:               var(--sys-touch-min);
+  --select-font:            var(--sys-text-md);
+  --select-arrow:           var(--sys-color-text-secondary);
+  --select-dropdown-bg:     var(--sys-color-surface-raised);
+  --select-dropdown-shadow: var(--sys-shadow-lg);
+
+  /* --- Checkbox ---------------------------------------------------------- */
+  --checkbox-size:         20px;
+  --checkbox-bg:           var(--sys-color-surface-base);
+  --checkbox-border:       var(--sys-color-border-strong);
+  --checkbox-bg-checked:   var(--sys-color-primary);
+  --checkbox-check:        var(--sys-color-text-on-bgcolor);
+  --checkbox-radius:       var(--sys-radius-sm);
+  --checkbox-shadow-focus: var(--sys-shadow-focus);
+
+  /* --- Radio ------------------------------------------------------------- */
+  --radio-size:         20px;
+  --radio-bg:           var(--sys-color-surface-base);
+  --radio-border:       var(--sys-color-border-strong);
+  --radio-bg-checked:   var(--sys-color-primary);
+  --radio-dot:          var(--sys-color-text-on-bgcolor);
+  --radio-shadow-focus: var(--sys-shadow-focus);
+
+  /* --- Textarea ---------------------------------------------------------- */
+  --textarea-bg:           var(--sys-color-surface-base);
+  --textarea-border:       var(--sys-color-border-default);
+  --textarea-border-focus: var(--sys-color-border-focus);
+  --textarea-border-error: var(--sys-color-border-error);
+  --textarea-text:         var(--sys-color-text-primary);
+  --textarea-placeholder:  var(--sys-color-text-tertiary);
+  --textarea-radius:       var(--sys-radius-md);
+  --textarea-px:           var(--sys-space-3);
+  --textarea-py:           var(--sys-space-3);
+  --textarea-font:         var(--sys-text-md);
+  --textarea-min-h:        96px;
+
+  /* --- Label ------------------------------------------------------------- */
+  --label-color:          var(--sys-color-text-primary);
+  --label-color-required: var(--sys-color-status-error);
+  --label-color-error:    var(--sys-color-status-error);
+  --label-color-disabled: var(--sys-color-text-disable);
+  --label-weight:         var(--sys-weight-medium);
+  --label-font:           var(--sys-text-sm);
+
+  /* --- Card -------------------------------------------------------------- */
+  --card-bg:      var(--sys-color-surface-base);
+  --card-border:  var(--sys-color-border-default);
+  --card-radius:  var(--sys-radius-lg);
+  --card-shadow:  var(--sys-shadow-sm);
+  --card-padding: var(--sys-space-6);
+
+  /* --- Badge ------------------------------------------------------------- */
+  --badge-bg-success:  var(--sys-color-status-success-soft);
+  --badge-bg-warning:  var(--sys-color-status-warning-soft);
+  --badge-bg-error:    var(--sys-color-status-error-soft);
+  --badge-bg-info:     var(--sys-color-status-info-soft);
+  --badge-bg-neutral:  var(--sys-color-surface-muted);
+
+  --badge-text-success: var(--sys-color-status-success);
+  --badge-text-warning: var(--sys-color-status-warning);
+  --badge-text-error:   var(--sys-color-status-error);
+  --badge-text-info:    var(--sys-color-status-info);
+  --badge-text-neutral: var(--sys-color-text-secondary);
+
+  --badge-radius: var(--sys-radius-pill);
+  --badge-px:     var(--sys-space-2);
+  --badge-py:     var(--sys-space-1);
+  --badge-font:   var(--sys-text-xs);
+  --badge-weight: var(--sys-weight-medium);
+}
+
+
+/* ============================================================================
+   SECTION 3 — DARK MODE (sys tier overrides only)
+   ----------------------------------------------------------------------------
+   Comp aliases above auto-resolve through CSS var() — no duplication.
+   ============================================================================ */
 
 [data-theme="dark"] {
-  /* ── Colors · Brand ────────────────────────────────────────────────────── */
-  --color-primary-default: #3b82f6;   /* {design.semantic.color.primary.default}  · blue.500  */
-  --color-primary-dark:    #2563eb;   /* {design.semantic.color.primary.dark}     · blue.600  */
-  --color-primary-darker:  #1d4ed8;   /* {design.semantic.color.primary.darker}   · blue.700  */
-  --color-primary-soft:    #1e3a8a;   /* {design.semantic.color.primary.soft}     · blue.900  */
-  --color-primary-subtle:  #172554;   /* {design.semantic.color.primary.subtle}   · blue.950  */
+  /* --- Color · Brand ----------------------------------------------------- */
+  --sys-color-primary:        #3b82f6;   /* blue.500 — lifted for dark contrast */
+  --sys-color-primary-dark:   #2563eb;   /* blue.600 */
+  --sys-color-primary-darker: #1d4ed8;   /* blue.700 */
+  --sys-color-primary-soft:   #1e3a8a;   /* blue.900 — dark tint bg */
 
-  --color-secondary-default: #94a3b8; /* {design.semantic.color.secondary.default} · slate.400 */
-  --color-secondary-dark:    #cbd5e1; /* {design.semantic.color.secondary.dark}    · slate.300 */
-  --color-secondary-darker:  #e2e8f0; /* {design.semantic.color.secondary.darker}  · slate.200 */
-  --color-secondary-soft:    #334155; /* {design.semantic.color.secondary.soft}    · slate.700 */
-  --color-secondary-subtle:  #1e293b; /* {design.semantic.color.secondary.subtle}  · slate.800 */
+  /* --- Color · Text ------------------------------------------------------ */
+  --sys-color-text-primary:    #f1f5f9;  /* slate.100 */
+  --sys-color-text-secondary:  #cbd5e1;  /* slate.300 */
+  --sys-color-text-tertiary:   #64748b;  /* slate.500 */
+  --sys-color-text-on-bgcolor: #ffffff;
+  --sys-color-text-disable:    #475569;  /* slate.600 */
+  --sys-color-text-link:       #60a5fa;  /* blue.400 */
 
-  --color-accent-default: #22d3ee;    /* {design.semantic.color.accent.default}   · cyan.400  */
-  --color-accent-dark:    #06b6d4;    /* {design.semantic.color.accent.dark}      · cyan.500  */
-  --color-accent-darker:  #0891b2;    /* {design.semantic.color.accent.darker}    · cyan.600  */
-  --color-accent-soft:    #164e63;    /* {design.semantic.color.accent.soft}      · cyan.900  */
-  --color-accent-subtle:  #083344;    /* {design.semantic.color.accent.subtle}    · cyan.950  */
+  /* --- Color · Border ---------------------------------------------------- */
+  --sys-color-border-default: #334155;   /* slate.700 */
+  --sys-color-border-strong:  #475569;   /* slate.600 */
+  --sys-color-border-focus:   #3b82f6;
+  --sys-color-border-error:   #ef4444;   /* red.500 */
+  --sys-color-border-disable: #334155;
 
-  /* ── Colors · Text ─────────────────────────────────────────────────────── */
-  --color-text-primary:   #f8fafc;    /* {design.semantic.color.text.primary}     · slate.50  */
-  --color-text-secondary: #cbd5e1;    /* {design.semantic.color.text.secondary}   · slate.300 */
-  --color-text-tertiary:  #94a3b8;    /* {design.semantic.color.text.tertiary}    · slate.400 */
-  --color-text-on-bgcolor: #ffffff;   /* {design.semantic.color.text.on-bgcolor}  · white     */
-  --color-text-disable:   #475569;    /* {design.semantic.color.text.disable}     · slate.600 */
-  --color-text-inverse:   #0f172a;    /* {design.semantic.color.text.inverse}     · slate.900 */
+  /* --- Color · Surface --------------------------------------------------- */
+  --sys-color-surface-base:    #0f172a;  /* slate.900 */
+  --sys-color-surface-raised:  #1e293b;  /* slate.800 */
+  --sys-color-surface-sunken:  #020617;  /* slate.950 */
+  --sys-color-surface-muted:   #1e293b;
+  --sys-color-surface-overlay: rgba(0, 0, 0, 0.7);
 
-  --color-text-state-error:   #f87171; /* {design.semantic.color.text.state.error}   · red.400    */
-  --color-text-state-warning: #fbbf24; /* {design.semantic.color.text.state.warning} · amber.400  */
-  --color-text-state-success: #4ade80; /* {design.semantic.color.text.state.success} · green.400  */
-  --color-text-state-info:    #60a5fa; /* {design.semantic.color.text.state.info}    · blue.400   */
+  /* --- Color · Status (lifted for dark bg contrast) ---------------------- */
+  --sys-color-status-success: #22c55e;   /* green.500 */
+  --sys-color-status-warning: #f59e0b;   /* amber.500 */
+  --sys-color-status-error:   #ef4444;   /* red.500 */
+  --sys-color-status-info:    #3b82f6;   /* blue.500 */
 
-  /* ── Colors · Border ───────────────────────────────────────────────────── */
-  --color-border-default: #334155;    /* {design.semantic.color.border.default}   · slate.700 */
-  --color-border-disable: #1e293b;    /* {design.semantic.color.border.disable}   · slate.800 */
-  --color-border-focus:   #3b82f6;    /* {design.semantic.color.border.focus}     · blue.500  */
-  --color-border-error:   #ef4444;    /* {design.semantic.color.border.error}     · red.500   */
+  --sys-color-status-success-soft: #14532d; /* green.900 */
+  --sys-color-status-warning-soft: #78350f; /* amber.900 */
+  --sys-color-status-error-soft:   #7f1d1d; /* red.900 */
+  --sys-color-status-info-soft:    #1e3a8a; /* blue.900 */
 
-  /* ── Colors · Surface ──────────────────────────────────────────────────── */
-  --color-surface-base:   #0f172a;    /* {design.semantic.color.surface.base}     · slate.900 */
-  --color-surface-raised: #1e293b;    /* {design.semantic.color.surface.raised}   · slate.800 */
-  --color-surface-sunken: #020617;    /* {design.semantic.color.surface.sunken}   · slate.950 */
-  --color-surface-page:   #020617;    /* {design.semantic.color.surface.page}     · slate.950 */
-
-  /* ── Colors · Status ───────────────────────────────────────────────────── */
-  --color-status-success-default: #22c55e; /* {design.semantic.color.status.success.default} · green.500 */
-  --color-status-success-soft:    #14532d; /* {design.semantic.color.status.success.soft}    · green.900 */
-  --color-status-warning-default: #f59e0b; /* {design.semantic.color.status.warning.default} · amber.500 */
-  --color-status-warning-soft:    #78350f; /* {design.semantic.color.status.warning.soft}    · amber.900 */
-  --color-status-error-default:   #ef4444; /* {design.semantic.color.status.error.default}   · red.500   */
-  --color-status-error-soft:      #7f1d1d; /* {design.semantic.color.status.error.soft}      · red.900   */
-  --color-status-info-default:    #3b82f6; /* {design.semantic.color.status.info.default}    · blue.500  */
-  --color-status-info-soft:       #1e3a8a; /* {design.semantic.color.status.info.soft}       · blue.900  */
-
-  /* ── Shadow (deeper for dark surfaces) ─────────────────────────────────── */
-  --shadow-sm:    0 1px 2px 0 rgba(0, 0, 0, 0.40);                                            /* {design.semantic.shadow.sm}    */
-  --shadow-md:    0 4px 6px -1px rgba(0, 0, 0, 0.50), 0 2px 4px -2px rgba(0, 0, 0, 0.40);     /* {design.semantic.shadow.md}    */
-  --shadow-lg:    0 10px 15px -3px rgba(0, 0, 0, 0.60), 0 4px 6px -4px rgba(0, 0, 0, 0.40);   /* {design.semantic.shadow.lg}    */
-  --shadow-focus: 0 0 0 3px rgba(59, 130, 246, 0.50);                                         /* {design.semantic.shadow.focus} */
+  /* --- Shadow (deeper for dark surface) --------------------------------- */
+  --sys-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.40);
+  --sys-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.50), 0 2px 4px -2px rgba(0, 0, 0, 0.40);
+  --sys-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.60), 0 4px 6px -4px rgba(0, 0, 0, 0.40);
+  --sys-shadow-focus: 0 0 0 3px rgba(59, 130, 246, 0.50);
 }

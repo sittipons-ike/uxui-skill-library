@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- ds-button | Tokens: --color-primary-*, --color-secondary-*, --color-text-*, --color-bg-*, --color-border-*, --radius-md, --space-2, --space-3, --space-4, --shadow-sm, --shadow-focus, --font-sans, --text-sm, --text-md, --text-lg, --leading-md, --weight-semibold, --touch-min, --duration-fast | A11y: native <button>, aria-disabled, aria-busy for loading, :focus-visible halo >=3:1, hit area >=44px -->
+<!-- ds-button | Comp-tier tokens: --btn-bg, --btn-bg-hover, --btn-bg-active, --btn-bg-disabled, --btn-text, --btn-text-disabled, --btn-radius, --btn-shadow, --btn-shadow-focus, --btn-px, --btn-py, --btn-h, --btn-font, --btn-weight + variant aliases (--btn-secondary-*, --btn-ghost-*) + size aliases (--btn-px-sm/lg, --btn-py-sm/lg, --btn-font-sm/lg) | A11y: native <button>, aria-disabled, aria-busy for loading, :focus-visible halo >=3:1, hit area >=44px -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -8,17 +8,17 @@
   <link rel="stylesheet" href="../tokens.css">
   <style>
     body {
-      font-family: var(--font-sans);
-      color: var(--color-text-default);
-      background: var(--color-bg-default);
-      padding: var(--space-6, 24px);
-      line-height: var(--leading-md);
+      font-family: var(--btn-font);
+      color: var(--page-text);
+      background: var(--page-bg);
+      padding: var(--page-px);
+      line-height: var(--page-leading);
     }
-    h1 { font-size: var(--text-2xl, 24px); margin-bottom: var(--space-2); }
-    h2 { font-size: var(--text-lg); margin-top: var(--space-6, 24px); border-bottom: 1px solid var(--color-border-subtle); padding-bottom: var(--space-2); }
-    h3 { font-size: var(--text-md); margin-top: var(--space-4); color: var(--color-text-muted); font-weight: var(--weight-semibold); }
-    .row { display: flex; gap: var(--space-3); flex-wrap: wrap; align-items: center; padding: var(--space-2) 0; }
-    .desc { color: var(--color-text-muted); max-width: 60ch; }
+    h1 { font-size: var(--page-h1-size); margin-bottom: var(--page-gap-xs); }
+    h2 { font-size: var(--page-h2-size); margin-top: var(--page-gap-lg); border-bottom: 1px solid var(--page-border); padding-bottom: var(--page-gap-xs); }
+    h3 { font-size: var(--page-h3-size); margin-top: var(--page-gap-md); color: var(--page-text-muted); font-weight: var(--btn-weight); }
+    .row { display: flex; gap: var(--page-row-gap); flex-wrap: wrap; align-items: center; padding: var(--page-gap-xs) 0; }
+    .desc { color: var(--page-text-muted); max-width: 60ch; }
 
     /* ============ ds-button base ============ */
     .ds-button {
@@ -26,112 +26,117 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: var(--space-2);
-      min-height: var(--touch-min, 44px);
-      padding: var(--space-2) var(--space-4);
+      gap: var(--btn-gap);
+      min-height: var(--btn-h);
+      padding: var(--btn-py) var(--btn-px);
       /* typography */
-      font-family: var(--font-sans);
-      font-size: var(--text-md);
-      line-height: var(--leading-md);
-      font-weight: var(--weight-semibold);
+      font-family: var(--btn-font);
+      font-size: var(--btn-font-size);
+      line-height: var(--btn-leading);
+      font-weight: var(--btn-weight);
       /* shape */
-      border-radius: var(--radius-md);
-      border: 1px solid transparent;
+      border-radius: var(--btn-radius);
+      border: var(--btn-border-width) solid transparent;
+      box-shadow: var(--btn-shadow);
       cursor: pointer;
       user-select: none;
-      transition: background-color var(--duration-fast, 150ms) ease,
-                  border-color var(--duration-fast, 150ms) ease,
-                  box-shadow var(--duration-fast, 150ms) ease,
-                  color var(--duration-fast, 150ms) ease;
+      transition: background-color var(--btn-transition) ease,
+                  border-color var(--btn-transition) ease,
+                  box-shadow var(--btn-transition) ease,
+                  color var(--btn-transition) ease;
     }
 
     .ds-button:focus { outline: none; }
     .ds-button:focus-visible,
     .ds-button.is-focus {
-      box-shadow: var(--shadow-focus, 0 0 0 3px rgba(59,130,246,0.5));
+      box-shadow: var(--btn-shadow-focus);
     }
 
     /* size modifiers */
     .ds-button--sm {
-      min-height: var(--touch-min, 44px); /* maintain 44px hit area */
-      padding: var(--space-1, 4px) var(--space-3);
-      font-size: var(--text-sm);
+      min-height: var(--btn-h);
+      padding: var(--btn-py-sm) var(--btn-px-sm);
+      font-size: var(--btn-font-sm);
     }
     .ds-button--md {
-      padding: var(--space-2) var(--space-4);
-      font-size: var(--text-md);
+      padding: var(--btn-py) var(--btn-px);
+      font-size: var(--btn-font-size);
     }
     .ds-button--lg {
-      padding: var(--space-3) var(--space-5, 20px);
-      font-size: var(--text-lg);
+      padding: var(--btn-py-lg) var(--btn-px-lg);
+      font-size: var(--btn-font-lg);
     }
 
     /* variant: primary */
     .ds-button--primary {
-      background: var(--color-primary-default);
-      color: var(--color-text-on-primary, #fff);
-      border-color: var(--color-primary-default);
+      background: var(--btn-bg);
+      color: var(--btn-text);
+      border-color: var(--btn-bg);
     }
     .ds-button--primary:hover,
     .ds-button--primary.is-hover {
-      background: var(--color-primary-hover);
-      border-color: var(--color-primary-hover);
+      background: var(--btn-bg-hover);
+      border-color: var(--btn-bg-hover);
     }
     .ds-button--primary:active,
     .ds-button--primary.is-active {
-      background: var(--color-primary-active);
-      border-color: var(--color-primary-active);
+      background: var(--btn-bg-active);
+      border-color: var(--btn-bg-active);
     }
 
     /* variant: secondary */
     .ds-button--secondary {
-      background: var(--color-bg-default);
-      color: var(--color-primary-default);
-      border-color: var(--color-border-default);
+      background: var(--btn-secondary-bg);
+      color: var(--btn-secondary-text);
+      border-color: var(--btn-secondary-border);
     }
     .ds-button--secondary:hover,
     .ds-button--secondary.is-hover {
-      background: var(--color-bg-subtle);
-      border-color: var(--color-primary-default);
+      background: var(--btn-secondary-bg-hover);
+      border-color: var(--btn-secondary-border-hover);
     }
     .ds-button--secondary:active,
     .ds-button--secondary.is-active {
-      background: var(--color-bg-muted, var(--color-bg-subtle));
+      background: var(--btn-secondary-bg-active);
+      border-color: var(--btn-secondary-border-active);
     }
 
     /* variant: ghost */
     .ds-button--ghost {
-      background: transparent;
-      color: var(--color-primary-default);
-      border-color: transparent;
+      background: var(--btn-ghost-bg);
+      color: var(--btn-ghost-text);
+      border-color: var(--btn-ghost-border);
     }
     .ds-button--ghost:hover,
     .ds-button--ghost.is-hover {
-      background: var(--color-bg-subtle);
+      background: var(--btn-ghost-bg-hover);
     }
     .ds-button--ghost:active,
     .ds-button--ghost.is-active {
-      background: var(--color-bg-muted, var(--color-bg-subtle));
+      background: var(--btn-ghost-bg-active);
     }
 
     /* disabled */
     .ds-button:disabled,
     .ds-button.is-disabled {
-      opacity: 0.5;
+      background: var(--btn-bg-disabled);
+      color: var(--btn-text-disabled);
+      border-color: var(--btn-bg-disabled);
+      opacity: var(--btn-opacity-disabled);
       cursor: not-allowed;
       pointer-events: none;
     }
 
     /* loading */
     .ds-button.is-loading { cursor: progress; pointer-events: none; }
-    .ds-button.is-loading .ds-button__label { opacity: 0.6; }
+    .ds-button.is-loading .ds-button__label { opacity: var(--btn-opacity-loading); }
     .ds-button__spinner {
       width: 1em;
       height: 1em;
-      border: 2px solid currentColor;
+      border: var(--btn-spinner-width) solid currentColor;
       border-right-color: transparent;
       border-radius: 50%;
-      animation: ds-spin 0.7s linear infinite;
+      animation: ds-spin var(--btn-spinner-duration) linear infinite;
       display: inline-block;
     }
     @keyframes ds-spin { to { transform: rotate(360deg); } }

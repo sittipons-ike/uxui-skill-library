@@ -1,118 +1,118 @@
 <!DOCTYPE html>
-<!-- ds-select | Tokens: --color-bg-default, --color-bg-subtle, --color-border-default, --color-border-strong, --color-primary-default, --color-danger-default, --color-text-default, --color-text-muted, --radius-md, --space-2, --space-3, --space-4, --shadow-md, --shadow-focus, --font-sans, --text-md, --leading-md, --weight-regular, --weight-semibold, --touch-min | A11y: native <select> with <label for>; custom dropdown uses role=combobox, aria-haspopup=listbox, aria-expanded, role=listbox, role=option, aria-selected, aria-disabled, aria-invalid, aria-describedby for error -->
+<!-- ds-select | Comp-tier tokens: --select-bg, --select-bg-disabled, --select-color, --select-color-muted, --select-color-disabled, --select-color-selected, --select-border, --select-border-focus, --select-border-error, --select-radius, --select-py, --select-px, --select-px-end, --select-gap, --select-min-h, --select-font, --select-font-size, --select-line-height, --select-font-weight, --select-font-weight-strong, --select-shadow-focus, --select-arrow, --select-dropdown-bg, --select-dropdown-border, --select-dropdown-radius, --select-dropdown-shadow, --select-dropdown-padding, --select-dropdown-offset, --select-dropdown-max-h, --select-option-bg-hover, --select-option-radius, --select-option-py, --select-option-px, --select-label-color, --select-label-font-weight, --select-help-color, --select-error-color, --select-page-bg, --select-page-padding, --select-section-gap, --select-section-padding, --select-section-border, --select-section-radius, --select-field-gap, --select-field-max-w | A11y: native <select> with <label for>; custom dropdown uses role=combobox, aria-haspopup=listbox, aria-expanded, role=listbox, role=option, aria-selected, aria-disabled, aria-invalid, aria-describedby for error -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>ds-select</title>
   <link rel="stylesheet" href="../tokens.css">
   <style>
-    body { font-family: var(--font-sans); color: var(--color-text-default); background: var(--color-bg-default); padding: var(--space-4); max-width: 920px; margin: 0 auto; }
-    h1 { font-weight: var(--weight-semibold); }
-    section { margin-block: var(--space-4); padding: var(--space-3); border: 1px solid var(--color-border-default); border-radius: var(--radius-md); }
-    h3 { margin-block: var(--space-2); font-size: var(--text-md); font-weight: var(--weight-semibold); }
-    .field { display: flex; flex-direction: column; gap: var(--space-2); max-width: 320px; margin-block: var(--space-3); }
-    label { font-size: var(--text-md); font-weight: var(--weight-semibold); color: var(--color-text-default); }
-    .help { font-size: var(--text-md); color: var(--color-text-muted); }
-    .err { font-size: var(--text-md); color: var(--color-danger-default); }
+    body { font-family: var(--select-font); color: var(--select-color); background: var(--select-page-bg); padding: var(--select-page-padding); max-width: 920px; margin: 0 auto; }
+    h1 { font-weight: var(--select-font-weight-strong); }
+    section { margin-block: var(--select-section-gap); padding: var(--select-section-padding); border: 1px solid var(--select-section-border); border-radius: var(--select-section-radius); }
+    h3 { margin-block: var(--select-field-gap); font-size: var(--select-font-size); font-weight: var(--select-font-weight-strong); }
+    .field { display: flex; flex-direction: column; gap: var(--select-field-gap); max-width: var(--select-field-max-w); margin-block: var(--select-section-padding); }
+    label { font-size: var(--select-font-size); font-weight: var(--select-label-font-weight); color: var(--select-label-color); }
+    .help { font-size: var(--select-font-size); color: var(--select-help-color); }
+    .err { font-size: var(--select-font-size); color: var(--select-error-color); }
 
     /* Native select base */
     .ds-select {
-      font-family: var(--font-sans);
-      font-size: var(--text-md);
-      line-height: var(--leading-md);
-      font-weight: var(--weight-regular);
-      color: var(--color-text-default);
-      background: var(--color-bg-default);
-      border: 1px solid var(--color-border-default);
-      border-radius: var(--radius-md);
-      padding: var(--space-2) var(--space-3);
-      min-height: var(--touch-min);
+      font-family: var(--select-font);
+      font-size: var(--select-font-size);
+      line-height: var(--select-line-height);
+      font-weight: var(--select-font-weight);
+      color: var(--select-color);
+      background: var(--select-bg);
+      border: 1px solid var(--select-border);
+      border-radius: var(--select-radius);
+      padding: var(--select-py) var(--select-px);
+      min-height: var(--select-min-h);
       width: 100%;
       appearance: none;
-      background-image: linear-gradient(45deg, transparent 50%, var(--color-text-muted) 50%), linear-gradient(135deg, var(--color-text-muted) 50%, transparent 50%);
+      background-image: linear-gradient(45deg, transparent 50%, var(--select-arrow) 50%), linear-gradient(135deg, var(--select-arrow) 50%, transparent 50%);
       background-position: calc(100% - 18px) 50%, calc(100% - 12px) 50%;
       background-size: 6px 6px;
       background-repeat: no-repeat;
-      padding-right: var(--space-4);
+      padding-right: var(--select-px-end);
     }
     .ds-select:focus-visible {
       outline: none;
-      border-color: var(--color-primary-default);
-      box-shadow: var(--shadow-focus);
+      border-color: var(--select-border-focus);
+      box-shadow: var(--select-shadow-focus);
     }
-    .ds-select.is-error { border-color: var(--color-danger-default); }
-    .ds-select.is-error:focus-visible { box-shadow: var(--shadow-focus); border-color: var(--color-danger-default); }
+    .ds-select.is-error { border-color: var(--select-border-error); }
+    .ds-select.is-error:focus-visible { box-shadow: var(--select-shadow-focus); border-color: var(--select-border-error); }
     .ds-select:disabled, .ds-select.is-disabled {
-      background: var(--color-bg-subtle);
-      color: var(--color-text-muted);
+      background: var(--select-bg-disabled);
+      color: var(--select-color-disabled);
       cursor: not-allowed;
     }
 
     /* Custom dropdown */
     .ds-select--custom { position: relative; }
     .ds-select__trigger {
-      font-family: var(--font-sans);
-      font-size: var(--text-md);
-      line-height: var(--leading-md);
-      color: var(--color-text-default);
-      background: var(--color-bg-default);
-      border: 1px solid var(--color-border-default);
-      border-radius: var(--radius-md);
-      padding: var(--space-2) var(--space-3);
-      min-height: var(--touch-min);
+      font-family: var(--select-font);
+      font-size: var(--select-font-size);
+      line-height: var(--select-line-height);
+      color: var(--select-color);
+      background: var(--select-bg);
+      border: 1px solid var(--select-border);
+      border-radius: var(--select-radius);
+      padding: var(--select-py) var(--select-px);
+      min-height: var(--select-min-h);
       width: 100%;
       text-align: left;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: var(--space-2);
+      gap: var(--select-gap);
       cursor: pointer;
     }
     .ds-select__trigger:focus-visible {
       outline: none;
-      border-color: var(--color-primary-default);
-      box-shadow: var(--shadow-focus);
+      border-color: var(--select-border-focus);
+      box-shadow: var(--select-shadow-focus);
     }
-    .ds-select__trigger[aria-expanded="true"] { border-color: var(--color-primary-default); }
-    .ds-select--custom.is-error .ds-select__trigger { border-color: var(--color-danger-default); }
+    .ds-select__trigger[aria-expanded="true"] { border-color: var(--select-border-focus); }
+    .ds-select--custom.is-error .ds-select__trigger { border-color: var(--select-border-error); }
     .ds-select--custom.is-disabled .ds-select__trigger {
-      background: var(--color-bg-subtle);
-      color: var(--color-text-muted);
+      background: var(--select-bg-disabled);
+      color: var(--select-color-disabled);
       cursor: not-allowed;
     }
-    .ds-select__caret { color: var(--color-text-muted); font-size: var(--text-md); }
+    .ds-select__caret { color: var(--select-color-muted); font-size: var(--select-font-size); }
     .ds-select__listbox {
       position: absolute;
-      top: calc(100% + var(--space-2));
+      top: calc(100% + var(--select-dropdown-offset));
       left: 0;
       right: 0;
-      background: var(--color-bg-default);
-      border: 1px solid var(--color-border-strong);
-      border-radius: var(--radius-md);
-      box-shadow: var(--shadow-md);
+      background: var(--select-dropdown-bg);
+      border: 1px solid var(--select-dropdown-border);
+      border-radius: var(--select-dropdown-radius);
+      box-shadow: var(--select-dropdown-shadow);
       list-style: none;
       margin: 0;
-      padding: var(--space-2);
-      max-height: 240px;
+      padding: var(--select-dropdown-padding);
+      max-height: var(--select-dropdown-max-h);
       overflow-y: auto;
       z-index: 10;
     }
     .ds-select--custom:not(.is-open) .ds-select__listbox { display: none; }
     .ds-select__option {
-      padding: var(--space-2) var(--space-3);
-      border-radius: var(--radius-md);
+      padding: var(--select-option-py) var(--select-option-px);
+      border-radius: var(--select-option-radius);
       cursor: pointer;
-      font-size: var(--text-md);
-      line-height: var(--leading-md);
-      color: var(--color-text-default);
+      font-size: var(--select-font-size);
+      line-height: var(--select-line-height);
+      color: var(--select-color);
     }
     .ds-select__option[aria-selected="true"] {
-      background: var(--color-bg-subtle);
-      font-weight: var(--weight-semibold);
-      color: var(--color-primary-default);
+      background: var(--select-option-bg-hover);
+      font-weight: var(--select-font-weight-strong);
+      color: var(--select-color-selected);
     }
     .ds-select__option:hover, .ds-select__option:focus-visible {
-      background: var(--color-bg-subtle);
+      background: var(--select-option-bg-hover);
       outline: none;
     }
   </style>
@@ -204,7 +204,7 @@
       <label id="cus-err-lbl" for="cus-err">Priority</label>
       <div class="ds-select ds-select--custom is-error">
         <button id="cus-err" type="button" class="ds-select__trigger" role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-invalid="true" aria-describedby="cus-err-msg" aria-labelledby="cus-err-lbl">
-          <span style="color: var(--color-text-muted);">Select priority…</span>
+          <span style="color: var(--select-color-muted);">Select priority…</span>
           <span class="ds-select__caret" aria-hidden="true">▾</span>
         </button>
       </div>

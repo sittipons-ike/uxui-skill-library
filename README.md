@@ -66,7 +66,7 @@ claude plugin install uxui-skills
 | Skill | หน้าที่ |
 |---|---|
 | `design-builder` v6 | สร้าง `design.md` — dual-path (zero / client-given palette + mood + refs) → base tokens + WCAG validation + Known Gaps log |
-| `design-component-builder` v4 | สร้าง `components.md` + **HTML files จริง** (`components/<name>.html` + `tokens.css` + `components.html` showcase) — atom/molecule/organism อ้าง tokens |
+| `design-component-builder` v4.1 | สร้าง `components.md` + **HTML files จริง** (`components/<name>.html` + `tokens.css` 2-tier + `components.html` showcase). Token strategy: **sys + comp aliases** (Material 3 + Carbon hybrid) — optimal agent intent + low output token cost |
 | `design-icon-builder` | populate iconography layer + ดึง SVG จริงจาก Phosphor/Tabler/Heroicons ฯลฯ |
 | `design-ui-builder` v2 | สร้าง `ui.md` + `pages/<name>.html` (self-contained, inline component markup) — UI compositions (page/pattern/section/flow) |
 | `design-md-audit` v5.1 | audit DS + เช็ก **HTML coverage** (components/<name>.html, pages/<name>.html, tokens.css) + cross-file refs |
