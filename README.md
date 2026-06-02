@@ -91,6 +91,19 @@ animate, polish, colorize, critique, audit, adapt, arrange, bolder, clarify, dis
 npx skills add pbakaus/impeccable
 ```
 
+## 🚧 Phase 5 in progress — JSON Manifest Migration
+
+DS spec layer กำลังย้ายจาก `.md` → JSON manifests (DTCG-aligned) เพื่อลด token cost + drift + เพิ่ม scalability
+- `design.md` **อยู่เหมือนเดิม** (designer-facing, YAML-in-MD)
+- `components.json` + `ui.json` + `patterns.json` ใหม่ — แทน `.md` spec
+- HTML files (atoms, pages) **ไม่เปลี่ยน**
+
+อ่าน [docs/architecture-v5.md](docs/architecture-v5.md) สำหรับรายละเอียด, [schemas/ref-resolver.md](schemas/ref-resolver.md) สำหรับ ref syntax
+
+**Status:** Phase 1A + 1B done (schemas + docs). Phase 2 (skill rewrites) pending.
+
+---
+
 ## อัปเดต Skills
 
 รันคำสั่งเดิมจากวิธีที่ติดตั้งซ้ำ:

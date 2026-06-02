@@ -1,0 +1,219 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://uxui-skill-library/schemas/components.schema.json",
+  "title": "Components Manifest",
+  "description": "Schema for components.json — atomic component layer in the split-architecture design system (design.md + components.json + patterns.json + ui.json). Components reference design.md semantic tokens via {design.semantic.*} brace syntax. Direction rule: components may only reference design (downward); references to patterns or ui are an audit error.",
+  "type": "object",
+  "required": ["$meta", "atom"],
+  "additionalProperties": false,
+  "properties": {
+    "$meta": {
+      "type": "object",
+      "required": ["schema", "scope", "depends_on", "version"],
+      "additionalProperties": false,
+      "properties": {
+        "schema": {
+          "type": "string",
+          "description": "Path or URL to this schema",
+          "examples": ["./schemas/components.schema.json"]
+        },
+        "scope": {
+          "type": "string",
+          "const": "components-only",
+          "description": "Must be 'components-only' — this file defines components and nothing else. Tokens live in design.md; compositions live in patterns.json/ui.json."
+        },
+        "depends_on": {
+          "type": "array",
+          "description": "Files this manifest depends on. Audit resolves refs against these.",
+          "items": { "type": "string" },
+          "minItems": 1,
+          "examples": [["./design.md", "./tokens.css"]]
+        },
+        "dtcg_version": {
+          "type": "string",
+          "description": "Pinned DTCG (Design Tokens Community Group) spec version. Token alias syntax {group.token} aligns with this spec.",
+          "examples": ["2024-09"]
+        },
+        "version": {
+          "type": "string",
+          "description": "SemVer of this components manifest. Per-skill bump — independent of library-wide version.",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "examples": ["1.0.0"]
+        }
+      }
+    },
+    "atom": {
+      "type": "object",
+      "description": "Atomic components — smallest UI primitives (button, input, badge, icon). Cannot compose other atoms.",
+      "additionalProperties": { "$ref": "#/definitions/AtomDef" }
+    },
+    "molecule": {
+      "type": "object",
+      "description": "Molecules — compositions of atoms (form-field, search-bar, card-header). Phase 3+. May be empty in Phase 1A.",
+      "additionalProperties": { "$ref": "#/definitions/AtomDef" }
+    },
+    "organism": {
+      "type": "object",
+      "description": "Organisms — larger composed blocks (data-table, nav-bar, hero). Phase 3+. May be empty in Phase 1A.",
+      "additionalProperties": { "$ref": "#/definitions/AtomDef" }
+    }
+  },
+  "definitions": {
+    "Ref": {
+      "type": "string",
+      "description": "Cross-file reference using brace syntax. Format: {file.path.to.thing}. Direction must be downward: ui→patterns→components→design.",
+      "pattern": "^\\{(design|components|patterns|ui)\\.([a-z0-9_.\\-]+)\\}$",
+      "examples": [
+        "{design.semantic.color.primary.default}",
+        "{components.atom.button}",
+        "{components.atom.button.variants.primary}"
+      ]
+    },
+    "DiffSpec": {
+      "type": "object",
+      "description": "Diff-only override from base. Agent merges base + variant + size + state (last-write-wins). Open shape: any field at base level may be overridden — typically tokens, classes, render.role, a11y.",
+      "additionalProperties": true,
+      "properties": {
+        "tokens": {
+          "type": "object",
+          "description": "Token overrides — only the vars that change from base.",
+          "additionalProperties": { "$ref": "#/definitions/Ref" }
+        },
+        "classes": {
+          "type": "array",
+          "description": "Classes appended to (or replacing) base classes. Convention: prefix with modifier class(es).",
+          "items": { "type": "string" }
+        },
+        "render": {
+          "type": "object",
+          "description": "Render overrides (e.g. role, slots).",
+          "additionalProperties": true
+        },
+        "a11y": {
+          "type": "object",
+          "description": "Accessibility overrides for this variant/size/state.",
+          "additionalProperties": true
+        }
+      }
+    },
+    "AtomDef": {
+      "type": "object",
+      "required": ["id", "render", "tokens"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Component id in kebab-case. Must match the key in atom/molecule/organism.",
+          "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+          "examples": ["button", "form-field", "data-table"]
+        },
+        "summary": {
+          "type": "string",
+          "description": "Short intent for the agent — what this component is for and when to reach for it.",
+          "maxLength": 240
+        },
+        "composes": {
+          "type": "array",
+          "description": "Refs to child components this composition includes. Atoms typically omit this. Molecules/organisms reference atoms (and molecules for organisms).",
+          "items": { "$ref": "#/definitions/Ref" }
+        },
+        "render": {
+          "type": "object",
+          "required": ["tag", "classes", "html_template"],
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "type": "string",
+              "description": "Semantic HTML element.",
+              "examples": ["button", "input", "span", "div", "label"]
+            },
+            "role": {
+              "type": "string",
+              "description": "ARIA role when needed (omit if tag already conveys role).",
+              "examples": ["status", "alert", "tablist"]
+            },
+            "classes": {
+              "type": "array",
+              "description": "Base CSS classes. Follows BEM-ish convention (block, block--mod, block__el).",
+              "items": { "type": "string" }
+            },
+            "slots": {
+              "type": "array",
+              "description": "Named slots for content insertion.",
+              "items": { "type": "string" },
+              "examples": [["icon", "text", "spinner"]]
+            },
+            "html_template": {
+              "type": "string",
+              "description": "Relative path to the HTML template file (Mustache/Handlebars-style).",
+              "examples": ["./components/button.html"]
+            }
+          }
+        },
+        "tokens": {
+          "type": "object",
+          "description": "Component-tier CSS custom properties mapped to design.md semantic refs. Keys are CSS var names; values are {design.semantic.*} refs (downward only).",
+          "additionalProperties": { "$ref": "#/definitions/Ref" },
+          "examples": [
+            {
+              "--btn-bg": "{design.semantic.color.primary.default}",
+              "--btn-fg": "{design.semantic.color.on-primary}"
+            }
+          ]
+        },
+        "variants": {
+          "type": "object",
+          "description": "Variant-level diffs from base (e.g. primary, secondary, ghost). Merge order: base → variant → size → state.",
+          "additionalProperties": { "$ref": "#/definitions/DiffSpec" }
+        },
+        "sizes": {
+          "type": "object",
+          "description": "Size-level diffs from base (e.g. sm, md, lg). Merge order: base → variant → size → state.",
+          "additionalProperties": { "$ref": "#/definitions/DiffSpec" }
+        },
+        "states": {
+          "type": "object",
+          "description": "State-level diffs from base (e.g. hover, focus, active, disabled, loading). Merge order: base → variant → size → state.",
+          "additionalProperties": { "$ref": "#/definitions/DiffSpec" }
+        },
+        "a11y": {
+          "type": "object",
+          "description": "Accessibility constraints and metadata.",
+          "additionalProperties": false,
+          "properties": {
+            "touch_min": {
+              "type": "string",
+              "description": "Minimum hit-target size (CSS length).",
+              "examples": ["44px", "48px"]
+            },
+            "role": {
+              "type": "string",
+              "description": "Expected ARIA role (informational; render.role is authoritative if both present)."
+            },
+            "required_attrs": {
+              "type": "array",
+              "description": "Attributes the component must render (e.g. aria-label, aria-pressed).",
+              "items": { "type": "string" }
+            },
+            "contrast_pair": {
+              "type": "object",
+              "description": "Token pair the audit should verify against WCAG contrast.",
+              "required": ["fg", "bg"],
+              "additionalProperties": false,
+              "properties": {
+                "fg": { "$ref": "#/definitions/Ref" },
+                "bg": { "$ref": "#/definitions/Ref" },
+                "min_ratio": {
+                  "type": "number",
+                  "description": "Minimum required ratio. Default 4.5 (WCAG AA body); use 3 for large text/UI.",
+                  "minimum": 1,
+                  "maximum": 21
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

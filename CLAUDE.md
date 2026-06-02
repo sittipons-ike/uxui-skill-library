@@ -10,6 +10,27 @@
 
 ---
 
+## 🚧 Active Architecture Migration — JSON Manifest (Phase 5)
+
+DS spec layer migrating from `.md` → JSON manifests (DTCG-aligned).
+
+**Read first when working on DS skills:**
+- [docs/architecture-v5.md](docs/architecture-v5.md) — full rationale + roadmap
+- [schemas/ref-resolver.md](schemas/ref-resolver.md) — ref syntax `{file.path}` + diff-merge algorithm
+- [schemas/components.schema.json](schemas/components.schema.json) — atoms/molecules/organisms manifest
+- [schemas/ui.schema.json](schemas/ui.schema.json) — pages/sections/flows manifest
+- [schemas/patterns.schema.json](schemas/patterns.schema.json) — reusable shells manifest
+
+**Status:**
+- ✅ Phase 1A: schemas + examples + ref-resolver spec
+- ✅ Phase 1B: architecture doc
+- ⏳ Phase 2A: design-component-builder v5 (JSON output)
+- ⏳ Phase 2B: design-ui-builder v4
+- ⏳ Phase 2C-3B: doc updates + audit + styleguide
+- ⏳ Phase 4-6: migration tool + verify + DTCG export
+
+---
+
 # 🔒 SECURITY RULES
 
 ## 🚫 RULE 1 — Secrets ต้องไม่อยู่ที่เหล่านี้

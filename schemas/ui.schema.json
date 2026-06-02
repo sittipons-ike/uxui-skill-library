@@ -1,0 +1,246 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://uxui-skill-library/schemas/ui.schema.json",
+  "title": "UXUI UI Layer Schema",
+  "description": "Schema for ui.json — the top layer of the split-architecture design system. Contains page compositions, marketing sections, and multi-step flows. References patterns, components, and design tokens via brace-ref syntax. Downward refs only: ui → patterns → components → design.",
+  "type": "object",
+  "required": ["$meta"],
+  "additionalProperties": false,
+
+  "definitions": {
+    "ref": {
+      "type": "string",
+      "description": "Cross-file reference using brace syntax. Format: {scope.path.to.thing}. Allowed scopes: design, components, patterns, ui. Direction: ui may reference patterns/components/design only (downward).",
+      "pattern": "^\\{(design|components|patterns|ui)\\.([a-z0-9_.\\-]+)\\}$",
+      "examples": [
+        "{design.semantic.color.primary.default}",
+        "{components.atom.button}",
+        "{components.organism.nav-bar}",
+        "{components.atom.button.variants.primary}",
+        "{patterns.auth-split}",
+        "{ui.page.signin}"
+      ]
+    },
+
+    "refOrInline": {
+      "description": "Either a brace ref to a component/pattern, or an inline HTML/markup string for one-off content.",
+      "oneOf": [
+        { "$ref": "#/definitions/ref" },
+        {
+          "type": "string",
+          "description": "Inline HTML/markup snippet. Use sparingly — prefer refs to organisms.",
+          "minLength": 1,
+          "not": { "pattern": "^\\{(design|components|patterns|ui)\\." }
+        }
+      ]
+    },
+
+    "metaBlock": {
+      "type": "object",
+      "description": "Page <head> metadata. Values may be plain strings or refs to design tokens / shared assets.",
+      "additionalProperties": false,
+      "properties": {
+        "title":       { "type": "string" },
+        "description": { "type": "string" },
+        "og_image":    { "$ref": "#/definitions/refOrInline" },
+        "favicon":     { "$ref": "#/definitions/refOrInline" },
+        "lang":        { "type": "string", "examples": ["en", "th"] }
+      }
+    },
+
+    "composesArray": {
+      "type": "array",
+      "description": "Ordered list of refs that compose this page/section. Prefer organism refs over molecule/atom refs — if you find yourself composing atoms directly here, promote the composition into a molecule or organism in components.json first.",
+      "items": { "$ref": "#/definitions/ref" },
+      "minItems": 1
+    },
+
+    "slotFills": {
+      "type": "object",
+      "description": "When `pattern` is set, fill that pattern's named slots. Keys are slot names defined by the pattern; values are refs to components or inline markup.",
+      "additionalProperties": { "$ref": "#/definitions/refOrInline" }
+    },
+
+    "PageDef": {
+      "type": "object",
+      "description": "A full screen / route. Either uses a pattern (with slot_fills) OR composes components directly — not both.",
+      "required": ["id", "html_template"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Stable identifier for this page. Used in flow transitions and analytics. snake_case or kebab-case.",
+          "pattern": "^[a-z0-9][a-z0-9_\\-]*$"
+        },
+        "summary": {
+          "type": "string",
+          "description": "Short human-readable description of the page's purpose."
+        },
+        "pattern": {
+          "$ref": "#/definitions/ref",
+          "description": "Optional. A pattern this page is built on (e.g. {patterns.auth-split}). When set, `slot_fills` should provide the pattern's slot content."
+        },
+        "slot_fills": { "$ref": "#/definitions/slotFills" },
+        "composes": {
+          "$ref": "#/definitions/composesArray",
+          "description": "Direct component composition. Use when not using a pattern. Prefer organism refs."
+        },
+        "html_template": {
+          "type": "string",
+          "description": "Path to the rendered HTML file for this page, relative to project root. Convention: pages/<page_id>.html",
+          "pattern": "^[A-Za-z0-9_\\-./]+\\.html$"
+        },
+        "meta": { "$ref": "#/definitions/metaBlock" }
+      },
+      "oneOf": [
+        {
+          "description": "Pattern-based page: requires `pattern`, allows `slot_fills`, forbids `composes`.",
+          "required": ["pattern"],
+          "not": { "required": ["composes"] }
+        },
+        {
+          "description": "Direct composition page: requires `composes`, forbids `pattern` and `slot_fills`.",
+          "required": ["composes"],
+          "not": { "anyOf": [
+            { "required": ["pattern"] },
+            { "required": ["slot_fills"] }
+          ] }
+        }
+      ]
+    },
+
+    "SectionDef": {
+      "type": "object",
+      "description": "A reusable marketing block (hero, pricing-table, feature-grid, testimonial-row, footer-cta). Composed of components, may live inline on a page or in its own file.",
+      "required": ["id", "composes"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_\\-]*$"
+        },
+        "summary":       { "type": "string" },
+        "composes":      { "$ref": "#/definitions/composesArray" },
+        "html_template": {
+          "type": "string",
+          "description": "Optional path to a standalone HTML partial for this section.",
+          "pattern": "^[A-Za-z0-9_\\-./]+\\.html$"
+        }
+      }
+    },
+
+    "FlowStep": {
+      "type": "object",
+      "description": "One step in a multi-step flow. `page` is a ref to a ui.page entry; `transitions` map event names to the next page ref (or external URL).",
+      "required": ["page"],
+      "additionalProperties": false,
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/ref",
+          "description": "Must resolve to a {ui.page.*} entry."
+        },
+        "transitions": {
+          "type": "object",
+          "description": "Event-name → destination ref. Common keys: on_success, on_back, on_skip, on_error, on_cancel.",
+          "additionalProperties": {
+            "oneOf": [
+              { "$ref": "#/definitions/ref" },
+              {
+                "type": "string",
+                "description": "Absolute URL for external destinations.",
+                "pattern": "^https?://"
+              }
+            ]
+          }
+        }
+      }
+    },
+
+    "FlowDef": {
+      "type": "object",
+      "description": "A multi-step user sequence (signup, checkout, onboarding). Steps reference ui.page entries and declare transitions between them.",
+      "required": ["id", "steps"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_\\-]*$"
+        },
+        "summary": { "type": "string" },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/definitions/FlowStep" }
+        }
+      }
+    },
+
+    "MetaBlock": {
+      "type": "object",
+      "description": "File-level metadata. Pins schema version, scope, dependencies, and DTCG alignment.",
+      "required": ["schema", "scope", "depends_on", "version"],
+      "additionalProperties": false,
+      "properties": {
+        "schema": {
+          "type": "string",
+          "const": "uxui/ui/v1",
+          "description": "Schema identifier and version. Bumped per-skill (no library-wide major)."
+        },
+        "scope": {
+          "type": "string",
+          "const": "ui-only",
+          "description": "What this file is allowed to contain. Used by audit tool to enforce scope-key separation."
+        },
+        "depends_on": {
+          "type": "array",
+          "description": "Files this file references via brace-refs. Audit tool resolves refs against these.",
+          "items": { "type": "string" },
+          "default": ["./design.md", "./components.json", "./patterns.json"]
+        },
+        "dtcg_version": {
+          "type": "string",
+          "description": "Pinned DTCG (Design Tokens Community Group) spec version. Brace-ref syntax matches DTCG alias syntax — future Style Dictionary transforms read tokens directly.",
+          "examples": ["draft-2024-08-09"]
+        },
+        "version": {
+          "type": "string",
+          "description": "Semver version of this specific ui.json file's content.",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "generated_by": {
+          "type": "string",
+          "description": "Optional. Skill name + version that wrote this file."
+        },
+        "generated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  },
+
+  "properties": {
+    "$meta": { "$ref": "#/definitions/MetaBlock" },
+
+    "page": {
+      "type": "object",
+      "description": "Map of page_name → PageDef. Page names should match the page id.",
+      "additionalProperties": { "$ref": "#/definitions/PageDef" },
+      "propertyNames": { "pattern": "^[a-z0-9][a-z0-9_\\-]*$" }
+    },
+
+    "section": {
+      "type": "object",
+      "description": "Map of section_name → SectionDef. Reusable marketing/page blocks.",
+      "additionalProperties": { "$ref": "#/definitions/SectionDef" },
+      "propertyNames": { "pattern": "^[a-z0-9][a-z0-9_\\-]*$" }
+    },
+
+    "flow": {
+      "type": "object",
+      "description": "Map of flow_name → FlowDef. Multi-step sequences with declared transitions.",
+      "additionalProperties": { "$ref": "#/definitions/FlowDef" },
+      "propertyNames": { "pattern": "^[a-z0-9][a-z0-9_\\-]*$" }
+    }
+  }
+}

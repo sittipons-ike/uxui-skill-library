@@ -1,0 +1,119 @@
+{
+  "$meta": {
+    "schema": "uxui/ui/v1",
+    "scope": "ui-only",
+    "depends_on": ["./design.md", "./components.json", "./patterns.json"],
+    "dtcg_version": "draft-2024-08-09",
+    "version": "1.0.0",
+    "generated_by": "design-ui-builder@1.0.0",
+    "generated_at": "2026-06-02T00:00:00Z"
+  },
+
+  "page": {
+    "signin": {
+      "id": "signin",
+      "summary": "Sign-in screen — uses the auth-split pattern (form left, illustration right). Branded brand panel hosts marketing copy; form panel hosts the signin organism.",
+      "pattern": "{patterns.auth-split}",
+      "slot_fills": {
+        "brand_panel": "{components.organism.marketing-brand-panel}",
+        "form_panel": "{components.organism.signin-form}",
+        "footer": "{components.molecule.legal-footer}"
+      },
+      "html_template": "pages/signin.html",
+      "meta": {
+        "title": "Sign in",
+        "description": "Sign in to your account",
+        "og_image": "{design.semantic.asset.og.default}",
+        "favicon": "{design.semantic.asset.favicon.default}",
+        "lang": "en"
+      }
+    },
+
+    "dashboard": {
+      "id": "dashboard",
+      "summary": "Main app dashboard after signin. Composes organisms directly — no shared pattern because layout is app-specific.",
+      "composes": [
+        "{components.organism.app-shell}",
+        "{components.organism.nav-bar}",
+        "{components.organism.side-nav}",
+        "{components.organism.dashboard-stats}",
+        "{components.organism.activity-feed}",
+        "{components.organism.app-footer}"
+      ],
+      "html_template": "pages/dashboard.html",
+      "meta": {
+        "title": "Dashboard",
+        "description": "Your account overview",
+        "lang": "en"
+      }
+    },
+
+    "onboarding": {
+      "id": "onboarding",
+      "summary": "First-run onboarding flow step. Used as an intermediate in the signup flow.",
+      "composes": [
+        "{components.organism.onboarding-stepper}",
+        "{components.organism.onboarding-prompt}"
+      ],
+      "html_template": "pages/onboarding.html",
+      "meta": {
+        "title": "Welcome",
+        "lang": "en"
+      }
+    }
+  },
+
+  "section": {
+    "hero": {
+      "id": "hero",
+      "summary": "Marketing hero — headline, sub-headline, primary CTA, secondary CTA, hero illustration. Used on landing and product pages.",
+      "composes": [
+        "{components.molecule.hero-headline}",
+        "{components.atom.button.variants.primary}",
+        "{components.atom.button.variants.ghost}",
+        "{components.molecule.hero-illustration}"
+      ],
+      "html_template": "sections/hero.html"
+    },
+
+    "pricing-table": {
+      "id": "pricing-table",
+      "summary": "Three-tier pricing block with feature comparison and per-tier CTA.",
+      "composes": [
+        "{components.molecule.section-heading}",
+        "{components.organism.pricing-card-grid}",
+        "{components.molecule.pricing-disclaimer}"
+      ],
+      "html_template": "sections/pricing-table.html"
+    }
+  },
+
+  "flow": {
+    "signup": {
+      "id": "signup",
+      "summary": "New-user signup sequence: signin (with create-account branch) → onboarding → dashboard. Includes back-navigation and skip on onboarding.",
+      "steps": [
+        {
+          "page": "{ui.page.signin}",
+          "transitions": {
+            "on_success": "{ui.page.onboarding}",
+            "on_create_account": "https://app.example.com/signup",
+            "on_forgot_password": "https://app.example.com/reset"
+          }
+        },
+        {
+          "page": "{ui.page.onboarding}",
+          "transitions": {
+            "on_success": "{ui.page.dashboard}",
+            "on_skip": "{ui.page.dashboard}",
+            "on_back": "{ui.page.signin}"
+          }
+        },
+        {
+          "page": "{ui.page.dashboard}",
+          "transitions": {}
+        }
+      ]
+    }
+  }
+}

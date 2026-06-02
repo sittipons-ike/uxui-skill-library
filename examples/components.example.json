@@ -1,0 +1,355 @@
+{
+  "$meta": {
+    "schema": "../schemas/components.schema.json",
+    "scope": "components-only",
+    "depends_on": ["./design.md", "./tokens.css"],
+    "dtcg_version": "2024-09",
+    "version": "1.0.0"
+  },
+
+  "atom": {
+    "button": {
+      "id": "button",
+      "summary": "Primary interactive control. Use for triggering actions, never for navigation (use link).",
+      "render": {
+        "tag": "button",
+        "classes": ["btn"],
+        "slots": ["icon-leading", "label", "icon-trailing", "spinner"],
+        "html_template": "./components/button.html"
+      },
+      "tokens": {
+        "--btn-bg": "{design.semantic.color.primary.default}",
+        "--btn-fg": "{design.semantic.color.on-primary}",
+        "--btn-border": "{design.semantic.color.primary.default}",
+        "--btn-radius": "{design.semantic.radius.md}",
+        "--btn-padding-x": "{design.semantic.space.4}",
+        "--btn-padding-y": "{design.semantic.space.2}",
+        "--btn-font": "{design.semantic.typography.label.md}",
+        "--btn-focus-ring": "{design.semantic.color.focus-ring}"
+      },
+      "variants": {
+        "primary": {
+          "classes": ["btn--primary"]
+        },
+        "secondary": {
+          "classes": ["btn--secondary"],
+          "tokens": {
+            "--btn-bg": "{design.semantic.color.surface.raised}",
+            "--btn-fg": "{design.semantic.color.content.default}",
+            "--btn-border": "{design.semantic.color.edge.subtle}"
+          }
+        },
+        "ghost": {
+          "classes": ["btn--ghost"],
+          "tokens": {
+            "--btn-bg": "{design.semantic.color.transparent}",
+            "--btn-fg": "{design.semantic.color.primary.default}",
+            "--btn-border": "{design.semantic.color.transparent}"
+          }
+        },
+        "danger": {
+          "classes": ["btn--danger"],
+          "tokens": {
+            "--btn-bg": "{design.semantic.color.danger.default}",
+            "--btn-fg": "{design.semantic.color.on-danger}",
+            "--btn-border": "{design.semantic.color.danger.default}"
+          }
+        }
+      },
+      "sizes": {
+        "sm": {
+          "classes": ["btn--sm"],
+          "tokens": {
+            "--btn-padding-x": "{design.semantic.space.3}",
+            "--btn-padding-y": "{design.semantic.space.1}",
+            "--btn-font": "{design.semantic.typography.label.sm}"
+          }
+        },
+        "md": {
+          "classes": ["btn--md"]
+        },
+        "lg": {
+          "classes": ["btn--lg"],
+          "tokens": {
+            "--btn-padding-x": "{design.semantic.space.5}",
+            "--btn-padding-y": "{design.semantic.space.3}",
+            "--btn-font": "{design.semantic.typography.label.lg}"
+          }
+        }
+      },
+      "states": {
+        "hover": {
+          "tokens": {
+            "--btn-bg": "{design.semantic.color.primary.hover}"
+          }
+        },
+        "active": {
+          "tokens": {
+            "--btn-bg": "{design.semantic.color.primary.active}"
+          }
+        },
+        "focus": {
+          "classes": ["btn--focus-visible"]
+        },
+        "disabled": {
+          "tokens": {
+            "--btn-bg": "{design.semantic.color.surface.disabled}",
+            "--btn-fg": "{design.semantic.color.content.disabled}",
+            "--btn-border": "{design.semantic.color.edge.disabled}"
+          },
+          "a11y": {
+            "required_attrs": ["aria-disabled"]
+          }
+        },
+        "loading": {
+          "classes": ["btn--loading"],
+          "a11y": {
+            "required_attrs": ["aria-busy"]
+          }
+        }
+      },
+      "a11y": {
+        "touch_min": "44px",
+        "role": "button",
+        "required_attrs": ["type"],
+        "contrast_pair": {
+          "fg": "{design.semantic.color.on-primary}",
+          "bg": "{design.semantic.color.primary.default}",
+          "min_ratio": 4.5
+        }
+      }
+    },
+
+    "input": {
+      "id": "input",
+      "summary": "Single-line text input. Pair with a label atom; for the full labeled control use the form-field molecule.",
+      "render": {
+        "tag": "input",
+        "classes": ["input"],
+        "html_template": "./components/input.html"
+      },
+      "tokens": {
+        "--input-bg": "{design.semantic.color.surface.default}",
+        "--input-fg": "{design.semantic.color.content.default}",
+        "--input-placeholder": "{design.semantic.color.content.muted}",
+        "--input-border": "{design.semantic.color.edge.default}",
+        "--input-radius": "{design.semantic.radius.sm}",
+        "--input-padding-x": "{design.semantic.space.3}",
+        "--input-padding-y": "{design.semantic.space.2}",
+        "--input-font": "{design.semantic.typography.body.md}",
+        "--input-focus-ring": "{design.semantic.color.focus-ring}"
+      },
+      "variants": {
+        "default": {
+          "classes": ["input--default"]
+        },
+        "invalid": {
+          "classes": ["input--invalid"],
+          "tokens": {
+            "--input-border": "{design.semantic.color.danger.default}"
+          },
+          "a11y": {
+            "required_attrs": ["aria-invalid", "aria-describedby"]
+          }
+        }
+      },
+      "sizes": {
+        "sm": {
+          "classes": ["input--sm"],
+          "tokens": {
+            "--input-padding-y": "{design.semantic.space.1}",
+            "--input-font": "{design.semantic.typography.body.sm}"
+          }
+        },
+        "md": {
+          "classes": ["input--md"]
+        },
+        "lg": {
+          "classes": ["input--lg"],
+          "tokens": {
+            "--input-padding-y": "{design.semantic.space.3}",
+            "--input-font": "{design.semantic.typography.body.lg}"
+          }
+        }
+      },
+      "states": {
+        "hover": {
+          "tokens": {
+            "--input-border": "{design.semantic.color.edge.strong}"
+          }
+        },
+        "focus": {
+          "classes": ["input--focus-visible"],
+          "tokens": {
+            "--input-border": "{design.semantic.color.primary.default}"
+          }
+        },
+        "disabled": {
+          "tokens": {
+            "--input-bg": "{design.semantic.color.surface.disabled}",
+            "--input-fg": "{design.semantic.color.content.disabled}"
+          },
+          "a11y": {
+            "required_attrs": ["aria-disabled"]
+          }
+        }
+      },
+      "a11y": {
+        "touch_min": "44px",
+        "required_attrs": ["id", "name"],
+        "contrast_pair": {
+          "fg": "{design.semantic.color.content.default}",
+          "bg": "{design.semantic.color.surface.default}",
+          "min_ratio": 4.5
+        }
+      }
+    },
+
+    "badge": {
+      "id": "badge",
+      "summary": "Compact status/category label. Non-interactive; for clickable use a button or chip.",
+      "render": {
+        "tag": "span",
+        "role": "status",
+        "classes": ["badge"],
+        "slots": ["icon", "label"],
+        "html_template": "./components/badge.html"
+      },
+      "tokens": {
+        "--badge-bg": "{design.semantic.color.surface.raised}",
+        "--badge-fg": "{design.semantic.color.content.default}",
+        "--badge-radius": "{design.semantic.radius.full}",
+        "--badge-padding-x": "{design.semantic.space.2}",
+        "--badge-padding-y": "{design.semantic.space.0-5}",
+        "--badge-font": "{design.semantic.typography.label.xs}"
+      },
+      "variants": {
+        "neutral": {
+          "classes": ["badge--neutral"]
+        },
+        "success": {
+          "classes": ["badge--success"],
+          "tokens": {
+            "--badge-bg": "{design.semantic.color.success.subtle}",
+            "--badge-fg": "{design.semantic.color.success.strong}"
+          }
+        },
+        "warning": {
+          "classes": ["badge--warning"],
+          "tokens": {
+            "--badge-bg": "{design.semantic.color.warning.subtle}",
+            "--badge-fg": "{design.semantic.color.warning.strong}"
+          }
+        },
+        "danger": {
+          "classes": ["badge--danger"],
+          "tokens": {
+            "--badge-bg": "{design.semantic.color.danger.subtle}",
+            "--badge-fg": "{design.semantic.color.danger.strong}"
+          }
+        }
+      },
+      "sizes": {
+        "sm": {
+          "classes": ["badge--sm"]
+        },
+        "md": {
+          "classes": ["badge--md"],
+          "tokens": {
+            "--badge-padding-x": "{design.semantic.space.3}",
+            "--badge-padding-y": "{design.semantic.space.1}",
+            "--badge-font": "{design.semantic.typography.label.sm}"
+          }
+        }
+      },
+      "a11y": {
+        "role": "status",
+        "contrast_pair": {
+          "fg": "{design.semantic.color.content.default}",
+          "bg": "{design.semantic.color.surface.raised}",
+          "min_ratio": 4.5
+        }
+      }
+    },
+
+    "label": {
+      "id": "label",
+      "summary": "Form label atom. Always associate with an input via 'for' attribute.",
+      "render": {
+        "tag": "label",
+        "classes": ["label"],
+        "html_template": "./components/label.html"
+      },
+      "tokens": {
+        "--label-fg": "{design.semantic.color.content.default}",
+        "--label-font": "{design.semantic.typography.label.md}"
+      },
+      "a11y": {
+        "required_attrs": ["for"]
+      }
+    },
+
+    "help-text": {
+      "id": "help-text",
+      "summary": "Descriptive helper or error text under a form control. Reference its id via aria-describedby on the input.",
+      "render": {
+        "tag": "span",
+        "classes": ["help-text"],
+        "html_template": "./components/help-text.html"
+      },
+      "tokens": {
+        "--help-fg": "{design.semantic.color.content.muted}",
+        "--help-font": "{design.semantic.typography.body.sm}"
+      },
+      "variants": {
+        "default": {
+          "classes": ["help-text--default"]
+        },
+        "error": {
+          "classes": ["help-text--error"],
+          "tokens": {
+            "--help-fg": "{design.semantic.color.danger.strong}"
+          },
+          "render": {
+            "role": "alert"
+          }
+        }
+      }
+    }
+  },
+
+  "molecule": {
+    "form-field": {
+      "id": "form-field",
+      "summary": "Labeled input with optional help/error text. Wires label[for] + input[id] + help-text[id] via aria-describedby.",
+      "composes": [
+        "{components.atom.label}",
+        "{components.atom.input}",
+        "{components.atom.help-text}"
+      ],
+      "render": {
+        "tag": "div",
+        "classes": ["form-field"],
+        "slots": ["label", "input", "help"],
+        "html_template": "./components/form-field.html"
+      },
+      "tokens": {
+        "--field-gap": "{design.semantic.space.1}",
+        "--field-stack-gap": "{design.semantic.space.2}"
+      },
+      "variants": {
+        "default": {
+          "classes": ["form-field--default"]
+        },
+        "invalid": {
+          "classes": ["form-field--invalid"]
+        }
+      },
+      "a11y": {
+        "required_attrs": ["data-field-id"]
+      }
+    }
+  },
+
+  "organism": {}
+}

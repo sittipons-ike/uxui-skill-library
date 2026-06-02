@@ -1,0 +1,201 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://uxui-skill-library/schemas/patterns.schema.json",
+  "title": "UXUI Patterns Schema",
+  "description": "Schema for patterns.json — reusable cross-page structures decoupled from any specific page. Patterns sit BETWEEN components and ui in the dependency chain: ui -> patterns -> components -> design. Examples include auth-split, app-shell, empty-state, hero-grid, modal-shell. Patterns expose slots that ui.json pages fill with concrete components/sections/content.",
+  "type": "object",
+  "required": ["$meta"],
+  "properties": {
+    "$meta": {
+      "type": "object",
+      "required": ["schema", "scope", "depends_on", "version"],
+      "properties": {
+        "schema": {
+          "type": "string",
+          "const": "uxui/patterns/v1",
+          "description": "Schema identifier and version. Pinned to uxui/patterns/v1 for this draft."
+        },
+        "scope": {
+          "type": "string",
+          "const": "patterns-only",
+          "description": "Declares this file only contains patterns; refs to design/components are allowed but not authoring them."
+        },
+        "depends_on": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1,
+          "description": "Relative paths to upstream files this file references. Typically ['./design.md','./components.json'].",
+          "default": ["./design.md", "./components.json"]
+        },
+        "dtcg_version": {
+          "type": "string",
+          "description": "DTCG (Design Tokens Community Group) format version this file aligns with. Used by Style Dictionary transforms.",
+          "examples": ["draft-2"]
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "description": "Semver of THIS patterns.json file. Bumped independently of design.md / components.json / ui.json."
+        },
+        "generated_by": {
+          "type": "string",
+          "description": "Optional. Name + version of the skill that wrote this file."
+        },
+        "generated_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Optional. ISO-8601 timestamp."
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "patternProperties": {
+    "^(?!\\$)[a-z][a-z0-9\\-]*$": {
+      "$ref": "#/definitions/PatternDef"
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "Ref": {
+      "type": "string",
+      "pattern": "^\\{(design|components|patterns|ui)\\.([a-z0-9_.\\-]+)\\}$",
+      "description": "Cross-file reference. Format: {scope.path.to.thing}. Direction rule: ui -> patterns -> components -> design (downward only). Upward refs (e.g. patterns referencing ui) are an audit error.",
+      "examples": [
+        "{design.semantic.color.surface.canvas}",
+        "{components.atom.button}",
+        "{components.organism.navbar}",
+        "{components.organism.navbar.variants.dark}"
+      ]
+    },
+    "SlotAcceptType": {
+      "type": "string",
+      "enum": ["component", "section", "pattern", "inline_html", "text", "image", "icon"],
+      "description": "Allowed content types for a slot. 'component' = ref to components.*, 'section' = ref to a marketing/ui section, 'pattern' = nested pattern ref, 'inline_html' = raw HTML literal, 'text'/'image'/'icon' = primitive content."
+    },
+    "Slot": {
+      "type": "object",
+      "required": ["name", "required", "accepts"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_\\-]*$",
+          "description": "Slot identifier in kebab_case. ui.json pages fill slots by name."
+        },
+        "required": {
+          "type": "boolean",
+          "description": "If true, a ui.json composition using this pattern MUST fill this slot. Audit errors if missing."
+        },
+        "accepts": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/SlotAcceptType" },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "Allowed content types for this slot."
+        },
+        "summary": {
+          "type": "string",
+          "description": "Short description of what this slot is for. Shown in tooling/style guides."
+        },
+        "default": {
+          "description": "Optional default content for this slot when unfilled. Can be a ref string or inline value.",
+          "oneOf": [
+            { "$ref": "#/definitions/Ref" },
+            { "type": "string" }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "BreakpointOverride": {
+      "type": "object",
+      "description": "Diff-only overrides for a specific breakpoint. Merged on top of the base pattern (last-write-wins).",
+      "additionalProperties": true
+    },
+    "VariantDef": {
+      "type": "object",
+      "description": "Diff-only variant override. Agent merges: base + variant (last-write-wins). Only include keys that differ from base.",
+      "additionalProperties": true
+    },
+    "PatternDef": {
+      "type": "object",
+      "required": ["id", "slots", "html_template"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9\\-]*$",
+          "description": "Kebab-case pattern identifier. Must match the top-level key in patterns.json."
+        },
+        "summary": {
+          "type": "string",
+          "description": "One-line description of what this pattern is and when to use it."
+        },
+        "slots": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Slot" },
+          "minItems": 1,
+          "description": "Slot contract for ui.json pages to fill. At minimum one slot must be defined."
+        },
+        "composes": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Ref" },
+          "uniqueItems": true,
+          "description": "Components built INTO the pattern (not slot-fillable). e.g. an app-shell may compose {components.organism.navbar} as a fixed part of the structure."
+        },
+        "html_template": {
+          "type": "string",
+          "description": "Relative path to the HTML template file that renders this pattern. e.g. 'patterns/auth-split.html'. The template uses slot names as placeholders.",
+          "examples": ["patterns/auth-split.html", "patterns/app-shell.html"]
+        },
+        "breakpoints": {
+          "type": "object",
+          "description": "Responsive overrides keyed by breakpoint name (sm/md/lg/xl). Diff-only from base.",
+          "patternProperties": {
+            "^(xs|sm|md|lg|xl|2xl)$": { "$ref": "#/definitions/BreakpointOverride" }
+          },
+          "additionalProperties": false
+        },
+        "variants": {
+          "type": "object",
+          "description": "Diff-only variant overrides. Keys are variant names (e.g. 'reversed', 'compact'). Agent merges: base + variant (last-write-wins).",
+          "patternProperties": {
+            "^[a-z][a-z0-9\\-]*$": { "$ref": "#/definitions/VariantDef" }
+          },
+          "additionalProperties": false
+        },
+        "tokens": {
+          "type": "object",
+          "description": "Pattern-level token references (e.g. background surface, gutter spacing). Values should be refs to {design.semantic.*}.",
+          "additionalProperties": {
+            "oneOf": [
+              { "$ref": "#/definitions/Ref" },
+              { "type": "string" },
+              { "type": "number" }
+            ]
+          }
+        },
+        "a11y": {
+          "type": "object",
+          "description": "Accessibility contract for this pattern (landmarks, ARIA roles, focus order).",
+          "properties": {
+            "landmarks": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Required ARIA landmarks (e.g. ['main','navigation','complementary'])."
+            },
+            "focus_order": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Expected tab order, referenced by slot name."
+            },
+            "notes": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

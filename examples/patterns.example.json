@@ -1,0 +1,280 @@
+{
+  "$meta": {
+    "schema": "uxui/patterns/v1",
+    "scope": "patterns-only",
+    "depends_on": ["./design.md", "./components.json"],
+    "dtcg_version": "draft-2",
+    "version": "1.0.0",
+    "generated_by": "design-pattern-builder@0.1.0",
+    "generated_at": "2026-06-02T00:00:00Z"
+  },
+
+  "auth-split": {
+    "id": "auth-split",
+    "summary": "Two-column authentication layout. Hero/brand content on the left, form on the right. Used for sign-in, sign-up, forgot-password screens.",
+    "slots": [
+      {
+        "name": "hero",
+        "required": true,
+        "accepts": ["component", "section", "inline_html", "image"],
+        "summary": "Left column: brand mark, headline, illustration, or marketing copy. Hidden on mobile (<md)."
+      },
+      {
+        "name": "form",
+        "required": true,
+        "accepts": ["component"],
+        "summary": "Right column: the actual auth form (sign-in form, sign-up form, etc). Always visible."
+      },
+      {
+        "name": "footer",
+        "required": false,
+        "accepts": ["component", "inline_html", "text"],
+        "summary": "Optional footer beneath the form (legal links, language switcher).",
+        "default": "{components.molecule.legal-footer}"
+      }
+    ],
+    "composes": [],
+    "html_template": "patterns/auth-split.html",
+    "tokens": {
+      "background_hero": "{design.semantic.color.surface.brand}",
+      "background_form": "{design.semantic.color.surface.canvas}",
+      "gutter": "{design.semantic.spacing.layout.gutter-lg}"
+    },
+    "breakpoints": {
+      "sm": {
+        "layout": "stack",
+        "hero_visible": false
+      },
+      "md": {
+        "layout": "two-column",
+        "hero_visible": true,
+        "split_ratio": "1:1"
+      },
+      "lg": {
+        "split_ratio": "5:7"
+      }
+    },
+    "variants": {
+      "reversed": {
+        "slots_order": ["form", "hero"]
+      },
+      "compact": {
+        "tokens": {
+          "gutter": "{design.semantic.spacing.layout.gutter-sm}"
+        }
+      }
+    },
+    "a11y": {
+      "landmarks": ["main"],
+      "focus_order": ["form"],
+      "notes": "Hero is decorative; form must receive initial focus on load."
+    }
+  },
+
+  "app-shell": {
+    "id": "app-shell",
+    "summary": "Standard application chrome: top navbar + left sidebar + main content area. Used for all authenticated dashboard/app pages.",
+    "slots": [
+      {
+        "name": "main",
+        "required": true,
+        "accepts": ["component", "section", "pattern", "inline_html"],
+        "summary": "Primary page content area. Receives the per-page composition."
+      },
+      {
+        "name": "sidebar_extra",
+        "required": false,
+        "accepts": ["component", "inline_html"],
+        "summary": "Optional content appended below the standard nav links in the sidebar (e.g. workspace switcher, upgrade CTA)."
+      },
+      {
+        "name": "navbar_actions",
+        "required": false,
+        "accepts": ["component", "inline_html"],
+        "summary": "Optional action slot in the top-right of the navbar (e.g. notifications bell, command palette button)."
+      }
+    ],
+    "composes": [
+      "{components.organism.navbar}",
+      "{components.organism.sidebar-nav}"
+    ],
+    "html_template": "patterns/app-shell.html",
+    "tokens": {
+      "background_canvas": "{design.semantic.color.surface.canvas}",
+      "background_sidebar": "{design.semantic.color.surface.subtle}",
+      "navbar_height": "{design.semantic.spacing.layout.navbar-h}",
+      "sidebar_width": "{design.semantic.spacing.layout.sidebar-w}"
+    },
+    "breakpoints": {
+      "sm": {
+        "sidebar_mode": "drawer",
+        "sidebar_default_open": false
+      },
+      "md": {
+        "sidebar_mode": "collapsible",
+        "sidebar_default_open": true
+      },
+      "lg": {
+        "sidebar_mode": "fixed",
+        "sidebar_default_open": true
+      }
+    },
+    "variants": {
+      "no-sidebar": {
+        "composes": ["{components.organism.navbar}"],
+        "tokens": {
+          "sidebar_width": "0"
+        }
+      },
+      "minimal": {
+        "composes": [],
+        "tokens": {
+          "navbar_height": "0",
+          "sidebar_width": "0"
+        }
+      }
+    },
+    "a11y": {
+      "landmarks": ["banner", "navigation", "main"],
+      "focus_order": ["navbar_actions", "sidebar_extra", "main"],
+      "notes": "Skip-to-main link required at the top of the navbar."
+    }
+  },
+
+  "empty-state": {
+    "id": "empty-state",
+    "summary": "Centered empty/zero-state block. Icon + title + body + primary CTA. Used inside tables, dashboards, search results, inbox.",
+    "slots": [
+      {
+        "name": "icon",
+        "required": true,
+        "accepts": ["icon", "image"],
+        "summary": "Visual indicator at the top. Usually a line icon from the design system."
+      },
+      {
+        "name": "title",
+        "required": true,
+        "accepts": ["text"],
+        "summary": "Short headline. e.g. 'No projects yet'."
+      },
+      {
+        "name": "message",
+        "required": false,
+        "accepts": ["text", "inline_html"],
+        "summary": "Supporting paragraph explaining what the user can do next."
+      },
+      {
+        "name": "cta",
+        "required": false,
+        "accepts": ["component"],
+        "summary": "Primary action button. Usually {components.atom.button} with variant=primary."
+      },
+      {
+        "name": "secondary_cta",
+        "required": false,
+        "accepts": ["component"],
+        "summary": "Optional secondary action (e.g. 'Learn more' link button)."
+      }
+    ],
+    "composes": [],
+    "html_template": "patterns/empty-state.html",
+    "tokens": {
+      "background": "{design.semantic.color.surface.subtle}",
+      "padding": "{design.semantic.spacing.layout.section-md}",
+      "max_width": "{design.semantic.spacing.layout.content-narrow}"
+    },
+    "variants": {
+      "inline": {
+        "tokens": {
+          "padding": "{design.semantic.spacing.layout.section-sm}",
+          "max_width": "{design.semantic.spacing.layout.content-narrow}"
+        }
+      },
+      "fullscreen": {
+        "tokens": {
+          "padding": "{design.semantic.spacing.layout.section-xl}",
+          "background": "{design.semantic.color.surface.canvas}"
+        }
+      }
+    },
+    "a11y": {
+      "landmarks": [],
+      "focus_order": ["cta", "secondary_cta"],
+      "notes": "Title should be an h2 within the surrounding page hierarchy."
+    }
+  },
+
+  "hero-grid": {
+    "id": "hero-grid",
+    "summary": "Marketing landing structure: full-width hero on top + 3-card feature grid below. Common for product home, feature pages.",
+    "slots": [
+      {
+        "name": "hero",
+        "required": true,
+        "accepts": ["section", "component", "inline_html"],
+        "summary": "Top hero block (headline + subhead + CTA + visual). Spans full width."
+      },
+      {
+        "name": "card_1",
+        "required": true,
+        "accepts": ["component", "section"],
+        "summary": "First feature card."
+      },
+      {
+        "name": "card_2",
+        "required": true,
+        "accepts": ["component", "section"],
+        "summary": "Second feature card."
+      },
+      {
+        "name": "card_3",
+        "required": true,
+        "accepts": ["component", "section"],
+        "summary": "Third feature card."
+      },
+      {
+        "name": "grid_caption",
+        "required": false,
+        "accepts": ["text", "inline_html"],
+        "summary": "Optional eyebrow text above the card grid."
+      }
+    ],
+    "composes": [],
+    "html_template": "patterns/hero-grid.html",
+    "tokens": {
+      "background": "{design.semantic.color.surface.canvas}",
+      "hero_padding": "{design.semantic.spacing.layout.section-xl}",
+      "grid_gap": "{design.semantic.spacing.layout.gutter-md}",
+      "grid_padding": "{design.semantic.spacing.layout.section-lg}"
+    },
+    "breakpoints": {
+      "sm": {
+        "grid_columns": 1
+      },
+      "md": {
+        "grid_columns": 2
+      },
+      "lg": {
+        "grid_columns": 3
+      }
+    },
+    "variants": {
+      "four-up": {
+        "slots_extra": ["card_4"],
+        "breakpoints": {
+          "lg": { "grid_columns": 4 }
+        }
+      },
+      "alt-bg": {
+        "tokens": {
+          "background": "{design.semantic.color.surface.subtle}"
+        }
+      }
+    },
+    "a11y": {
+      "landmarks": ["region"],
+      "focus_order": ["hero", "card_1", "card_2", "card_3"],
+      "notes": "Hero CTA should be the first interactive element. Cards should use semantic <article> elements."
+    }
+  }
+}
