@@ -72,6 +72,7 @@ claude plugin install uxui-skills
 | `design-md-audit` v6.1 | audit DS (JSON Schema + ref resolver + diff-merge + HTML coverage + hybrid input) + **`--migrate-to-json`** flag (convert legacy MD spec → v6 JSON manifests with auto-extracted patterns) |
 | `design-styleguide` v3 | aggregator mode default (อ่าน components/*.html → single styleguide.html with TOC + theme toggle) หรือ `--regenerate` ใช้ legacy MD mode |
 | `design-remix` | mix design จาก brand references (Linear typography + Notion spacing ฯลฯ) |
+| `design-export-dtcg` v1 | export DS tokens → W3C DTCG `tokens.json` + Style Dictionary config (cross-platform: iOS/Android/Flutter/web/Tailwind) |
 
 **ต้อง setup ก่อนใช้** ⚠️
 
@@ -110,7 +111,9 @@ DS spec layer กำลังย้ายจาก `.md` → JSON manifests (DTC
 - ✅ Phase 3A: `design-md-audit v6.0` (JSON Schema validation + hybrid mode + ref resolver)
 - ✅ Phase 4: `design-md-audit v6.1` (`--migrate-to-json` flag — convert legacy MD → v6 JSON with pattern auto-extraction)
 - ✅ Phase 5: E2E verify ([docs/VERIFICATION-v6.md](docs/VERIFICATION-v6.md)) — all schemas + examples PASS after fixes
-- ⏳ Phase 6 (deferred): DTCG export — เมื่อทีมเริ่ม multi-platform
+- ✅ Phase 6: `design-export-dtcg v1.0` — DTCG `tokens.json` + Style Dictionary config (cross-platform: web/iOS/Android/Flutter/Tailwind)
+
+**🎉 DS v6 — JSON Manifest Migration COMPLETE**
 
 ---
 
