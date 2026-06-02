@@ -24,8 +24,8 @@ DS spec layer migrating from `.md` → JSON manifests (DTCG-aligned).
 **Status:**
 - ✅ Phase 1A: schemas + examples + ref-resolver spec
 - ✅ Phase 1B: architecture doc
-- ⏳ Phase 2A: design-component-builder v5 (JSON output)
-- ⏳ Phase 2B: design-ui-builder v4
+- ✅ Phase 2A: design-component-builder v5 (JSON output)
+- ✅ Phase 2B: design-ui-builder v4
 - ⏳ Phase 2C-3B: doc updates + audit + styleguide
 - ⏳ Phase 4-6: migration tool + verify + DTCG export
 

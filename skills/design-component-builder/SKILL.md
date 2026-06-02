@@ -1,7 +1,7 @@
 ---
 name: design-component-builder
-description: Build the components layer of a 3-file split-architecture design system. Reads design.md (tokens + mood), and outputs HTML files (components/<name>.html) + tokens.css alongside components.md spec. Each atomic component becomes a self-contained HTML file with all states/variants, referencing CSS custom properties mapped from semantic tokens. components.md serves as the index/spec pointing to the HTML files. Mood-biased state mapping. Default initial atomic scope: button, input, select, checkbox, radio, textarea, label, card, badge. Molecule/organism remain spec-only in components.md (Phase 3 work). Triggers on "build components", "add components", "atomic components", "เพิ่ม component", "สร้าง components", "atomic design", "component layer". Uses 2-tier token strategy (sys + comp aliases) following Material 3 + Carbon hybrid for optimal agent intent + low output token cost.
-version: 4.1.0
+description: Build the components layer of a split-architecture design system. Reads design.md (tokens + mood) and emits components.json — a JSON manifest (per schemas/components.schema.json) describing atoms/molecules/organisms with DTCG-aligned ref syntax {design.semantic.*} — alongside tokens.css and self-contained components/<name>.html files plus a components.html showcase. Atoms encode variants/sizes/states as DIFF-ONLY overrides (merge order base → variant → size → state, last-write-wins). Molecule/organism remain spec stubs (status=planned). Mood-biased state mapping. Default initial atomic scope: button, input, select, checkbox, radio, textarea, label, card, badge. Triggers on "build components", "add components", "atomic components", "เพิ่ม component", "สร้าง components", "atomic design", "component layer". Uses 2-tier token strategy (sys + comp aliases) following Material 3 + Carbon hybrid for optimal agent intent + low output token cost. Legacy --format=md flag dual-emits components.md (deprecated, removed in v7).
+version: 5.0.0
 user-invokable: true
 args:
   - name: source
@@ -10,15 +10,27 @@ args:
   - name: scope
     description: "Comma-separated component names to build. Default: button,input,select,checkbox,radio,textarea,label,card,badge"
     required: false
+  - name: format
+    description: "Output format. 'json' (default) emits components.json only. 'md' (LEGACY, deprecated v5+v6, removed v7) ALSO emits components.md for tools still parsing Markdown."
+    required: false
 ---
 
-# 🧩 Design Component Builder (v4)
+# 🧩 Design Component Builder (v5)
 
 Tier-3 layer builder. Reads `design.md` and outputs:
-1. `tokens.css` — CSS custom properties mapped from semantic tokens
-2. `components/<name>.html` — self-contained HTML file per atomic component
-3. `components.html` — showcase aggregating all components via iframes
-4. `components.md` — index/spec pointing to the HTML files
+1. `components.json` — JSON manifest (primary spec) per `schemas/components.schema.json`
+2. `tokens.css` — CSS custom properties mapped from semantic tokens (2-tier)
+3. `components/<name>.html` — self-contained HTML file per atomic component
+4. `components.html` — showcase aggregating all components via iframes
+5. `components.md` — *only if* `--format=md` (legacy dual-emit, deprecated)
+
+## What changed from v4.1 → v5.0
+
+- **Primary spec is JSON, not Markdown.** `components.json` replaces `components.md` as the authoritative manifest.
+- **DTCG-aligned ref syntax.** All cross-file refs use brace form `{design.semantic.path.to.token}` matching the DTCG 2024-09 spec. Direction is downward only: `ui → patterns → components → design`. Upward refs are an audit error.
+- **Diff-only variants/sizes/states.** Each atom declares a base, then variants/sizes/states list ONLY the fields that change. Agents/builders merge `base → variant → size → state` (last-write-wins).
+- **Per-skill SemVer.** Version bumps independently of the library. Pinned `dtcg_version: 2024-09`.
+- **`--format=md` legacy flag.** Supported in v5 and v6 with a deprecation warning. Removed in v7. Default is `json`.
 
 ## When to use
 - Have a `design.md` with primitive + semantic already built (via `design-builder`)
@@ -32,23 +44,23 @@ Tier-3 layer builder. Reads `design.md` and outputs:
 
 ## 3-tier atomic architecture
 
-| Layer | Examples | Output in v4 |
+| Layer | Examples | Output in v5 |
 |---|---|---|
-| **atom** | button, input, select, checkbox, radio, textarea, label, card, badge | **HTML file + components.md entry** |
-| **molecule** | form-field, nav-item, search-bar, stat-tile | components.md spec only (Phase 3) |
-| **organism** | sidebar, topbar, hero, table | components.md spec only (Phase 3) |
+| **atom** | button, input, select, checkbox, radio, textarea, label, card, badge | **components.json entry + HTML file** |
+| **molecule** | form-field, nav-item, search-bar, stat-tile | components.json stub (`status: "planned"`), no HTML |
+| **organism** | sidebar, topbar, hero, table | components.json stub (`status: "planned"`), no HTML |
 
-Template + page tiers live in `ui.md` / app code, NOT in components.md.
+Patterns + pages live in `patterns.json` / `ui.json` (separate files), NOT in components.json.
 
-## Default initial atomic scope (v4)
+## Default initial atomic scope (v5)
 
 `button, input, select, checkbox, radio, textarea, label, card, badge`
 
 Override via `scope` arg.
 
-## Token Architecture (v4.1 — Hybrid Layered)
+## Token Architecture (v5 — Hybrid Layered, JSON-bound)
 
-v4.1 introduces a **2-tier CSS custom property strategy** inspired by Material 3 + Carbon. The goal is to keep agent intent legible AND minimize output tokens in component CSS.
+The **2-tier CSS custom property strategy** (Material 3 + Carbon inspired) is unchanged from v4.1. The new piece in v5 is that the **mapping from `--comp-*` aliases → `{design.semantic.*}` refs is recorded inside `components.json`** under each atom's `tokens` block. `tokens.css` continues to be the runtime artifact; `components.json` is the authoritative source of the binding.
 
 ### The 2 tiers
 
@@ -123,14 +135,146 @@ Comp aliases (`--btn-bg`, etc.) do NOT need re-declaration — they resolve thro
 - Verify `primitive:` AND `semantic:` blocks exist — ABORT if missing
 - Read `mood.primary` for state-mapping bias
 - Walk the `semantic:` tree and collect every leaf token with its dotted path:
-  - e.g. `semantic.colors.primary.default` → value `#3B82F6`
-  - e.g. `semantic.spacing.md` → value `16px`
+  - e.g. `semantic.color.primary.default` → value `#3B82F6`
+  - e.g. `semantic.space.4` → value `16px`
   - e.g. `semantic.radius.md` → value `8px`
   - e.g. `semantic.typography.label.md` → composed value (font/size/weight/lh)
 
-Hold this flat token map in memory for Step 2.
+Hold this flat token map in memory for the later steps. Each semantic path will be used (a) directly as a `{design.semantic.*}` ref inside `components.json`, and (b) as the source of a `--sys-*` declaration in `tokens.css`.
 
-### Step 2 — Write `tokens.css` (2-tier structure REQUIRED)
+### Step 2 — Plan atomic scope
+
+- Resolve the `scope` arg (default: `button,input,select,checkbox,radio,textarea,label,card,badge`).
+- For each atom in scope, plan:
+  - `id` (kebab-case)
+  - One-line `summary` (intent)
+  - `render` shape: `tag`, optional `role`, base `classes`, optional `slots`, `html_template` path
+  - Base `tokens` block — every `--{comp}-*` alias the atom needs, each mapped to a `{design.semantic.*}` ref
+  - `variants` / `sizes` / `states` as **diff-only** overrides
+  - `a11y` block (`touch_min`, `required_attrs`, `contrast_pair`)
+
+### Step 3 — Assemble `components.json` (schemas/components.schema.json)
+
+Build a single JSON object with this shape (see `examples/components.example.json` for a worked reference):
+
+```jsonc
+{
+  "$meta": {
+    "schema": "../schemas/components.schema.json",
+    "scope": "components-only",
+    "depends_on": ["./design.md", "./tokens.css"],
+    "dtcg_version": "2024-09",
+    "version": "1.0.0"
+  },
+  "atom": {
+    "button": {
+      "id": "button",
+      "summary": "Primary interactive control. Use for triggering actions, never for navigation (use link).",
+      "render": {
+        "tag": "button",
+        "classes": ["btn"],
+        "slots": ["icon-leading", "label", "icon-trailing", "spinner"],
+        "html_template": "./components/button.html"
+      },
+      "tokens": {
+        "--btn-bg":     "{design.semantic.color.primary.default}",
+        "--btn-fg":     "{design.semantic.color.on-primary}",
+        "--btn-border": "{design.semantic.color.primary.default}",
+        "--btn-radius": "{design.semantic.radius.md}",
+        "--btn-padding-x": "{design.semantic.space.4}",
+        "--btn-padding-y": "{design.semantic.space.2}",
+        "--btn-font":   "{design.semantic.typography.label.md}",
+        "--btn-focus-ring": "{design.semantic.color.focus-ring}"
+      },
+      "variants": {
+        "primary":   { "classes": ["btn--primary"] },
+        "secondary": {
+          "classes": ["btn--secondary"],
+          "tokens": {
+            "--btn-bg":     "{design.semantic.color.surface.raised}",
+            "--btn-fg":     "{design.semantic.color.content.default}",
+            "--btn-border": "{design.semantic.color.edge.subtle}"
+          }
+        }
+      },
+      "sizes": {
+        "md": { "classes": ["btn--md"] },
+        "lg": {
+          "classes": ["btn--lg"],
+          "tokens": {
+            "--btn-padding-x": "{design.semantic.space.5}",
+            "--btn-padding-y": "{design.semantic.space.3}",
+            "--btn-font":      "{design.semantic.typography.label.lg}"
+          }
+        }
+      },
+      "states": {
+        "hover":  { "tokens": { "--btn-bg": "{design.semantic.color.primary.hover}" } },
+        "active": { "tokens": { "--btn-bg": "{design.semantic.color.primary.active}" } },
+        "focus":  { "classes": ["btn--focus-visible"] },
+        "disabled": {
+          "tokens": {
+            "--btn-bg":     "{design.semantic.color.surface.disabled}",
+            "--btn-fg":     "{design.semantic.color.content.disabled}",
+            "--btn-border": "{design.semantic.color.edge.disabled}"
+          },
+          "a11y": { "required_attrs": ["aria-disabled"] }
+        }
+      },
+      "a11y": {
+        "touch_min": "44px",
+        "role": "button",
+        "required_attrs": ["type"],
+        "contrast_pair": {
+          "fg": "{design.semantic.color.on-primary}",
+          "bg": "{design.semantic.color.primary.default}",
+          "min_ratio": 4.5
+        }
+      }
+    }
+    /* … one entry per atom in scope … */
+  },
+  "molecule": {
+    "form-field": {
+      "id": "form-field",
+      "summary": "Planned in Phase 3. Labeled input wiring label[for] + input[id] + help-text[id] via aria-describedby.",
+      "status": "planned",
+      "composes": [
+        "{components.atom.label}",
+        "{components.atom.input}",
+        "{components.atom.help-text}"
+      ],
+      "render": { "tag": "div", "classes": ["form-field"], "html_template": "./components/form-field.html" },
+      "tokens": {}
+    }
+  },
+  "organism": {}
+}
+```
+
+**Diff-only encoding rules (variants/sizes/states):**
+- The base atom declares every token alias and every base class.
+- Each entry under `variants`, `sizes`, `states` lists ONLY the keys that change from base.
+- `tokens` overrides are KEY-level (override one alias, keep the rest).
+- `classes` arrays are appended (modifier classes), not replaced.
+- Merge order at consumption time: `base → variant → size → state` (last-write-wins per key).
+
+**Ref syntax (DTCG-aligned):**
+- Regex: `^\{(design|components|patterns|ui)\.([a-z0-9_.\-]+)\}$`
+- Direction: `ui → patterns → components → design`. Downward only.
+- Inside `components.json`, ONLY `{design.*}` refs are allowed in token bindings. Composition refs (`composes`) may reference `{components.*}` for sibling atoms inside this same file.
+
+### Step 4 — Write `components.json`
+
+- Path: `./components.json` at repo root.
+- `$meta.schema` → relative path to `schemas/components.schema.json`
+- `$meta.scope` → MUST be `"components-only"`
+- `$meta.depends_on` → MUST include `"./design.md"` and `"./tokens.css"`
+- `$meta.dtcg_version` → `"2024-09"`
+- `$meta.version` → SemVer, bumped independently of skill version (start `1.0.0` on first emit, then bump per change)
+- Write the file with the Write tool. Do NOT paste the full JSON into the chat response.
+
+### Step 5 — Write `tokens.css` (2-tier structure REQUIRED)
 
 `tokens.css` MUST contain BOTH tiers in this order:
 
@@ -215,7 +359,9 @@ Structure:
 
 **Write the file with the Write tool. Do not include the full file content in the chat response.**
 
-### Step 3 — For each component in scope, write `components/<name>.html`
+`tokens.css` is the runtime artifact; `components.json` is the authoritative source of which `--comp-*` aliases exist and which `{design.semantic.*}` ref each one points to. The two MUST stay in sync — every `--comp-*` declared in `tokens.css` must also appear in some atom's `tokens` block in `components.json`, and vice versa.
+
+### Step 6 — For each component in scope, write `components/<name>.html`
 
 For every atomic component in scope (default: `button, input, select, checkbox, radio, textarea, label, card, badge`):
 
@@ -248,7 +394,7 @@ Apply mood-biased state mapping (see Mood Overrides below) when picking which to
 
 **Always WRITE the file with the Write tool. Do NOT include file content in the chat response.**
 
-### Step 4 — Write `components.html` showcase
+### Step 7 — Write `components.html` showcase
 
 Single page that aggregates every atomic component built in Step 3 via iframes.
 
@@ -285,38 +431,52 @@ Structure:
 
 **Write with the Write tool. Do not include full content in response.**
 
-### Step 5 — Write `components.md` as INDEX/SPEC
+### Step 8 — *(only if `--format=md`)* Write legacy `components.md`
 
-`components.md` is now an INDEX pointing to the HTML files, plus the spec for molecule/organism layers (which remain YAML-only in v4).
+ONLY when invoked with `--format=md`:
+
+1. Emit a deprecation warning to stderr (NOT in the chat response):
+   `[design-component-builder] WARN: --format=md is deprecated. components.md will be removed in v7. Migrate consumers to components.json.`
+2. Write `components.md` as a *human-readable index* derived from `components.json`. It must NOT be the source of truth.
 
 Frontmatter:
 ```yaml
 ---
 scope: 'components-only'
-depends-on: ['./design.md']
+depends-on: ['./design.md', './components.json']
 outputs:
   - ./tokens.css
   - ./components.html
   - ./components/*.html
-version: 4.0.0
+version: 5.0.0
+legacy: true
 ---
 ```
 
-Body sections:
-1. **Atomic component index** — table linking each built component to its HTML file
-   ```
-   | Component | HTML file | States | A11y notes |
-   |---|---|---|---|
-   | button | [components/button.html](./components/button.html) | rest, hover, active, focus, disabled × 5 variants | hit-area-min 44px, role=button |
-   | input | [components/input.html](./components/input.html) | rest, hover, focus, disabled, error | label-for required, aria-describedby |
-   | ...
-   ```
-2. **Tokens.css mapping reference** — short table: semantic path → CSS custom property name
-3. **Molecule layer (Phase 3 — spec only)** — YAML block describing planned molecules (form-field, nav-item, search-bar) with `composed-of:` referencing atom HTML files. No HTML output in v4.
-4. **Organism layer (Phase 3 — spec only)** — YAML block describing planned organisms. No HTML output in v4.
-5. **Known Gaps** — list anything skipped from default scope.
+Body sections (derived from `components.json`):
+1. **Atomic component index** — table linking each built component to its HTML file + a11y notes
+2. **Token bindings reference** — short table: `--comp-*` alias → `{design.semantic.*}` ref (sourced from `components.json` atom `tokens` blocks)
+3. **Molecule layer (Phase 3 — planned)** — list of `molecule` stubs with `status: planned`
+4. **Organism layer (Phase 3 — planned)** — list of `organism` stubs with `status: planned`
+5. **Known Gaps** — list anything skipped from default scope
 
 **Write the file with the Write tool. Do not include full content in response.**
+
+## Backward Compat (`--format=md`)
+
+| Skill version | Default output | `--format=md` behavior |
+|---|---|---|
+| v5.x | `components.json` only | Dual-emit: `components.json` + legacy `components.md` (deprecation warning to stderr) |
+| v6.x | `components.json` only | Dual-emit retained; warning escalates to `WARN-DEPRECATED` |
+| v7.0 | `components.json` only | **Flag removed.** Passing `--format=md` errors out with a migration hint |
+
+**Why dual-emit during the transition:** existing tooling (audits, style-guide renderers, ad-hoc Markdown readers) still parses `components.md`. v5 + v6 give consumers two full release windows to migrate to the JSON manifest before the legacy format is dropped.
+
+**Migration guidance for downstream consumers:**
+- Read `components.json` directly (it is JSON, parseable in any language).
+- Validate against `schemas/components.schema.json` (Draft-07).
+- Resolve `{design.semantic.*}` refs via `schemas/ref-resolver.md`.
+- If you previously parsed `components.md` frontmatter, the same fields (`scope`, `depends_on`, `version`) live under `$meta` in JSON.
 
 ## Mood-biased state mapping
 
@@ -333,7 +493,7 @@ Apply this when picking which `--color-*` token each state uses in the component
 
 ## Required a11y attrs per atom (WCAG AA)
 
-Each HTML file MUST include these:
+These constraints are now recorded **in `components.json`** under each atom's `a11y` block (`touch_min`, `role`, `required_attrs`, `contrast_pair`). The HTML files MUST honor them at render time, and each HTML file's top comment MUST still list the attrs used (for in-browser inspection).
 
 - **button** — `role="button"` (implicit on `<button>`), hit-area ≥44px (use padding to enforce on small sizes), `aria-label` if icon-only
 - **input** — `id`, `aria-describedby` linking to helper-text, `aria-invalid="true"` on error
@@ -344,15 +504,35 @@ Each HTML file MUST include these:
 - **card (interactive)** — `role="button"` or wrap in `<a>`, keyboard handler (tabindex=0)
 - **badge** — `aria-label` if status communicated by color alone
 
-Each HTML file's top comment MUST list the a11y attrs used.
+`contrast_pair` blocks in `components.json` are what `design-md-audit` reads to verify WCAG ratios against `design.md`. Set `min_ratio: 4.5` for body text, `3` for large text / non-text UI.
 
 ## Validation checklist
 
+**JSON manifest:**
+- [ ] `components.json` exists at repo root and parses as valid JSON
+- [ ] `components.json` validates against `schemas/components.schema.json` (Draft-07)
+- [ ] `$meta.scope == "components-only"`
+- [ ] `$meta.depends_on` includes `"./design.md"` and `"./tokens.css"`
+- [ ] `$meta.dtcg_version == "2024-09"`
+- [ ] `$meta.version` is a valid SemVer (`x.y.z`)
+- [ ] Every atom has `id`, `render`, `tokens` (per schema)
+- [ ] Every `render.html_template` path resolves to an existing file in `./components/`
+- [ ] Every token ref matches the regex `^\{(design|components|patterns|ui)\.([a-z0-9_.\-]+)\}$`
+- [ ] Every `{design.semantic.*}` ref in `tokens` resolves to a real path in `design.md`
+- [ ] **No upward refs** — components.json contains NO `{patterns.*}` or `{ui.*}` refs (audit error)
+- [ ] Variants/sizes/states are **diff-only** — they do NOT duplicate base keys that aren't changing
+- [ ] Every `composes` entry (molecule/organism) references an atom that exists in this file
+- [ ] Molecule/organism stubs use `status: "planned"` and have no HTML output yet
+
+**Tokens.css:**
 - [ ] `tokens.css` exists at repo root
-- [ ] `tokens.css` contains BOTH tiers: sys (`--sys-*`) AND comp (`--{component}-*`)
+- [ ] Contains BOTH tiers: sys (`--sys-*`) AND comp (`--{component}-*`)
 - [ ] Every sys-tier custom property has a source-path comment
 - [ ] Every comp-tier alias points to a `var(--sys-*)` reference
 - [ ] Dark mode block re-declares ONLY sys-tier (not comp aliases)
+- [ ] Every `--comp-*` alias declared in `tokens.css` appears in some atom's `tokens` block in `components.json` (and vice versa)
+
+**HTML files:**
 - [ ] Every component in scope has a `components/<name>.html` file
 - [ ] Every HTML file links `../tokens.css`
 - [ ] Every HTML file uses `var(--...)` — NO raw hex, NO raw px
@@ -361,22 +541,31 @@ Each HTML file's top comment MUST list the a11y attrs used.
 - [ ] Every HTML file uses semantic HTML elements
 - [ ] Every HTML file shows ALL states/variants grouped by `<h2>/<h3>`
 - [ ] `components.html` exists and iframes every component
-- [ ] `components.md` index table links every HTML file
-- [ ] `components.md` frontmatter declares `scope: components-only`, `depends-on: ['./design.md']`
-- [ ] Molecule/organism remain YAML-only in components.md (no HTML output)
-- [ ] No raw hex/px anywhere except in `tokens.css`
 - [ ] Open `components.html` in browser → renders correctly
+
+**Legacy md (only if `--format=md`):**
+- [ ] `components.md` derived from `components.json` (NOT hand-authored)
+- [ ] Frontmatter has `legacy: true` and points `depends-on` at `./components.json`
+- [ ] Deprecation warning emitted to stderr
 
 ## Constraints
 - READ design.md once at start; don't re-read
 - Do NOT touch primitive/semantic blocks in design.md — additive only
 - Do NOT change mood — read it, apply it
-- **Hard cutoff — no v3 backward compat.** v4 always outputs HTML+CSS. If user wants legacy YAML-only output, point them to v3.
+- **Hard cutoff — no v3 backward compat.** v5 always outputs JSON + HTML + CSS. If user wants legacy YAML-only output, point them to v3. If they need Markdown index, use `--format=md` (v5–v6 only).
 - Use the Write tool for every file; never paste full file contents into the chat response
 
 ## Quality Bar
+
+**`components.json` (authoritative spec):**
+- Token map completeness — every atom in scope binds every `--comp-*` alias it uses; no orphan aliases, no missing bindings
+- Diff-only consistency — variants/sizes/states contain ONLY changed keys; no copy-paste of unchanged base tokens
+- Ref hygiene — every ref is downward (`{design.*}` only inside `tokens`), every path resolves
+- Schema-valid — passes `components.schema.json` validation with no warnings
+
+**Runtime artifacts:**
 A designer opening `components.html` in a browser should:
 - See every atomic component with every state/variant rendered live
-- Be able to inspect any element and see `var(--color-...)` instead of hex
-- See visible focus rings, hit areas, and disabled states matching the design.md mood
+- Be able to inspect any element and see `var(--...)` instead of hex
+- See visible focus rings, hit areas, and disabled states matching the `design.md` mood
 - Click through to any `components/<name>.html` and see it work standalone

@@ -66,9 +66,9 @@ claude plugin install uxui-skills
 | Skill | หน้าที่ |
 |---|---|
 | `design-builder` v6 | สร้าง `design.md` — dual-path (zero / client-given palette + mood + refs) → base tokens + WCAG validation + Known Gaps log |
-| `design-component-builder` v4.1 | สร้าง `components.md` + **HTML files จริง** (`components/<name>.html` + `tokens.css` 2-tier + `components.html` showcase). Token strategy: **sys + comp aliases** (Material 3 + Carbon hybrid) — optimal agent intent + low output token cost |
+| `design-component-builder` v5 | สร้าง `components.json` (DTCG-aligned manifest) + `tokens.css` 2-tier + `components/<name>.html` + `components.html` showcase. Legacy `--format=md` ยังใช้ได้ใน v5–v6 |
 | `design-icon-builder` | populate iconography layer + ดึง SVG จริงจาก Phosphor/Tabler/Heroicons ฯลฯ |
-| `design-ui-builder` v2 | สร้าง `ui.md` + `pages/<name>.html` (self-contained, inline component markup) — UI compositions (page/pattern/section/flow) |
+| `design-ui-builder` v4 | สร้าง `ui.json` + `patterns.json` (NEW) + `pages/<name>.html` (self-contained) + `patterns/<name>.html` (NEW — reusable shells with slot contracts) |
 | `design-md-audit` v5.1 | audit DS + เช็ก **HTML coverage** (components/<name>.html, pages/<name>.html, tokens.css) + cross-file refs |
 | `design-styleguide` v3 | aggregator mode default (อ่าน components/*.html → single styleguide.html with TOC + theme toggle) หรือ `--regenerate` ใช้ legacy MD mode |
 | `design-remix` | mix design จาก brand references (Linear typography + Notion spacing ฯลฯ) |
@@ -100,7 +100,11 @@ DS spec layer กำลังย้ายจาก `.md` → JSON manifests (DTC
 
 อ่าน [docs/architecture-v5.md](docs/architecture-v5.md) สำหรับรายละเอียด, [schemas/ref-resolver.md](schemas/ref-resolver.md) สำหรับ ref syntax
 
-**Status:** Phase 1A + 1B done (schemas + docs). Phase 2 (skill rewrites) pending.
+**Status:**
+- ✅ Phase 1A + 1B: schemas + docs
+- ✅ Phase 2A: `design-component-builder v5` (emits `components.json`)
+- ✅ Phase 2B: `design-ui-builder v4` (emits `ui.json` + `patterns.json`)
+- ⏳ Phase 2C-D, 3A-B, 4-6 pending
 
 ---
 
