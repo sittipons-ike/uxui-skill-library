@@ -75,6 +75,7 @@ claude plugin install uxui-skills
 | `design-export-dtcg` v1 | export DS tokens → W3C DTCG `tokens.json` + Style Dictionary config (cross-platform: iOS/Android/Flutter/web/Tailwind) |
 | `design-push-figma-tokens` v1 | sync DS tokens (design.md / tokens.json) → Figma Variable Collection (light/dark modes, idempotent, alias-aware) |
 | `design-push-figma-components` v1 | push 5 atoms (button, input, badge, label, card) → Figma Component Sets with auto-layout + Variable bindings (variant × size × state matrix; rest + disabled states; hover/focus via designer Interactions) |
+| `design-figma-rename-tokens` v1 | normalize existing Figma Variable names → canonical DS naming (Color/Primary/Default, Space/Md ฯลฯ). 4-tier confidence (value/name/category/manual). Non-destructive — preserves bindings/values/modes. ใช้กับ existing projects ก่อน align ทีม |
 
 **ต้อง setup ก่อนใช้** ⚠️
 
