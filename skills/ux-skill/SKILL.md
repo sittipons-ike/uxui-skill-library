@@ -25,7 +25,7 @@ Invoke this skill when user:
 **Do NOT invoke when:**
 - User wants visual design (→ `ui-implementation-specialist`)
 - User wants microcopy (→ `ux-writer`)
-- User wants to QA existing work (→ `design-qa-auditor`)
+- User wants to QA existing work (→ `figma-audit-ui`)
 
 ---
 
@@ -152,7 +152,7 @@ Invoke this skill when user:
 ## 🔗 Related Skills
 
 - **Next step:** `ui-implementation-specialist`, `ux-writer` (run in parallel)
-- **Final step:** `design-qa-auditor`
+- **Final step:** `figma-audit-ui`
 
 ---
 

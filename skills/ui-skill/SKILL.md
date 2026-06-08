@@ -25,7 +25,7 @@ Invoke this skill when user:
 **Do NOT invoke when:**
 - User is still defining the problem (→ `ux-strategist`)
 - User wants copy only (→ `ux-writer`)
-- User wants to audit existing work (→ `design-qa-auditor`)
+- User wants to audit existing work (→ `figma-audit-ui`)
 - User wants to CREATE a new design system (this skill uses existing DS)
 
 ---
@@ -160,7 +160,7 @@ Invoke this skill when user:
 - [ ] All tokens available in `tokens.css`
 - [ ] Responsive rules documented
 - [ ] Edge cases spec'd (empty, error, loading)
-- [ ] Ready for QA audit (`design-qa-auditor`)
+- [ ] Ready for QA audit (`figma-audit-ui`)
 ```
 
 ---
@@ -189,7 +189,7 @@ Invoke this skill when user:
 
 - **Depends on:** `ux-strategist` (needs UX Blueprint)
 - **Parallel with:** `ux-writer`
-- **Next:** `design-qa-auditor` (will verify token compliance)
+- **Next:** `figma-audit-ui` (will verify token compliance)
 
 ---
 

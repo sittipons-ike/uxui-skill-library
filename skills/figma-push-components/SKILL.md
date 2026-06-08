@@ -1,13 +1,13 @@
 ---
-name: design-push-figma-components
-description: Push DS atoms (button, input, badge, label, card) from components.json + HTML into Figma as Component Sets with auto-layout + Variable bindings. Every padding/radius/fill binds to Figma Variables (from design-push-figma-tokens). Variants per atom (primary/secondary/ghost × sm/md/lg). States rest + disabled only (hover/focus via designer Interactions). Idempotent. Triggers on "push components to figma", "sync figma components", "figma components", "push atoms", "อัพ component figma", "สร้าง component figma".
+name: figma-push-components
+description: Push DS atoms (button, input, badge, label, card) from components.json + HTML into Figma as Component Sets with auto-layout + Variable bindings. Every padding/radius/fill binds to Figma Variables (from figma-push-tokens). Variants per atom (primary/secondary/ghost × sm/md/lg). States rest + disabled only (hover/focus via designer Interactions). Idempotent. Triggers on "push components to figma", "sync figma components", "figma components", "push atoms", "อัพ component figma", "สร้าง component figma".
 version: 1.0.0
 user-invokable: true
 ---
 
-# design-push-figma-components
+# figma-push-components
 
-Push DS atoms from `components.json` + `components/*.html` into a Figma file as **Component Sets** with auto-layout and **Variable bindings**. Every padding, radius, gap, fill, and stroke binds to a Figma Variable created in Phase 7A (`design-push-figma-tokens`) — so token changes propagate automatically without re-pushing components.
+Push DS atoms from `components.json` + `components/*.html` into a Figma file as **Component Sets** with auto-layout and **Variable bindings**. Every padding, radius, gap, fill, and stroke binds to a Figma Variable created in Phase 7A (`figma-push-tokens`) — so token changes propagate automatically without re-pushing components.
 
 Scope v1.0: 5 atoms (button, input, badge, label, card), 2 states (rest + disabled).
 
@@ -21,7 +21,7 @@ Scope v1.0: 5 atoms (button, input, badge, label, card), 2 states (rest + disabl
 
 ## When NOT to use
 
-- Variables not yet pushed → run `/design-push-figma-tokens` first
+- Variables not yet pushed → run `/figma-push-tokens` first
 - Atoms still iterating (props/structure churning) — wait until stable
 - Need pixel-perfect 1:1 match with web — do it manually in Figma
 - Need all interactive states (hover, focus, active) — designer wires those via Interactions panel; this skill only encodes static Variants
@@ -80,7 +80,7 @@ Do not proceed until the user confirms.
 Verify Phase 7A:
 
 - Call `mcp__figma-console__figma_get_variables`
-- If collection `DS Tokens` missing → **STOP** + suggest `/design-push-figma-tokens first`
+- If collection `DS Tokens` missing → **STOP** + suggest `/figma-push-tokens first`
 
 ### Step 2 — Read sources
 
@@ -206,7 +206,7 @@ Screenshot: <url>
 Next steps:
 - Figma → Assets panel → drag Button into any frame
 - Hover/focus → select component → Interactions panel → On Hover → Change to (different variant)
-- Edit design.md → re-run /design-push-figma-tokens — variables update; components inherit automatically
+- Edit design.md → re-run /figma-push-tokens — variables update; components inherit automatically
 ```
 
 ---
@@ -268,7 +268,7 @@ Grand total: **45 Figma components** across 5 Component Sets.
 
 | Failure | User-facing message |
 |---|---|
-| `DS Tokens` collection not found | "ไม่พบ Variable Collection `DS Tokens` — รัน `/design-push-figma-tokens` ก่อน" |
+| `DS Tokens` collection not found | "ไม่พบ Variable Collection `DS Tokens` — รัน `/figma-push-tokens` ก่อน" |
 | Variable `X` missing for a token | "Warning: token `<--btn-bg>` → `Color/Primary/Default` not found — used raw value as fallback" |
 | Component Set already exists | "Updated existing `Button` set — added/refreshed N variants" |
 | Image fill needed (atom has bg image) | "Skipped image fill on `<atom>` — auto-layout binding not applied to image atoms" |
@@ -295,7 +295,7 @@ After this skill runs, designer still does:
 
 1. Phase 7A done — Variables in Figma
 2. Open the target Figma file (correct page)
-3. Run `/design-push-figma-components`
+3. Run `/figma-push-components`
 4. Confirm pre-flight + scope
 5. Skill reports: `"Pushed 5 atoms, 45 components, 234 bindings"`
 6. In Figma → `DS / Atoms` section → drag Button into any frame
@@ -305,14 +305,14 @@ After this skill runs, designer still does:
 
 1. Designer tweaks `design.md` (e.g. primary color)
 2. `/design-export-dtcg` → tokens.json refreshed
-3. `/design-push-figma-tokens` → Variables update
+3. `/figma-push-tokens` → Variables update
 4. **Skip re-push of components** — components already bound to Variables → new color appears automatically
-5. Re-run `/design-push-figma-components` only when atom structure changes (new variant, new slot)
+5. Re-run `/figma-push-components` only when atom structure changes (new variant, new slot)
 
 ### C — Add a new variant
 
 1. Edit `components.json` → add variant `danger` to `button.variants`
-2. Run `/design-push-figma-components`
+2. Run `/figma-push-components`
 3. Skill detects existing `Button` Component Set + new variant → appends variant frames to existing set
 4. Report: `"Updated Button: +3 variants (danger × 3 sizes)"`
 
@@ -320,11 +320,11 @@ After this skill runs, designer still does:
 
 ## Related skills
 
-- `design-push-figma-tokens` — Phase 7A prerequisite (Variables)
+- `figma-push-tokens` — Phase 7A prerequisite (Variables)
 - `design-component-builder` — writes `components.json` + `components/*.html` (input source)
 - `design-export-dtcg` — keeps `tokens.json` in sync with `design.md`
 - `design-md-audit` — verify components.json refs resolve before pushing
-- **Future:** `design-push-figma-patterns` (Phase 8B) — push patterns (auth-split, app-shell) built from these atoms
+- **Future:** `figma-push-patterns` (Phase 8B) — push patterns (auth-split, app-shell) built from these atoms
 
 ---
 

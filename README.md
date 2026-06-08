@@ -52,7 +52,7 @@ claude plugin install uxui-skills
 | Skill | หน้าที่ |
 |---|---|
 | `check-setup` | Guide ทีมตอน install ครั้งแรก — เช็ก prerequisites + แนะนำ skill แรก |
-| `audit-ui` | ตรวจ Figma DS compliance ก่อน handoff |
+| `figma-audit-ui` | ตรวจ Figma DS compliance ก่อน handoff |
 | `ux-skill` | วาง User Flow + Information Architecture |
 | `ui-skill` | Map component + design token จาก Blueprint |
 | `ux-writing` | เขียน / rewrite microcopy บน UI |
@@ -73,9 +73,9 @@ claude plugin install uxui-skills
 | `design-styleguide` v3 | aggregator mode default (อ่าน components/*.html → single styleguide.html with TOC + theme toggle) หรือ `--regenerate` ใช้ legacy MD mode |
 | `design-remix` | mix design จาก brand references (Linear typography + Notion spacing ฯลฯ) |
 | `design-export-dtcg` v1 | export DS tokens → W3C DTCG `tokens.json` + Style Dictionary config (cross-platform: iOS/Android/Flutter/web/Tailwind) |
-| `design-push-figma-tokens` v1 | sync DS tokens (design.md / tokens.json) → Figma Variable Collection (light/dark modes, idempotent, alias-aware) |
-| `design-push-figma-components` v1 | push 5 atoms (button, input, badge, label, card) → Figma Component Sets with auto-layout + Variable bindings (variant × size × state matrix; rest + disabled states; hover/focus via designer Interactions) |
-| `design-figma-rename-tokens` v1 | normalize existing Figma Variable names → canonical DS naming (Color/Primary/Default, Space/Md ฯลฯ). 4-tier confidence (value/name/category/manual). Non-destructive — preserves bindings/values/modes. ใช้กับ existing projects ก่อน align ทีม |
+| `figma-push-tokens` v1 | sync DS tokens (design.md / tokens.json) → Figma Variable Collection (light/dark modes, idempotent, alias-aware) |
+| `figma-push-components` v1 | push 5 atoms (button, input, badge, label, card) → Figma Component Sets with auto-layout + Variable bindings (variant × size × state matrix; rest + disabled states; hover/focus via designer Interactions) |
+| `figma-rename-tokens` v1 | normalize existing Figma Variable names → canonical DS naming (Color/Primary/Default, Space/Md ฯลฯ). 4-tier confidence (value/name/category/manual). Non-destructive — preserves bindings/values/modes. ใช้กับ existing projects ก่อน align ทีม |
 
 **ต้อง setup ก่อนใช้** ⚠️
 

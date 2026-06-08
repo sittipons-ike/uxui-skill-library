@@ -1,11 +1,11 @@
 ---
-name: design-figma-rename-tokens
+name: figma-rename-tokens
 description: Normalize existing Figma Variable names to match canonical DS naming (Color/Primary/Default, Space/Md, etc.) via figma-console MCP. Non-destructive — preserves all bindings, values, modes. Hybrid auto-suggest + designer approval. Useful for aligning multi-project Figma files with team DS standard before subscribing to DS Library. Triggers on "rename figma variables", "normalize figma tokens", "align figma naming", "เปลี่ยนชื่อ variable figma", "rename token figma", "ทำชื่อ figma ให้ตรง DS".
 version: 1.0.0
 user-invokable: true
 ---
 
-# design-figma-rename-tokens
+# figma-rename-tokens
 
 Normalize existing Figma Variables to match the team's canonical DS naming (Color/Primary/Default, Space/Md, Radius/Md, ...). Non-destructive — preserves all bindings, values, and modes.
 
@@ -18,10 +18,10 @@ Normalize existing Figma Variables to match the team's canonical DS naming (Colo
 
 ## When NOT to use
 
-- New Figma file with no Variables yet → use `/design-push-figma-tokens` instead
+- New Figma file with no Variables yet → use `/figma-push-tokens` instead
 - Need to merge duplicate variables → must be done manually in Figma (skill flags only)
-- Need to change a variable's value → use `/design-push-figma-tokens`
-- Need to add new variables that don't exist in Figma yet → use `/design-push-figma-tokens`
+- Need to change a variable's value → use `/figma-push-tokens`
+- Need to add new variables that don't exist in Figma yet → use `/figma-push-tokens`
 
 ## Prerequisites
 
@@ -254,7 +254,7 @@ No values changed. No variables created or deleted. Modes untouched.
 ### A — First-pass on existing project
 
 1. Open Figma file with 32 Variables (mixed naming)
-2. Run `/design-figma-rename-tokens`
+2. Run `/figma-rename-tokens`
 3. Pre-flight Q&A — pick `auto-suggest` + `batch`
 4. Skill reads vars → suggests 28 renames (20 HIGH / 6 MEDIUM / 2 LOW)
 5. Designer approves HIGH bulk + reviews MEDIUM one-by-one + skips LOW
@@ -264,7 +264,7 @@ No values changed. No variables created or deleted. Modes untouched.
 ### B — Re-run after design.md updates
 
 1. NAMING.md extended with new semantic tokens
-2. Run `/design-figma-rename-tokens`
+2. Run `/figma-rename-tokens`
 3. Skill detects existing vars already aligned + suggests new mappings for newer DS additions
 4. Apply or skip
 
@@ -279,7 +279,7 @@ No values changed. No variables created or deleted. Modes untouched.
 
 ## Related skills
 
-- `/design-push-figma-tokens` — push canonical tokens to a fresh Figma file (Phase 7A)
-- `/design-push-figma-components` — push DS components after vars are aligned
+- `/figma-push-tokens` — push canonical tokens to a fresh Figma file (Phase 7A)
+- `/figma-push-components` — push DS components after vars are aligned
 - `/design-md-audit` — audit DS structure for spec compliance
 - Future: `/design-figma-migrate-project` — full migration (subscribe library + swap components)

@@ -1,4 +1,4 @@
-# `design-push-figma-components` — Concrete Walkthrough
+# `figma-push-components` — Concrete Walkthrough
 
 > End-to-end examples showing how the skill behaves across first-time push, idempotent re-run, additive update, pre-flight failure, and Figma-model limitations.
 > Reference inputs: `examples/components.example.json` (atom shape) + `skills/design-component-builder/examples/components/button.html` (HTML template).
@@ -10,7 +10,7 @@
 ### A.1 User invocation
 
 ```
-> /design-push-figma-components
+> /figma-push-components
 ```
 
 ### A.2 Pre-flight `AskUserQuestion` responses
@@ -21,7 +21,7 @@
 | 2 | Target Figma file? | currently open — `DS / Foundations v2` |
 | 3 | Which scope? | `atom` only (skip molecule/organism for now) |
 | 4 | Which atoms? | `button` (skip input/badge/label/help-text) |
-| 5 | Confirm DS Tokens variable collection exists? | yes — pushed via `/design-push-figma-tokens` 5 min ago |
+| 5 | Confirm DS Tokens variable collection exists? | yes — pushed via `/figma-push-tokens` 5 min ago |
 | 6 | Naming convention? | `Component / <id> / <Variant> / <Size> / <State>` (default) |
 | 7 | Dry-run first? | yes — preview before commit |
 
@@ -165,7 +165,7 @@ Page: DS / Atoms
 ### A.6 Final report shown to user
 
 ```text
-✅ design-push-figma-components — done
+✅ figma-push-components — done
 
 File:    DS / Foundations v2
 Page:    DS / Atoms (created)
@@ -187,7 +187,7 @@ Skipped (Figma model limits):
     → Add via Interactions on the primary variant (see push-flow.md §E).
 
 Next:
-  • Run /design-push-figma-components again for input / badge / label / help-text
+  • Run /figma-push-components again for input / badge / label / help-text
   • Publish file as Library (manual — Assets panel → Publish)
 ```
 
@@ -195,12 +195,12 @@ Next:
 
 ## Scenario B — Re-run after `design.md` token change
 
-**Context:** Designer changed `semantic.color.primary.default` from `#3B82F6` → `#2563EB` in `design.md`, re-ran `/design-export-dtcg`, then `/design-push-figma-tokens`. Now wants components to reflect the new color.
+**Context:** Designer changed `semantic.color.primary.default` from `#3B82F6` → `#2563EB` in `design.md`, re-ran `/design-export-dtcg`, then `/figma-push-tokens`. Now wants components to reflect the new color.
 
 ### B.1 Invocation
 
 ```
-> /design-push-figma-components
+> /figma-push-components
 ```
 
 ### B.2 Pre-flight
@@ -262,7 +262,7 @@ Tip: Run /design-styleguide to refresh the team-review page with the new color.
 ### C.1 Invocation
 
 ```
-> /design-push-figma-components
+> /figma-push-components
 ```
 
 ### C.2 Diff phase
@@ -295,7 +295,7 @@ Tip: Run /design-styleguide to refresh the team-review page with the new color.
 ### C.4 Report
 
 ```text
-✅ design-push-figma-components — additive update
+✅ figma-push-components — additive update
 
 Component Set: Button (id 12:88)
 Added:
@@ -321,7 +321,7 @@ Downstream check:
 ### D.1 Invocation
 
 ```
-> /design-push-figma-components
+> /figma-push-components
 ```
 
 ### D.2 Pre-flight check fails
@@ -347,12 +347,12 @@ Why this matters:
   back to design.md and defeating the purpose of a token-driven DS.
 
 Fix:
-  1. Run /design-push-figma-tokens   ← creates "DS Tokens" collection
-  2. Re-run /design-push-figma-components
+  1. Run /figma-push-tokens   ← creates "DS Tokens" collection
+  2. Re-run /figma-push-components
 
 Don't have tokens yet?
   • Run /design-export-dtcg to generate tokens.json from design.md
-  • Then /design-push-figma-tokens
+  • Then /figma-push-tokens
 
 No components were created. File untouched.
 ```
@@ -430,5 +430,5 @@ Or use Figma's built-in "Smart animate hover" via States:
 | A — first push | `components.json` new | 8 | +18 | Publish library |
 | B — token re-run | `design.md` color change | 3 | 0 | None |
 | C — add variant | `components.json` edited | 5 | +6 | None |
-| D — missing Variables | fresh file | 2 (fails) | 0 | Run `/design-push-figma-tokens` first |
+| D — missing Variables | fresh file | 2 (fails) | 0 | Run `/figma-push-tokens` first |
 | E — hover limit | designer question | 0 | 0 | Manual Interactions in Figma |

@@ -3,7 +3,7 @@
 ## Scenario A: First-pass on Project A (existing Figma file)
 
 ### Pre-flight
-User: `/design-figma-rename-tokens`
+User: `/figma-rename-tokens`
 
 Skill asks:
 - Q1: "Figma file ใดที่จะ rename?" → User: "current"
@@ -131,7 +131,7 @@ User accepts.
 
 ### Setup
 - design-builder added new semantic tokens: Color/Accent/Soft, Space/Sm-md (compound)
-- Run /design-figma-rename-tokens again on Project A
+- Run /figma-rename-tokens again on Project A
 
 ### Result
 ```
@@ -198,5 +198,5 @@ User picks (b):
 2. เปิด file ที่จะ rename
 3. ใน Claude Code: /mcp
 4. ดูว่า figma-console ขึ้นสถานะ Connected ไหม
-5. ลอง /design-figma-rename-tokens ใหม่
+5. ลอง /figma-rename-tokens ใหม่
 ```

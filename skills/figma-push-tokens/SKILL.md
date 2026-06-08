@@ -1,11 +1,11 @@
 ---
-name: design-push-figma-tokens
+name: figma-push-tokens
 description: Sync DS tokens (design.md or tokens.json DTCG) to Figma Variables via figma-console MCP. Creates Variable Collection with light/dark modes; aliases (comp tier) become Figma variable refs. Idempotent. Triggers on "push to figma", "sync figma variables", "figma tokens", "push tokens", "อัพ figma", "sync token ขึ้น figma".
 version: 1.0.0
 user-invokable: true
 ---
 
-# design-push-figma-tokens
+# figma-push-tokens
 
 Sync a stable Design System token set (semantic colors, radius, spacing, typography, shadow) from `design.md` or DTCG `tokens.json` into a Figma **Variable Collection** — with light/dark modes and alias preservation. Idempotent: re-runs update only changed variables.
 
@@ -21,7 +21,7 @@ Sync a stable Design System token set (semantic colors, radius, spacing, typogra
 
 - Figma MCP not connected (check via `/mcp`)
 - DS still in iteration — tokens will churn, causing noisy Figma diffs
-- You want to push components/frames — use `design-push-figma-components` (Phase 8)
+- You want to push components/frames — use `figma-push-components` (Phase 8)
 - You want to push icons — icons live in `design.md` and are exported separately
 
 ---
@@ -197,7 +197,7 @@ After push, run:
 - `design-builder` → writes `design.md` (alternative input)
 - `design-component-builder` → consumes `tokens.css` (web), not Figma
 - `design-styleguide` → renders `styleguide.html` (web preview)
-- **Future:** `design-push-figma-components` (Phase 8) — pushes HTML atoms as Figma frames bound to these variables
+- **Future:** `figma-push-components` (Phase 8) — pushes HTML atoms as Figma frames bound to these variables
 
 ---
 
@@ -208,7 +208,7 @@ After push, run:
 1. Designer finalises `design.md`
 2. Run `/design-export-dtcg` → produces `tokens.json`
 3. Open the target Figma file (correct page)
-4. Run `/design-push-figma-tokens`
+4. Run `/figma-push-tokens`
 5. Confirm pre-flight prompts
 6. Skill creates collection → reports `"Created 87 variables in collection 'DS Tokens' (light + dark)"`
 7. In Figma: select fill → click variable icon → bind to `DS Tokens` collection
@@ -217,7 +217,7 @@ After push, run:
 
 1. `design.md` updated (e.g. primary color tweak)
 2. Run `/design-export-dtcg` → `tokens.json` refreshed
-3. Run `/design-push-figma-tokens`
+3. Run `/figma-push-tokens`
 4. Skill detects existing collection, updates only changed variables → `"Updated 3 variables, 84 unchanged"`
 5. Figma components already bound to those variables update automatically
 
@@ -225,7 +225,7 @@ After push, run:
 
 1. Add `dark:` block to `design.md` semantic tokens
 2. `/design-export-dtcg` → tokens.json now has dark values
-3. `/design-push-figma-tokens` → skill detects dark mode is new, adds `dark` mode to the existing collection and fills in dark values per variable
+3. `/figma-push-tokens` → skill detects dark mode is new, adds `dark` mode to the existing collection and fills in dark values per variable
 4. Report: `"Added dark mode; 47 variables now have dark values"`
 
 ---

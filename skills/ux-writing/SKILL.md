@@ -152,7 +152,7 @@ Invoke this skill when user:
 
 - **Depends on:** `ux-strategist` (needs UX Blueprint for context)
 - **Parallel with:** `ui-implementation-specialist`
-- **Next:** `design-qa-auditor` (will verify tone consistency)
+- **Next:** `figma-audit-ui` (will verify tone consistency)
 
 ---
 

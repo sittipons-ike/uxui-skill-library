@@ -34,7 +34,7 @@ Invoke this skill when user:
 **Do NOT invoke when:**
 - User wants you to **execute the task directly** (เช่น "เขียนบทความให้หน่อย" → ทำเลย ไม่ต้องสร้าง prompt)
 - User wants UX/UI work (→ `ux-skill`, `ui-skill`)
-- User wants design QA (→ `audit-ui`)
+- User wants design QA (→ `figma-audit-ui`)
 - User wants microcopy (→ `ux-writing`)
 
 ---

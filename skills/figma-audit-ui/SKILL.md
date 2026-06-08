@@ -1,5 +1,5 @@
 ---
-name: design-qa-auditor
+name: figma-audit-ui
 description: Audit Figma for DS token/component compliance (Consumer files). Pinpoint per-element, Thai, no WCAG/UX scope.
 version: 2.6.0
 mcps_required: [figma]

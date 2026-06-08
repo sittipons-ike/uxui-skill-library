@@ -1,6 +1,6 @@
 # Example: push-flow.md
 
-A concrete walkthrough of `design-push-figma-tokens` v1.0.0 — from `tokens.json` to a working Figma Variable Collection with light + dark modes.
+A concrete walkthrough of `figma-push-tokens` v1.0.0 — from `tokens.json` to a working Figma Variable Collection with light + dark modes.
 
 ---
 
