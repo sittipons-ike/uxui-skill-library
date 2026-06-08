@@ -1,7 +1,7 @@
 ---
 name: design-ui-builder
-description: Build the ui.json manifest + patterns.json manifest + per-page HTML files + per-pattern HTML shells in a split-architecture design system. Reads design.md (tokens, YAML-in-MD) + components.json (atomic catalog) + components/*.html (markup source for inlining into pages). Emits ui.json (page/section/flow compositions, per schemas/ui.schema.json), patterns.json (reusable cross-page shells like auth-split / app-shell / empty-state / hero-grid, per schemas/patterns.schema.json), pages/<name>.html (self-contained — inlines component markup, no iframes), and patterns/<name>.html (template shells with slot placeholders). Pages compose either via a pattern + slot_fills OR direct composes []. Slot contract types — component | section | pattern | inline_html | text | image | icon. Refs use brace syntax {file.path.to.thing} per DTCG; downward only (ui → patterns → components → design). Prefers organism refs over atom refs (promote to molecule/organism if composing atoms directly). Legacy --format=md flag emits ui.md alongside ui.json (deprecated, removed v7). Triggers on "build ui", "build pages", "build patterns", "ui compositions", "create ui.json", "patterns.json", "สร้าง pages", "ui layer", "page composition", "slot fills".
-version: 4.0.0
+description: Build the ui.json manifest + patterns.json manifest + per-page HTML files + per-pattern HTML shells in a split-architecture design system. Reads design.md (tokens, YAML-in-MD) + components.json (atomic catalog) + components/*.html (markup source for inlining into pages). Emits ui.json (page/section/flow compositions, per schemas/ui.schema.json), patterns.json (reusable cross-page shells like auth-split / app-shell / empty-state / hero-grid, per schemas/patterns.schema.json), pages/<name>.html, and patterns/<name>.html (template shells with slot placeholders). Pages compose either via a pattern + slot_fills OR direct composes []. Slot contract types — component | section | pattern | inline_html | text | image | icon. Refs use brace syntax {file.path.to.thing} per DTCG; downward only (ui → patterns → components → design). Prefers organism refs over atom refs (promote to molecule/organism if composing atoms directly). Legacy --format=md flag emits ui.md alongside ui.json (deprecated, removed v7). v5 adds dual-mode page rendering — DEFAULT iframe mode for live designer iteration (edit component → page auto-reflects on reload), --render=inline flag for self-contained export to dev. Iframe pages reference ./components/<name>.html via relative path; inline pages keep markup copied at build time. Triggers on "build ui", "build pages", "build patterns", "ui compositions", "create ui.json", "patterns.json", "สร้าง pages", "ui layer", "page composition", "slot fills".
+version: 5.0.0
 user-invokable: true
 args:
   - name: source-design
@@ -19,11 +19,26 @@ args:
   - name: format
     description: "Output format. 'json' (default v4+) emits ui.json + patterns.json. 'md' (legacy, v5–v6, removed v7) ALSO emits ui.md alongside ui.json. Emits a deprecation warning."
     required: false
+  - name: render
+    description: "Page render mode. 'iframe' (default v5+) — pages use <iframe src='../components/<name>.html'> so designer edits to a component HTML are reflected on next page reload, no rebuild needed. 'inline' — pages inline component markup at build time (self-contained for dev hand-off; legacy v4 behavior)."
+    required: false
 ---
 
-# 🖼️ Design UI Builder — v4.0.0
+# 🖼️ Design UI Builder — v5.0.0
 
 Top layer of the split-architecture design system. Reads `design.md` + `components.json` + `components/*.html` → emits `ui.json` + `patterns.json` + `pages/*.html` + `patterns/*.html`.
+
+## What changed in v5 (vs v4)
+
+| v4 | v5 (current) |
+|---|---|
+| Pages always inline component markup (self-contained) | Pages have TWO render modes — `iframe` (DEFAULT, live designer iteration) and `inline` (export / dev hand-off) |
+| Component edits required re-running `design-ui-builder` to refresh pages | In iframe mode, designer edits component HTML → page reflects on reload, NO rebuild |
+| No companion stylesheet for pages | iframe mode emits `pages.css` (iframe sizing per component class) |
+| One output shape per page | Per-page shape now depends on `--render` flag |
+| Validation: "no iframes in pages" | Validation forks by mode — iframe mode verifies iframe src exists; inline mode verifies markup matches latest `components/<name>.html` (warns on drift) |
+
+The iframe mode keeps `components/` as the single source of truth, so designer iteration loops feel instant. The inline mode is still available (and recommended) for dev hand-off or production archives.
 
 ## What changed in v4 (vs v2)
 
@@ -77,6 +92,135 @@ Required inputs:
 
 If `design.md` or `components.json` is missing → ABORT with clear next-step instruction.
 
+## Page Rendering Modes
+
+v5 introduces dual-mode page rendering. The mode is chosen at build time via `--render=iframe` (default) or `--render=inline`.
+
+### Mode 1: Iframe (default) — Designer iteration
+
+Pages reference components via `<iframe>`:
+
+```html
+<!-- pages/signin.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Sign in</title>
+    <link rel="stylesheet" href="../tokens.css">
+    <link rel="stylesheet" href="../pages.css">
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <main id="main" class="page-signin">
+      <h1>Sign in</h1>
+      <iframe src="../components/signin-form.html"     class="ds-iframe ds-iframe--signin-form"></iframe>
+      <iframe src="../components/legal-footer.html"    class="ds-iframe ds-iframe--legal-footer"></iframe>
+    </main>
+  </body>
+</html>
+```
+
+Iframes get class `ds-iframe ds-iframe--<component-name>` for sizing/positioning via `pages.css`.
+
+**PROS**
+- Designer edit component HTML → reload page → see new version instantly
+- No re-run of `/design-ui-builder` needed for component changes
+- Single source of truth (`components/` folder); pages never go stale
+
+**CONS**
+- Pages NOT self-contained (require `components/` folder alongside)
+- Iframe overhead in browser (one HTTP/file fetch per slot)
+- Print / PDF may render iframes differently than inline markup
+
+**USE WHEN** — active development, designer iteration, QA / stakeholder review
+
+### Mode 2: Inline (`--render=inline`) — Dev hand-off
+
+Pages inline component markup at build time (v4 behavior):
+
+```html
+<!-- pages/signin.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Sign in</title>
+    <link rel="stylesheet" href="../tokens.css">
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <main id="main" class="page-signin">
+      <h1>Sign in</h1>
+      <!-- snapshot of components/signin-form.html markup -->
+      <form class="signin-form">
+        <input type="email" class="input" />
+        <button class="btn btn--primary">Sign in</button>
+      </form>
+      <!-- snapshot of components/legal-footer.html markup -->
+      <footer class="legal-footer">© 2026 Example Inc.</footer>
+    </main>
+  </body>
+</html>
+```
+
+**PROS**
+- Pages self-contained (copy 1 file → works)
+- No iframe overhead
+- Print / PDF works cleanly
+- Dev hand-off ready
+
+**CONS**
+- Component change → re-run `/design-ui-builder` to refresh pages
+- Pages have stale markup if component edited but builder not re-run
+
+**USE WHEN** — export, dev hand-off, final delivery, production archive
+
+### Iframe sizing
+
+Each iframe needs explicit dimensions in CSS — at minimum `height` (iframes have no intrinsic height); `width` is optional (defaults to container width). `pages.css` (emitted only in iframe mode) holds sizing per component class:
+
+```css
+/* pages.css — iframe layout overrides (iframe mode only) */
+.ds-iframe { border: 0; display: block; }
+.ds-iframe--button         { height: 44px;  width: auto; }
+.ds-iframe--input          { height: 44px;  width: 100%; }
+.ds-iframe--card           { height: 200px; width: 320px; }
+.ds-iframe--signin-form    { height: 320px; width: 100%; }
+.ds-iframe--legal-footer   { height: 48px;  width: 100%; }
+.ds-iframe--nav-bar        { height: 64px;  width: 100%; }
+.ds-iframe--side-nav       { height: 100vh; width: 240px; }
+```
+
+Component intrinsic size (its rendered height inside the standalone `components/<name>.html`) is the baseline; per-page overrides can be added by extending the class list (e.g. `class="ds-iframe ds-iframe--card ds-iframe--card--compact"`).
+
+### When to switch modes
+
+| Phase | Mode |
+|---|---|
+| Active design iteration | iframe (default) |
+| Designer review on local | iframe |
+| QA / stakeholder review | iframe (live updates) |
+| Dev hand-off | inline (`--render=inline`) |
+| Production / archive | inline |
+
+### Migration from v4 (inline-only) to v5
+
+- Existing v4 pages are byte-identical to v5 inline-mode output — they keep working as-is.
+- To switch a project to live iteration mode: re-run `/design-ui-builder` (defaults to iframe). Existing `pages/*.html` are overwritten with iframe shells + a new `pages.css` is emitted.
+- To stay on v4 behavior: pass `--render=inline` — output matches v4 exactly (no `pages.css`, no iframes).
+- `.gitignore` recommendation:
+  - **Iframe mode**: keep `pages/*.html` + `pages.css` in git for review (they're cheap to regenerate but useful in PRs).
+  - **Inline mode**: same — track in git so reviewers see the snapshot a dev will receive.
+
+### Slot composition across modes
+
+Slot fills work in **both** modes:
+- **Iframe mode**: each slot fill becomes an `<iframe src="../components/<name>.html">` inside the slot's `data-slot` container. Inline-string fills (text / `inline_html` / image) are rendered directly without iframing.
+- **Inline mode**: each slot fill is inlined as markup (current v4 behavior).
+
+Page-level slot overrides (e.g. swapping a different component into the `footer` slot) work identically in both modes — only the rendering of the chosen ref differs.
+
 ## Ref syntax (carryover)
 
 - Format: `{scope.path.to.thing}` — DTCG-aligned brace alias.
@@ -85,6 +229,26 @@ If `design.md` or `components.json` is missing → ABORT with clear next-step in
 - `dtcg_version` pinned to `draft-2024-08-09` in `$meta`.
 
 ## Execution Steps
+
+### Step 0. Pre-flight — pick render mode
+
+Before reading any input, confirm the render mode with the user via `AskUserQuestion`:
+
+```
+Question: How should pages be rendered?
+
+  [1] iframe (default, recommended) — pages reference components via <iframe>.
+      Designer edits to components/<name>.html show up on next page reload, no rebuild.
+      Best for active iteration / QA / stakeholder review.
+
+  [2] inline — pages inline component markup at build time (self-contained, v4 behavior).
+      Component edits require re-running this skill. Best for dev hand-off / production export.
+```
+
+If the user passed `--render=iframe` or `--render=inline` on the CLI, skip the prompt and respect the flag.
+Default when neither prompt-answer nor flag is provided → `iframe`.
+
+Cache the chosen mode as `<MODE>` for the remainder of the run.
 
 ### Step 1. Read `design.md`
 - Parse the YAML frontmatter + body. Confirm `$meta.scope: design`.
@@ -254,30 +418,75 @@ For sections + flows, follow `examples/ui.example.json`:
 
 Flow `transitions` values are EITHER refs (`{ui.page.*}`) OR absolute URLs (`^https?://`).
 
-#### 6b. Write `pages/<name>.html` — SELF-CONTAINED
+#### 6b. Write `pages/<name>.html` — mode-dependent
 
-Pages are end-to-end renderable in a browser with no build step. Component markup is **inlined** from the Step-3 manifest — NEVER iframed, NEVER `<link>`ed, NEVER fetched at runtime.
+Behavior forks on the `<MODE>` cached in Step 0.
+
+##### Mode A — `iframe` (default)
+
+Pages reference components via `<iframe>` rather than inlining markup.
 
 **For pattern-based pages:**
 1. Open the pattern's `html_template` (e.g. `patterns/auth-split.html`) — use it as the structural scaffold.
 2. For each entry in `slot_fills`, replace the corresponding `<slot name="X"></slot>` placeholder:
-   - If the fill is a `{components.<...>}` ref → look up the markup in the Step-3 manifest and paste it inline.
-   - If the fill is a `{patterns.<...>}` ref → recursively expand that pattern's shell + its slot fills.
-   - If the fill is an inline string (no brace) → paste it as-is (inline HTML/text/image markup).
-3. Validate that **every required slot** declared by the pattern is filled. If a required slot is missing in `slot_fills` AND the slot has no `default`, emit a "Known Gap" entry and leave the placeholder as `<!-- TODO: fill slot <name> -->`.
+   - If the fill is a `{components.<atom|molecule|organism>.<name>}` ref → emit `<iframe src="../components/<name>.html" class="ds-iframe ds-iframe--<name>"></iframe>` (use the leaf segment after the last dot as `<name>`).
+   - If the fill is a `{patterns.<...>}` ref → recursively expand that pattern's shell + its slot fills (the inner pattern keeps its iframes too).
+   - If the fill is an inline string (no brace) → paste it as-is (raw text / HTML / image markup). Inline strings do NOT get wrapped in an iframe.
+3. Validate that every `required: true` slot is filled; on miss, emit a "Known Gap" + leave the placeholder as `<!-- TODO: fill slot <name> -->`.
 
 **For direct-composition pages:**
 1. Build the page from scratch with the page's own layout `<style>`.
-2. For each ref in `composes[]`, inline the component markup at the appropriate slot position.
+2. For each `{components.<...>}` ref in `composes[]`, emit one iframe (same `ds-iframe ds-iframe--<name>` class pair).
 
-**Common rules for both:**
-- Include `<link rel="stylesheet" href="../tokens.css">` in `<head>`.
-- Include a page-specific `<style>` block for layout only (grid, slot positions). Never duplicate component styles.
-- Emit accessible structure per the page's `meta` + a11y conventions: `<title>` (from `meta.title`), `<a href="#main" class="skip-link">Skip to content</a>`, `<main id="main">…</main>`, exactly one `<h1>`, `<nav aria-label="...">` where applicable.
-- When inlining, strip the demo wrapper from the source `components/*.html` — keep only the real component markup.
-- `lang` attribute on `<html>` comes from `meta.lang` (default `en`).
+**Companion file (iframe mode only):** also emit / merge into `./pages.css` at the project root, containing iframe sizing per component class encountered:
+```css
+.ds-iframe { border: 0; display: block; }
+.ds-iframe--<name> { height: <h>px; width: <w>; }
+```
+Sizing defaults: pick height from the component's intrinsic rendered height (eyeball via the standalone `components/<name>.html` preview, or fall back to sane defaults — atoms 44px, molecules 80px, organisms 200px+); `width` defaults to `100%`. Merge into an existing `pages.css` rather than overwriting — preserve any designer customizations.
 
-**Skeleton:**
+**Skeleton (iframe):**
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><!-- from meta.title --></title>
+  <link rel="stylesheet" href="../tokens.css">
+  <link rel="stylesheet" href="../pages.css">
+  <style>/* page-specific layout */</style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+  <main id="main">
+    <h1><!-- page heading --></h1>
+    <iframe src="../components/<name>.html" class="ds-iframe ds-iframe--<name>"></iframe>
+    <!-- … more slot iframes / direct composes -->
+  </main>
+</body>
+</html>
+```
+
+##### Mode B — `inline` (`--render=inline`)
+
+Pages are end-to-end renderable in a browser with no build step. Component markup is **inlined** from the Step-3 manifest — NEVER iframed, NEVER `<link>`ed, NEVER fetched at runtime. (This is the v4 behavior.)
+
+**For pattern-based pages:**
+1. Open the pattern's `html_template` — use it as the structural scaffold.
+2. For each entry in `slot_fills`, replace the corresponding `<slot name="X"></slot>` placeholder:
+   - If the fill is a `{components.<...>}` ref → look up the markup in the Step-3 manifest and paste it inline.
+   - If the fill is a `{patterns.<...>}` ref → recursively expand that pattern's shell + its slot fills (also inlined).
+   - If the fill is an inline string → paste as-is.
+3. Validate required slots same as iframe mode.
+
+**For direct-composition pages:**
+1. Build the page from scratch with the page's own layout `<style>`.
+2. For each ref in `composes[]`, inline the component markup at the appropriate position.
+
+**Companion file (inline mode):** none — pages are self-contained beyond `../tokens.css`.
+
+**Skeleton (inline):**
 ```html
 <!DOCTYPE html>
 <html lang="en">
@@ -299,6 +508,15 @@ Pages are end-to-end renderable in a browser with no build step. Component marku
 </body>
 </html>
 ```
+
+##### Common rules (both modes)
+
+- Include `<link rel="stylesheet" href="../tokens.css">` in `<head>`.
+- Iframe mode adds a second link to `../pages.css`.
+- Include a page-specific `<style>` block for layout only (grid, slot positions). Never duplicate component styles.
+- Emit accessible structure per the page's `meta` + a11y conventions: `<title>` (from `meta.title`), `<a href="#main" class="skip-link">Skip to content</a>`, `<main id="main">…</main>`, exactly one `<h1>`, `<nav aria-label="...">` where applicable.
+- When inlining (inline mode), strip the demo wrapper from the source `components/*.html` — keep only the real component markup.
+- `lang` attribute on `<html>` comes from `meta.lang` (default `en`).
 
 ### Step 7. Legacy `--format=md` (deprecated)
 
@@ -389,13 +607,23 @@ Run this before declaring done. Audit (`design-md-audit`) re-runs the same check
 - [ ] Every fill's type is allowed by the slot's `accepts` array
 - [ ] No page declares BOTH `pattern` and `composes` (mutually exclusive per schema `oneOf`)
 
-**HTML output**
+**HTML output (common)**
 - [ ] Every `page.<name>.html_template` file exists on disk
 - [ ] Every `pattern.<name>.html_template` file exists on disk
 - [ ] Every `section.<name>.html_template` file exists (if declared)
-- [ ] `pages/*.html` are self-contained — no `<iframe>`, no `<link>` to component files, no runtime `fetch` of components
 - [ ] `pages/*.html` and `patterns/*.html` include `<link rel="stylesheet" href="../tokens.css">`
 - [ ] Each `pages/*.html` has exactly one `<h1>`, a skip link to `#main`, and `<main id="main">` landmark
+
+**HTML output (iframe mode)**
+- [ ] Every `<iframe src="../components/<name>.html">` in `pages/*.html` resolves to an existing file on disk
+- [ ] Every iframe has the `ds-iframe ds-iframe--<name>` class pair
+- [ ] `pages.css` exists at project root and contains a sizing rule for each `ds-iframe--<name>` class used
+- [ ] Each `pages/*.html` includes `<link rel="stylesheet" href="../pages.css">`
+
+**HTML output (inline mode)**
+- [ ] `pages/*.html` are self-contained — no `<iframe>`, no `<link>` to component files, no runtime `fetch` of components
+- [ ] Inlined component markup matches the latest `components/<name>.html` source (compare normalized markup; warn on drift but do not fail — drift means the component changed after the last builder run)
+- [ ] No `pages.css` is emitted (inline mode does not need it)
 
 **Composition quality**
 - [ ] Pages prefer organism refs over atom refs (warn if a page composes 3+ atoms directly without an organism wrapper — promote to a molecule/organism in `components.json` first)
@@ -421,6 +649,7 @@ project-root/
 ├── patterns.json                  ← OUTPUT (NEW in v4) — pattern manifest
 ├── ui.json                        ← OUTPUT (NEW in v4) — page/section/flow manifest
 ├── ui.md                          ← OUTPUT (only if --format=md, deprecated)
+├── pages.css                      ← OUTPUT (NEW in v5, iframe mode only) — iframe sizing per component class
 │
 ├── patterns/                      ← OUTPUT (NEW in v4) — pattern shells with <slot> placeholders
 │   ├── auth-split.html
@@ -428,7 +657,7 @@ project-root/
 │   ├── empty-state.html
 │   └── hero-grid.html
 │
-├── pages/                         ← OUTPUT — self-contained, inline component markup
+├── pages/                         ← OUTPUT — iframe shells (v5 default) OR inline (v4-style, --render=inline)
 │   ├── signin.html
 │   ├── dashboard.html
 │   └── pricing.html
@@ -437,6 +666,16 @@ project-root/
     ├── hero.html
     └── pricing-table.html
 ```
+
+**Per-mode outputs:**
+| File | iframe mode | inline mode |
+|---|---|---|
+| `ui.json` | ✓ | ✓ |
+| `patterns.json` | ✓ | ✓ |
+| `patterns/*.html` | ✓ | ✓ |
+| `pages/*.html` | ✓ (iframe shells) | ✓ (self-contained) |
+| `pages.css` | ✓ (NEW) | — (not emitted) |
+| `sections/*.html` | ✓ (if requested) | ✓ (if requested) |
 
 **Hard rules:**
 - `ui.json` and `patterns.json` are the **canonical source of truth** — even when `ui.md` is emitted for legacy compat.
@@ -465,6 +704,38 @@ A coding agent reading `ui.json` + `patterns.json` + `components.json` + `design
 A designer reading just `ui.json` + `patterns.json` should understand the page inventory + pattern shells + flow structure without opening `components.json`.
 
 A stakeholder opening any `pages/<name>.html` directly in a browser sees the page render end-to-end with no build step, no server, and no extra files beyond `tokens.css`.
+
+## Workflow scenarios
+
+### Scenario A — Designer iterating on `signin-form` (iframe mode)
+
+1. Run `/design-ui-builder` once → produces `pages/signin.html` (iframe shell) + `pages.css`.
+2. Designer opens `pages/signin.html` in a browser → sees current state.
+3. Designer edits `components/signin-form.html` (e.g. tweaks padding, fixes label copy).
+4. Designer reloads `pages/signin.html` → new component version is reflected immediately. No rebuild.
+5. Designer is happy → commits both `components/signin-form.html` + `pages/signin.html` (unchanged iframe shell).
+
+**Why iframe wins here:** zero rebuild loop. The page is a thin reference; the component is the source of truth.
+
+### Scenario B — Dev hand-off (inline mode)
+
+1. After designer is happy, designer runs `/design-ui-builder --render=inline`.
+2. Skill regenerates every `pages/*.html` with current component markup inlined. `pages.css` is removed (or left in place but unused — note in a final report).
+3. Dev receives the project; opens any `pages/<name>.html` directly → renders end-to-end with only `tokens.css`.
+4. Dev uses inlined markup as the spec for their framework implementation (React / Vue / Svelte).
+
+**Why inline wins here:** self-contained snapshot, no dependency on `components/` folder layout, no iframe quirks in print/PDF.
+
+### Scenario C — Stakeholder review (iframe mode, live)
+
+1. Designer pushes branch with iframe-mode output.
+2. Stakeholder opens `pages/signin.html` locally; comments "make the button rounder".
+3. Designer edits `components/button.html` while screen-sharing.
+4. Stakeholder reloads → sees the change. No round-trip with dev.
+
+### Scenario D — Mixing modes is fine
+
+A project can switch between modes any time. Re-running `/design-ui-builder` always overwrites `pages/*.html` based on the chosen mode at that run. There's no persistent "mode" state file — each run is authoritative.
 
 ## References
 

@@ -68,7 +68,7 @@ claude plugin install uxui-skills
 | `design-builder` v6 | สร้าง `design.md` — dual-path (zero / client-given palette + mood + refs) → base tokens + WCAG validation + Known Gaps log |
 | `design-component-builder` v5 | สร้าง `components.json` (DTCG-aligned manifest) + `tokens.css` 2-tier + `components/<name>.html` + `components.html` showcase. Legacy `--format=md` ยังใช้ได้ใน v5–v6 |
 | `design-icon-builder` | populate iconography layer + ดึง SVG จริงจาก Phosphor/Tabler/Heroicons ฯลฯ |
-| `design-ui-builder` v4 | สร้าง `ui.json` + `patterns.json` (NEW) + `pages/<name>.html` (self-contained) + `patterns/<name>.html` (NEW — reusable shells with slot contracts) |
+| `design-ui-builder` v5 | สร้าง `ui.json` + `patterns.json` + `pages/<name>.html` (dual-mode: iframe default for designer iteration / `--render=inline` for dev hand-off) + `patterns/<name>.html` (reusable shells with slot contracts) + `pages.css` (iframe sizing) |
 | `design-md-audit` v6.1 | audit DS (JSON Schema + ref resolver + diff-merge + HTML coverage + hybrid input) + **`--migrate-to-json`** flag (convert legacy MD spec → v6 JSON manifests with auto-extracted patterns) |
 | `design-styleguide` v3 | aggregator mode default (อ่าน components/*.html → single styleguide.html with TOC + theme toggle) หรือ `--regenerate` ใช้ legacy MD mode |
 | `design-remix` | mix design จาก brand references (Linear typography + Notion spacing ฯลฯ) |

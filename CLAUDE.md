@@ -40,8 +40,9 @@ DS spec layer migrating from `.md` → JSON manifests (DTCG-aligned).
 - ✅ Phase 7A: `design-push-figma-tokens v1.0` — sync DS tokens to Figma Variables (light/dark modes, idempotent)
 - ✅ Phase 8: `design-push-figma-components v1.0` — push 5 atoms as Component Sets with Variable bindings (variant × size × state matrix, idempotent)
 - ✅ Phase 7C: `design-figma-rename-tokens v1.0` — normalize existing Figma Variable names to canonical DS naming (4-tier confidence, non-destructive, preserves bindings)
+- ✅ Phase 9A: `design-ui-builder v5.0` — dual-mode page rendering (iframe default for designer iteration / --render=inline for dev hand-off)
 - ⏳ Phase 7B (optional): Tokens Studio export format
-- ⏳ Phase 9 (future): Patterns push + Interactions auto-wire
+- ⏳ Phase 9B (future): Patterns push + Interactions auto-wire
 
 ---
 
