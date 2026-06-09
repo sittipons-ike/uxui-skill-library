@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<title>design-builder button sample</title>
+<style>
+  /* ========================================================
+     :root = light mode CSS variables emitted from design.md
+     Each var name mirrors a semantic token path:
+       semantic.colors.primary.default  -> --color-primary-default
+       semantic.radius.md               -> --radius-md
+       semantic.shadow.md               -> --shadow-md
+     ======================================================== */
+  :root {
+    /* colors — semantic */
+    --color-primary-default:  #2563eb; /* {primitive.colors.blue.600}  */
+    --color-primary-dark:     #1d4ed8; /* {primitive.colors.blue.700}  */
+    --color-primary-darker:   #1e40af; /* {primitive.colors.blue.800}  */
+    --color-primary-soft:     #eff6ff; /* {primitive.colors.blue.50}   */
+    --color-text-on-bgcolor:  #f8fafc; /* {primitive.colors.neutral.50}*/
+    --color-text-disable:     #94a3b8; /* {primitive.colors.neutral.400}*/
+    --color-border-disable:   #e2e8f0; /* {primitive.colors.neutral.200}*/
+    --color-surface-base:     #ffffff; /* {primitive.colors.base.white}*/
+
+    /* radius, spacing, shadow — semantic refs of primitive */
+    --radius-md:    8px;
+    --space-3:      12px;
+    --space-4:      16px;
+    --shadow-md:    0 4px 8px 0 rgba(15,23,42,.12);
+    --shadow-focus: 0 0 0 3px rgba(37,99,235,.35);
+
+    /* typography */
+    --font-sans:    "Inter", system-ui, sans-serif;
+    --text-md:      16px;
+    --leading-md:   24px;
+    --weight-semibold: 600;
+    --tracking-normal: 0em;
+
+    /* a11y constants from primitive.a11y */
+    --touch-min:    44px;
+    --focus-ring:   2px;
+  }
+
+  /* dark mode = same names, different mapped primitive */
+  [data-theme="dark"] {
+    --color-primary-default: #3b82f6; /* blue.500 */
+    --color-primary-dark:    #60a5fa; /* blue.400 */
+    --color-primary-darker:  #93c5fd; /* blue.300 */
+    --color-text-on-bgcolor: #0f172a; /* neutral.900 */
+    --color-surface-base:    #020617; /* neutral.950 */
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--color-surface-base);
+    padding: 48px;
+    display: flex;
+    gap: 16px;
+  }
+
+  /* =========================
+     Button — uses ONLY semantic vars, never raw hex
+     ========================= */
+  .btn {
+    /* layout */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--touch-min);            /* a11y touch target */
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    border: 1px solid transparent;
+
+    /* type */
+    font: var(--weight-semibold) var(--text-md)/var(--leading-md) var(--font-sans);
+    letter-spacing: var(--tracking-normal);
+
+    /* color — primary variant */
+    background: var(--color-primary-default);
+    color: var(--color-text-on-bgcolor);
+    box-shadow: var(--shadow-md);
+
+    /* motion */
+    cursor: pointer;
+    transition: background-color 160ms ease-out, box-shadow 160ms ease-out, transform 80ms ease-out;
+  }
+
+  .btn:hover    { background: var(--color-primary-dark); }
+  .btn:active   { background: var(--color-primary-darker); transform: translateY(1px); }
+  .btn:focus-visible {
+    outline: none;
+    box-shadow: var(--shadow-md), var(--shadow-focus);   /* focus-ring-min-px = 2 */
+  }
+  .btn[disabled] {
+    background: var(--color-border-disable);
+    color: var(--color-text-disable);
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+</style>
+</head>
+<body>
+  <button class="btn">Primary action</button>
+  <button class="btn" disabled>Disabled</button>
+</body>
+</html>

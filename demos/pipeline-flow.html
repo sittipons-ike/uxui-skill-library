@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Design Pipeline — Artifact Flow</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #060912;
+      --surface: #0D1117;
+      --surface-2: #161B27;
+      --border: rgba(255,255,255,0.07);
+      --text: #E6EDF3;
+      --muted: #7D8590;
+      --faint: #3D444D;
+
+      --discovery:  #818CF8;
+      --product:    #C084FC;
+      --strategy:   #22D3EE;
+      --ds:         #34D399;
+      --ui-spec:    #FBBF24;
+      --spec:       #FB923C;
+      --engineering:#F87171;
+      --testing:    #60A5FA;
+      --launch:     #A78BFA;
+
+      --reads-bg:   rgba(96,165,250,0.08);
+      --reads-border: rgba(96,165,250,0.25);
+      --writes-bg:  rgba(52,211,153,0.08);
+      --writes-border: rgba(52,211,153,0.25);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(6,9,18,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header-title {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .header-title span { color: var(--text); }
+    .legend {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+    .legend-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+    }
+
+    /* ── LAYOUT ── */
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 0;
+      min-height: calc(100vh - 57px);
+    }
+
+    /* ── PIPELINE ── */
+    .pipeline {
+      padding: 48px 48px 80px;
+      border-right: 1px solid var(--border);
+    }
+
+    /* Phase group */
+    .phase-group { margin-bottom: 8px; }
+    .phase-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      padding-left: 20px;
+    }
+
+    /* Skill card */
+    .skill-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      border-left: 3px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+    .skill-card:hover {
+      background: var(--surface-2);
+      border-color: rgba(255,255,255,0.12);
+      transform: translateX(2px);
+    }
+    .skill-card.active {
+      border-color: rgba(255,255,255,0.2);
+      background: var(--surface-2);
+    }
+    .skill-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 6px;
+    }
+    .skill-name {
+      font-family: 'Fira Code', monospace;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+    }
+    .skill-badge {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 4px;
+      opacity: 0.9;
+    }
+    .skill-desc {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 14px;
+      line-height: 1.6;
+    }
+    .artifacts {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .artifact-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 11px;
+      line-height: 1.7;
+    }
+    .artifact-label {
+      font-family: 'Fira Code', monospace;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 4px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .reads .artifact-label {
+      background: var(--reads-bg);
+      border: 1px solid var(--reads-border);
+      color: #93C5FD;
+    }
+    .writes .artifact-label {
+      background: var(--writes-bg);
+      border: 1px solid var(--writes-border);
+      color: #6EE7B7;
+    }
+    .artifact-files {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .file-pill {
+      font-family: 'Fira Code', monospace;
+      font-size: 10.5px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      transition: opacity 0.2s;
+    }
+    .reads .file-pill {
+      background: var(--reads-bg);
+      color: #93C5FD;
+    }
+    .writes .file-pill {
+      background: var(--writes-bg);
+      color: #6EE7B7;
+    }
+    .file-pill.highlight {
+      opacity: 1;
+      box-shadow: 0 0 0 1px currentColor;
+    }
+    .file-pill.dim { opacity: 0.3; }
+
+    /* Arrow */
+    .arrow-connector {
+      display: flex;
+      justify-content: flex-start;
+      padding-left: 32px;
+      margin: 4px 0;
+    }
+    .arrow-line {
+      width: 2px;
+      height: 28px;
+      background: linear-gradient(to bottom, var(--faint), var(--faint));
+      position: relative;
+    }
+    .arrow-line::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: -4px;
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 6px solid var(--faint);
+    }
+
+    /* Parallel row */
+    .parallel-wrap {
+      position: relative;
+    }
+    .parallel-label {
+      font-size: 10px;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 8px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+    }
+    .parallel-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    /* Conditional branch */
+    .branch-wrap {
+      position: relative;
+    }
+    .branch-label {
+      font-size: 10px;
+      color: var(--muted);
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+      padding: 4px 12px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      display: inline-block;
+    }
+
+    /* Feedback loop tag */
+    .feedback-tag {
+      font-size: 10px;
+      color: var(--muted);
+      padding: 3px 10px;
+      border: 1px dashed var(--faint);
+      border-radius: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin: 6px 0 6px 24px;
+    }
+    .feedback-tag::before { content: '↺'; font-size: 12px; }
+
+    /* ── SIDEBAR: FILE TREE ── */
+    .sidebar {
+      padding: 32px 24px;
+      position: sticky;
+      top: 57px;
+      height: calc(100vh - 57px);
+      overflow-y: auto;
+    }
+    .sidebar-title {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+    .sidebar-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 16px 0;
+    }
+
+    /* ── FOLDER TREE ── */
+    .ftree-wrap { font-family: 'Fira Code', monospace; font-size: 10.5px; }
+    .ftree, .ftree ul { list-style: none; padding: 0; margin: 0; }
+
+    /* Nested list = vertical trunk line */
+    .ftree ul {
+      padding-left: 8px;
+      border-left: 1px solid rgba(255,255,255,0.09);
+      margin-left: 8px;
+      margin-top: 1px;
+      margin-bottom: 1px;
+    }
+
+    /* Each list item */
+    .ftree li {
+      position: relative;
+      padding: 2px 0 2px 14px;
+    }
+
+    /* Horizontal branch connector */
+    .ftree li::before {
+      content: '';
+      position: absolute;
+      left: -1px;
+      top: 50%;
+      width: 11px;
+      height: 1px;
+      background: rgba(255,255,255,0.09);
+    }
+
+    /* Root items — no connector */
+    .ftree > li { padding-left: 0; }
+    .ftree > li::before { display: none; }
+
+    .ftree-dir-label {
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 1px 0;
+      font-size: 10.5px;
+    }
+    .ftree-dir-icon { opacity: 0.5; font-size: 10px; }
+
+    .ftree-file {
+      color: #3D4B5C;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 1.5px 0;
+      transition: color 0.18s, opacity 0.18s;
+      cursor: default;
+      line-height: 1.4;
+    }
+    .ftree-file::before { content: '·'; color: rgba(255,255,255,0.12); margin-right: 2px; }
+    .ftree-file:hover { color: var(--muted); }
+
+    /* Phase color dot on file */
+    .ftree-file .fphase {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      opacity: 0.5;
+      transition: opacity 0.2s, box-shadow 0.2s;
+    }
+
+    /* Hover active states */
+    .ftree-file.af-r {
+      color: #93C5FD !important;
+      opacity: 1 !important;
+    }
+    .ftree-file.af-r .fphase { opacity: 1; box-shadow: 0 0 6px currentColor; }
+    .ftree-file.af-r::before { color: #93C5FD; }
+
+    .ftree-file.af-w {
+      color: #6EE7B7 !important;
+      opacity: 1 !important;
+    }
+    .ftree-file.af-w .fphase { opacity: 1; box-shadow: 0 0 6px currentColor; }
+    .ftree-file.af-w::before { color: #6EE7B7; }
+
+    .ftree-file.af-dim { opacity: 0.18 !important; }
+
+    /* Folder glow when active */
+    .ftree-dir-label.af-active { color: var(--text); }
+    .ftree-dir-label.af-active .ftree-dir-icon { opacity: 1; }
+
+    /* Legend */
+    .af-legend {
+      display: flex; flex-direction: column; gap: 7px;
+      font-size: 11px; color: var(--muted);
+    }
+    .af-legend-row { display: flex; align-items: center; gap: 8px; }
+    .af-legend-swatch { width: 28px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+
+    /* ── OVERVIEW BAR ── */
+    .overview {
+      padding: 24px 48px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .overview::-webkit-scrollbar { display: none; }
+    .ov-step {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      flex-shrink: 0;
+    }
+    .ov-chip {
+      font-size: 10px;
+      font-weight: 600;
+      font-family: 'Fira Code', monospace;
+      padding: 4px 10px;
+      border-radius: 6px;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .ov-chip:hover { opacity: 0.8; }
+    .ov-arrow {
+      font-size: 12px;
+      color: var(--faint);
+      margin: 0 4px;
+      flex-shrink: 0;
+    }
+    .ov-parallel {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    /* Phase colors applied */
+    .phase-discovery  { border-left-color: var(--discovery) !important; }
+    .phase-product    { border-left-color: var(--product) !important; }
+    .phase-strategy   { border-left-color: var(--strategy) !important; }
+    .phase-ds         { border-left-color: var(--ds) !important; }
+    .phase-ui-spec    { border-left-color: var(--ui-spec) !important; }
+    .phase-spec       { border-left-color: var(--spec) !important; }
+    .phase-engineering{ border-left-color: var(--engineering) !important; }
+    .phase-testing    { border-left-color: var(--testing) !important; }
+    .phase-launch     { border-left-color: var(--launch) !important; }
+
+    .badge-discovery  { background: rgba(129,140,248,0.15); color: var(--discovery); }
+    .badge-product    { background: rgba(192,132,252,0.15); color: var(--product); }
+    .badge-strategy   { background: rgba(34,211,238,0.15);  color: var(--strategy); }
+    .badge-ds         { background: rgba(52,211,153,0.15);  color: var(--ds); }
+    .badge-ui-spec    { background: rgba(251,191,36,0.15);  color: var(--ui-spec); }
+    .badge-spec       { background: rgba(251,146,60,0.15);  color: var(--spec); }
+    .badge-engineering{ background: rgba(248,113,113,0.15); color: var(--engineering); }
+    .badge-testing    { background: rgba(96,165,250,0.15);  color: var(--testing); }
+    .badge-launch     { background: rgba(167,139,250,0.15); color: var(--launch); }
+
+    .ov-discovery  { background: rgba(129,140,248,0.15); color: var(--discovery); border: 1px solid rgba(129,140,248,0.3); }
+    .ov-product    { background: rgba(192,132,252,0.15); color: var(--product);   border: 1px solid rgba(192,132,252,0.3); }
+    .ov-strategy   { background: rgba(34,211,238,0.15);  color: var(--strategy);  border: 1px solid rgba(34,211,238,0.3); }
+    .ov-ds         { background: rgba(52,211,153,0.15);  color: var(--ds);        border: 1px solid rgba(52,211,153,0.3); }
+    .ov-ui-spec    { background: rgba(251,191,36,0.15);  color: var(--ui-spec);   border: 1px solid rgba(251,191,36,0.3); }
+    .ov-spec       { background: rgba(251,146,60,0.15);  color: var(--spec);      border: 1px solid rgba(251,146,60,0.3); }
+    .ov-engineering{ background: rgba(248,113,113,0.15); color: var(--engineering);border: 1px solid rgba(248,113,113,0.3);}
+    .ov-testing    { background: rgba(96,165,250,0.15);  color: var(--testing);   border: 1px solid rgba(96,165,250,0.3); }
+    .ov-launch     { background: rgba(167,139,250,0.15); color: var(--launch);    border: 1px solid rgba(167,139,250,0.3); }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-title">Product Design Pipeline <span>— Artifact Flow</span></div>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--discovery)"></div>Discovery</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--product)"></div>Product</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--strategy)"></div>Strategy</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--ds)"></div>Design System</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--ui-spec)"></div>UI Spec</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--spec)"></div>Spec</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--engineering)"></div>Engineering</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--testing)"></div>Testing</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--launch)"></div>Launch</div>
+  </div>
+</header>
+
+<!-- OVERVIEW BAR -->
+<div class="overview">
+  <div class="ov-step">
+    <span class="ov-chip ov-discovery">interview-me</span>
+    <span class="ov-arrow">→</span>
+  </div>
+  <div class="ov-step">
+    <span class="ov-chip ov-product">prd</span>
+    <span class="ov-arrow">→</span>
+  </div>
+  <div class="ov-step">
+    <div class="ov-parallel">
+      <span class="ov-chip ov-strategy">ux-strategist</span>
+      <span class="ov-chip ov-strategy">ux-writer</span>
+    </div>
+    <span class="ov-arrow">→</span>
+  </div>
+  <div class="ov-step">
+    <div class="ov-parallel">
+      <span class="ov-chip ov-ds">ds-builder</span>
+      <span class="ov-chip ov-ds">design-component-builder</span>
+      <span class="ov-chip ov-ds">design-ui-builder</span>
+    </div>
+    <span class="ov-arrow">→</span>
+  </div>
+  <div class="ov-step">
+    <div class="ov-parallel">
+      <span class="ov-chip ov-ui-spec">ui-ux-pro-max</span>
+      <span class="ov-chip ov-ui-spec">ui-implementation-specialist</span>
+    </div>
+    <span class="ov-arrow">→</span>
+  </div>
+  <div class="ov-step">
+    <span class="ov-chip ov-spec">spec-driven-development</span>
+    <span class="ov-arrow">→</span>
+  </div>
+  <div class="ov-step">
+    <span class="ov-chip ov-engineering">frontend-ui-engineering</span>
+    <span class="ov-arrow">→</span>
+  </div>
+  <div class="ov-step">
+    <span class="ov-chip ov-testing">browser-testing-with-devtools</span>
+    <span class="ov-arrow">→</span>
+  </div>
+  <div class="ov-step">
+    <span class="ov-chip ov-launch">shipping-and-launch</span>
+  </div>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="layout">
+
+  <!-- PIPELINE COLUMN -->
+  <div class="pipeline">
+
+    <!-- 1. interview-me -->
+    <div class="phase-group">
+      <div class="phase-label" style="color:var(--discovery)">① Discovery</div>
+      <div class="skill-card phase-discovery" data-skill="interview-me">
+        <div class="skill-header">
+          <span class="skill-name">interview-me</span>
+          <span class="skill-badge badge-discovery">Discovery</span>
+        </div>
+        <div class="skill-desc">Extracts what the user actually wants via one-question-at-a-time interview until ~95% confidence. Closes the gap before any plan, spec, or code exists.</div>
+        <div class="artifacts">
+          <div class="artifact-row reads">
+            <span class="artifact-label">reads</span>
+            <div class="artifact-files">
+              <span class="file-pill">user conversation (live)</span>
+            </div>
+          </div>
+          <div class="artifact-row writes">
+            <span class="artifact-label">writes</span>
+            <div class="artifact-files">
+              <span class="file-pill" data-file="interview-notes">docs/discovery/interview-notes.md</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow-connector"><div class="arrow-line"></div></div>
+
+    <!-- 2. prd -->
+    <div class="phase-group">
+      <div class="phase-label" style="color:var(--product)">② Product</div>
+      <div class="skill-card phase-product" data-skill="prd">
+        <div class="skill-header">
+          <span class="skill-name">prd</span>
+          <span class="skill-badge badge-product">Product</span>
+        </div>
+        <div class="skill-desc">Generates PRD with executive summary, user stories, technical specs, and risk analysis. Output format adapts by target: Stakeholder / Dev+Designer / AI Agent.</div>
+        <div class="artifacts">
+          <div class="artifact-row reads">
+            <span class="artifact-label">reads</span>
+            <div class="artifact-files">
+              <span class="file-pill" data-file="interview-notes">docs/discovery/interview-notes.md</span>
+            </div>
+          </div>
+          <div class="artifact-row writes">
+            <span class="artifact-label">writes</span>
+            <div class="artifact-files">
+              <span class="file-pill" data-file="prd">docs/prd.md</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow-connector"><div class="arrow-line"></div></div>
+
+    <!-- 3. Strategy (parallel) -->
+    <div class="phase-group">
+      <div class="phase-label" style="color:var(--strategy)">③ Strategy — parallel</div>
+      <div class="parallel-label">runs simultaneously ↓</div>
+      <div class="parallel-row">
+        <div class="skill-card phase-strategy" data-skill="ux-strategist">
+          <div class="skill-header">
+            <span class="skill-name">ux-strategist</span>
+            <span class="skill-badge badge-strategy">Strategy</span>
+          </div>
+          <div class="skill-desc">Defines problem, maps user flows, structures IA, edge cases, heuristics. Never touches colors or copy.</div>
+          <div class="artifacts">
+            <div class="artifact-row reads">
+              <span class="artifact-label">reads</span>
+              <div class="artifact-files">
+                <span class="file-pill" data-file="prd">docs/prd.md</span>
+              </div>
+            </div>
+            <div class="artifact-row writes">
+              <span class="artifact-label">writes</span>
+              <div class="artifact-files">
+                <span class="file-pill" data-file="ux-blueprint">docs/design/ux-blueprint.md</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="skill-card phase-strategy" data-skill="ux-writer">
+          <div class="skill-header">
+            <span class="skill-name">ux-writer</span>
+            <span class="skill-badge badge-strategy">Strategy</span>
+          </div>
+          <div class="skill-desc">Writes microcopy, labels, error messages, CTAs, empty states. Clarity-first, user-tested language.</div>
+          <div class="artifacts">
+            <div class="artifact-row reads">
+              <span class="artifact-label">reads</span>
+              <div class="artifact-files">
+                <span class="file-pill" data-file="prd">docs/prd.md</span>
+                <span class="file-pill" data-file="ux-blueprint">docs/design/ux-blueprint.md</span>
+              </div>
+            </div>
+            <div class="artifact-row writes">
+              <span class="artifact-label">writes</span>
+              <div class="artifact-files">
+                <span class="file-pill" data-file="copy">docs/design/copy.md</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow-connector"><div class="arrow-line"></div></div>
+
+    <!-- 4. Design System (greenfield) -->
+    <div class="phase-group">
+      <div class="phase-label" style="color:var(--ds)">④ Design System <span style="opacity:0.5;font-weight:400">(greenfield only)</span></div>
+      <div class="skill-card phase-ds" data-skill="ds-builder" style="margin-bottom:12px">
+        <div class="skill-header">
+          <span class="skill-name">ds-builder</span>
+          <span class="skill-badge badge-ds">Design System</span>
+          <span style="font-size:10px;color:var(--muted);margin-left:auto">if no DS exists</span>
+        </div>
+        <div class="skill-desc">Creates complete design system from scratch — tokens, component shells, UI patterns, and design docs. Foundation for everything downstream.</div>
+        <div class="artifacts">
+          <div class="artifact-row reads">
+            <span class="artifact-label">reads</span>
+            <div class="artifact-files">
+              <span class="file-pill" data-file="prd">docs/prd.md</span>
+              <span class="file-pill">brand brief (optional)</span>
+            </div>
+          </div>
+          <div class="artifact-row writes">
+            <span class="artifact-label">writes</span>
+            <div class="artifact-files">
+              <span class="file-pill" data-file="design-md">design-system/design.md</span>
+              <span class="file-pill" data-file="components-json">design-system/components.json</span>
+              <span class="file-pill" data-file="ui-json">design-system/ui.json</span>
+              <span class="file-pill" data-file="patterns-json">design-system/patterns.json</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="parallel-row">
+        <div class="skill-card phase-ds" data-skill="design-component-builder">
+          <div class="skill-header">
+            <span class="skill-name">design-component-builder</span>
+            <span class="skill-badge badge-ds">DS</span>
+          </div>
+          <div class="skill-desc">Builds detailed atom/molecule/organism specs with variants, props, states, and responsive rules. Output: JSON manifest.</div>
+          <div class="artifacts">
+            <div class="artifact-row reads">
+              <span class="artifact-label">reads</span>
+              <div class="artifact-files">
+                <span class="file-pill" data-file="design-md">design-system/design.md</span>
+              </div>
+            </div>
+            <div class="artifact-row writes">
+              <span class="artifact-label">writes</span>
+              <div class="artifact-files">
+                <span class="file-pill" data-file="components-json">design-system/components.json</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="skill-card phase-ds" data-skill="design-ui-builder">
+          <div class="skill-header">
+            <span class="skill-name">design-ui-builder</span>
+            <span class="skill-badge badge-ds">DS</span>
+          </div>
+          <div class="skill-desc">Assembles page layouts, sections, and screen flows from components. Dual-mode: iframe (iteration) / inline (dev handoff).</div>
+          <div class="artifacts">
+            <div class="artifact-row reads">
+              <span class="artifact-label">reads</span>
+              <div class="artifact-files">
+                <span class="file-pill" data-file="components-json">design-system/components.json</span>
+                <span class="file-pill" data-file="design-md">design-system/design.md</span>
+              </div>
+            </div>
+            <div class="artifact-row writes">
+              <span class="artifact-label">writes</span>
+              <div class="artifact-files">
+                <span class="file-pill" data-file="ui-json">design-system/ui.json</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow-connector"><div class="arrow-line"></div></div>
+
+    <!-- 5. UI Spec (parallel) -->
+    <div class="phase-group">
+      <div class="phase-label" style="color:var(--ui-spec)">⑤ UI Specification — parallel</div>
+      <div class="parallel-row">
+        <div class="skill-card phase-ui-spec" data-skill="ui-ux-pro-max">
+          <div class="skill-header">
+            <span class="skill-name">ui-ux-pro-max</span>
+            <span class="skill-badge badge-ui-spec">Style Intel</span>
+          </div>
+          <div class="skill-desc">Design intelligence layer — 50+ visual styles, 161 palettes, 57 font pairings. Provides style direction and aesthetic decisions before pixel work.</div>
+          <div class="artifacts">
+            <div class="artifact-row reads">
+              <span class="artifact-label">reads</span>
+              <div class="artifact-files">
+                <span class="file-pill" data-file="prd">docs/prd.md</span>
+                <span class="file-pill">style context (in-conversation)</span>
+              </div>
+            </div>
+            <div class="artifact-row writes">
+              <span class="artifact-label">writes</span>
+              <div class="artifact-files">
+                <span class="file-pill" data-file="design-md">design-system/design.md</span>
+                <span class="file-pill">in-context style decisions</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="skill-card phase-ui-spec" data-skill="ui-implementation-specialist">
+          <div class="skill-header">
+            <span class="skill-name">ui-implementation-specialist</span>
+            <span class="skill-badge badge-ui-spec">UI Spec</span>
+          </div>
+          <div class="skill-desc">Maps UX Blueprint → DS components + tokens. Every component named, every token referenced. Dev-ready spec with Figma node IDs and a11y notes.</div>
+          <div class="artifacts">
+            <div class="artifact-row reads">
+              <span class="artifact-label">reads</span>
+              <div class="artifact-files">
+                <span class="file-pill" data-file="ux-blueprint">docs/design/ux-blueprint.md</span>
+                <span class="file-pill" data-file="components-json">design-system/components.json</span>
+                <span class="file-pill" data-file="design-md">design-system/design.md</span>
+                <span class="file-pill">Figma (MCP)</span>
+              </div>
+            </div>
+            <div class="artifact-row writes">
+              <span class="artifact-label">writes</span>
+              <div class="artifact-files">
+                <span class="file-pill" data-file="ui-spec">docs/design/ui-spec.md</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow-connector"><div class="arrow-line"></div></div>
+
+    <!-- 6. Spec -->
+    <div class="phase-group">
+      <div class="phase-label" style="color:var(--spec)">⑥ Spec</div>
+      <div class="skill-card phase-spec" data-skill="spec-driven-development">
+        <div class="skill-header">
+          <span class="skill-name">spec-driven-development</span>
+          <span class="skill-badge badge-spec">Spec</span>
+        </div>
+        <div class="skill-desc">Writes structured spec before any code. 4-phase gated workflow: Specify → Plan → Tasks → Implement. Each phase needs human review before advancing.</div>
+        <div class="artifacts">
+          <div class="artifact-row reads">
+            <span class="artifact-label">reads</span>
+            <div class="artifact-files">
+              <span class="file-pill" data-file="ui-spec">docs/design/ui-spec.md</span>
+              <span class="file-pill" data-file="prd">docs/prd.md</span>
+            </div>
+          </div>
+          <div class="artifact-row writes">
+            <span class="artifact-label">writes</span>
+            <div class="artifact-files">
+              <span class="file-pill" data-file="spec">docs/specs/[feature].spec.md</span>
+              <span class="file-pill" data-file="tests">tests/ (test stubs)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow-connector"><div class="arrow-line"></div></div>
+
+    <!-- 7. Engineering -->
+    <div class="phase-group">
+      <div class="phase-label" style="color:var(--engineering)">⑦ Engineering</div>
+      <div class="skill-card phase-engineering" data-skill="frontend-ui-engineering">
+        <div class="skill-header">
+          <span class="skill-name">frontend-ui-engineering</span>
+          <span class="skill-badge badge-engineering">Engineering</span>
+        </div>
+        <div class="skill-desc">Builds production-quality UI — accessible, performant, visually polished. Composable components, proper token usage, no "AI aesthetic". Colocated tests + stories.</div>
+        <div class="artifacts">
+          <div class="artifact-row reads">
+            <span class="artifact-label">reads</span>
+            <div class="artifact-files">
+              <span class="file-pill" data-file="ui-spec">docs/design/ui-spec.md</span>
+              <span class="file-pill" data-file="spec">docs/specs/[feature].spec.md</span>
+              <span class="file-pill" data-file="copy">docs/design/copy.md</span>
+              <span class="file-pill" data-file="components-json">design-system/components.json</span>
+              <span class="file-pill" data-file="design-md">design-system/design.md</span>
+            </div>
+          </div>
+          <div class="artifact-row writes">
+            <span class="artifact-label">writes</span>
+            <div class="artifact-files">
+              <span class="file-pill" data-file="src-components">src/components/[Name]/</span>
+              <span class="file-pill" data-file="src-pages">src/pages/</span>
+              <span class="file-pill" data-file="tokens-css">src/styles/tokens.css</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="feedback-tag">if bug found → back to frontend-ui-engineering</div>
+    <div class="arrow-connector"><div class="arrow-line"></div></div>
+
+    <!-- 8. Testing -->
+    <div class="phase-group">
+      <div class="phase-label" style="color:var(--testing)">⑧ Testing</div>
+      <div class="skill-card phase-testing" data-skill="browser-testing-with-devtools">
+        <div class="skill-header">
+          <span class="skill-name">browser-testing-with-devtools</span>
+          <span class="skill-badge badge-testing">Testing</span>
+        </div>
+        <div class="skill-desc">Live browser verification via Chrome DevTools MCP. Reads DOM, console logs, network requests, performance traces. Sees exactly what the user sees — no guessing.</div>
+        <div class="artifacts">
+          <div class="artifact-row reads">
+            <span class="artifact-label">reads</span>
+            <div class="artifact-files">
+              <span class="file-pill">localhost (running app)</span>
+              <span class="file-pill">DOM · console · network · perf</span>
+            </div>
+          </div>
+          <div class="artifact-row writes">
+            <span class="artifact-label">writes</span>
+            <div class="artifact-files">
+              <span class="file-pill" data-file="test-results">docs/testing/[date]-results.md</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow-connector"><div class="arrow-line"></div></div>
+
+    <!-- 9. Launch -->
+    <div class="phase-group">
+      <div class="phase-label" style="color:var(--launch)">⑨ Launch</div>
+      <div class="skill-card phase-launch" data-skill="shipping-and-launch">
+        <div class="skill-header">
+          <span class="skill-name">shipping-and-launch</span>
+          <span class="skill-badge badge-launch">Launch</span>
+        </div>
+        <div class="skill-desc">Pre-launch checklist across code quality, security, performance, accessibility, infrastructure, and docs. Feature flag strategy, staged rollout, rollback plan.</div>
+        <div class="artifacts">
+          <div class="artifact-row reads">
+            <span class="artifact-label">reads</span>
+            <div class="artifact-files">
+              <span class="file-pill" data-file="test-results">docs/testing/[date]-results.md</span>
+              <span class="file-pill" data-file="prd">docs/prd.md</span>
+              <span class="file-pill" data-file="spec">docs/specs/[feature].spec.md</span>
+            </div>
+          </div>
+          <div class="artifact-row writes">
+            <span class="artifact-label">writes</span>
+            <div class="artifact-files">
+              <span class="file-pill" data-file="changelog">CHANGELOG.md</span>
+              <span class="file-pill">feature flag config</span>
+              <span class="file-pill">CI/CD trigger</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /pipeline -->
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-title">Artifact Dependency Chain</div>
+    <div style="font-size:10px;color:var(--muted);margin-bottom:16px;line-height:1.6">
+      Hover a skill card → see which files it reads <span style="color:#93C5FD">●</span> and writes <span style="color:#6EE7B7">●</span>
+    </div>
+
+    <div class="ftree-wrap">
+      <ul class="ftree">
+
+        <!-- docs/ -->
+        <li>
+          <div class="ftree-dir-label" data-dir="docs"><span class="ftree-dir-icon">▶</span> docs/</div>
+          <ul>
+            <li>
+              <div class="ftree-dir-label" data-dir="discovery"><span class="ftree-dir-icon">▶</span> discovery/</div>
+              <ul>
+                <li>
+                  <div class="ftree-file" data-fid="interview-notes">
+                    <span class="fphase" style="background:var(--discovery)"></span>
+                    interview-notes.md
+                  </div>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <div class="ftree-file" data-fid="prd">
+                <span class="fphase" style="background:var(--product)"></span>
+                prd.md
+              </div>
+            </li>
+            <li>
+              <div class="ftree-dir-label" data-dir="design"><span class="ftree-dir-icon">▶</span> design/</div>
+              <ul>
+                <li>
+                  <div class="ftree-file" data-fid="ux-blueprint">
+                    <span class="fphase" style="background:var(--strategy)"></span>
+                    ux-blueprint.md
+                  </div>
+                </li>
+                <li>
+                  <div class="ftree-file" data-fid="copy">
+                    <span class="fphase" style="background:var(--strategy)"></span>
+                    copy.md
+                  </div>
+                </li>
+                <li>
+                  <div class="ftree-file" data-fid="ui-spec">
+                    <span class="fphase" style="background:var(--ui-spec)"></span>
+                    ui-spec.md
+                  </div>
+                </li>
+                <li>
+                  <div class="ftree-file" data-fid="figma-audit">
+                    <span class="fphase" style="background:var(--ui-spec)"></span>
+                    figma-audit.md
+                  </div>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <div class="ftree-dir-label" data-dir="specs"><span class="ftree-dir-icon">▶</span> specs/</div>
+              <ul>
+                <li>
+                  <div class="ftree-file" data-fid="spec">
+                    <span class="fphase" style="background:var(--spec)"></span>
+                    [feature].spec.md
+                  </div>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <div class="ftree-dir-label" data-dir="testing"><span class="ftree-dir-icon">▶</span> testing/</div>
+              <ul>
+                <li>
+                  <div class="ftree-file" data-fid="test-results">
+                    <span class="fphase" style="background:var(--testing)"></span>
+                    [date]-results.md
+                  </div>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+
+        <!-- design-system/ -->
+        <li style="margin-top:6px">
+          <div class="ftree-dir-label" data-dir="design-system"><span class="ftree-dir-icon">▶</span> design-system/</div>
+          <ul>
+            <li>
+              <div class="ftree-file" data-fid="design-md">
+                <span class="fphase" style="background:var(--ds)"></span>
+                design.md
+              </div>
+            </li>
+            <li>
+              <div class="ftree-file" data-fid="components-json">
+                <span class="fphase" style="background:var(--ds)"></span>
+                components.json
+              </div>
+            </li>
+            <li>
+              <div class="ftree-file" data-fid="ui-json">
+                <span class="fphase" style="background:var(--ds)"></span>
+                ui.json
+              </div>
+            </li>
+            <li>
+              <div class="ftree-file" data-fid="patterns-json">
+                <span class="fphase" style="background:var(--ds)"></span>
+                patterns.json
+              </div>
+            </li>
+          </ul>
+        </li>
+
+        <!-- src/ -->
+        <li style="margin-top:6px">
+          <div class="ftree-dir-label" data-dir="src"><span class="ftree-dir-icon">▶</span> src/</div>
+          <ul>
+            <li>
+              <div class="ftree-dir-label" data-dir="components"><span class="ftree-dir-icon">▶</span> components/</div>
+              <ul>
+                <li>
+                  <div class="ftree-file" data-fid="src-components">
+                    <span class="fphase" style="background:var(--engineering)"></span>
+                    [Name]/ (.tsx + .test.tsx)
+                  </div>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <div class="ftree-dir-label" data-dir="pages"><span class="ftree-dir-icon">▶</span> pages/</div>
+              <ul>
+                <li>
+                  <div class="ftree-file" data-fid="src-pages">
+                    <span class="fphase" style="background:var(--engineering)"></span>
+                    *.tsx
+                  </div>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <div class="ftree-dir-label" data-dir="styles"><span class="ftree-dir-icon">▶</span> styles/</div>
+              <ul>
+                <li>
+                  <div class="ftree-file" data-fid="tokens-css">
+                    <span class="fphase" style="background:var(--engineering)"></span>
+                    tokens.css
+                  </div>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <div class="ftree-dir-label" data-dir="tests"><span class="ftree-dir-icon">▶</span> tests/</div>
+              <ul>
+                <li>
+                  <div class="ftree-file" data-fid="tests">
+                    <span class="fphase" style="background:var(--spec)"></span>
+                    *.test.ts
+                  </div>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+
+        <!-- CHANGELOG -->
+        <li style="margin-top:6px">
+          <div class="ftree-file" data-fid="changelog">
+            <span class="fphase" style="background:var(--launch)"></span>
+            CHANGELOG.md
+          </div>
+        </li>
+
+      </ul>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="af-legend">
+      <div class="af-legend-row">
+        <div class="af-legend-swatch" style="background:rgba(96,165,250,0.15);border:1px solid rgba(96,165,250,0.3)"></div>
+        <span style="color:#93C5FD">reads from</span>
+      </div>
+      <div class="af-legend-row">
+        <div class="af-legend-swatch" style="background:rgba(52,211,153,0.15);border:1px solid rgba(52,211,153,0.3)"></div>
+        <span style="color:#6EE7B7">writes to</span>
+      </div>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="sidebar-title">Source of Truth</div>
+    <div style="font-size:10.5px;color:var(--muted);line-height:2">
+      <div><span style="color:#C084FC">prd.md</span> — product intent</div>
+      <div><span style="color:#22D3EE">ux-blueprint.md</span> — UX structure</div>
+      <div><span style="color:#34D399">design.md</span> — tokens</div>
+      <div><span style="color:#34D399">components.json</span> — component API</div>
+      <div><span style="color:#FBBF24">ui-spec.md</span> — UI spec</div>
+      <div><span style="color:#FB923C">[feature].spec.md</span> — code spec</div>
+      <div><span style="color:#60A5FA">test-results.md</span> — QA evidence</div>
+    </div>
+  </div>
+
+</div><!-- /layout -->
+
+<script>
+  const cards   = document.querySelectorAll('.skill-card');
+  const ftFiles = document.querySelectorAll('.ftree-file[data-fid]');
+  const ftDirs  = document.querySelectorAll('.ftree-dir-label[data-dir]');
+
+  // dir that should highlight when a file inside is active
+  const fileToDir = {
+    'interview-notes': 'discovery',
+    'prd':             'docs',
+    'ux-blueprint':    'design',
+    'copy':            'design',
+    'ui-spec':         'design',
+    'figma-audit':     'design',
+    'spec':            'specs',
+    'test-results':    'testing',
+    'design-md':       'design-system',
+    'components-json': 'design-system',
+    'ui-json':         'design-system',
+    'patterns-json':   'design-system',
+    'src-components':  'components',
+    'src-pages':       'pages',
+    'tokens-css':      'styles',
+    'tests':           'tests',
+    'changelog':       '',
+  };
+
+  cards.forEach(card => {
+    card.addEventListener('mouseenter', () => {
+      const readFiles  = [...card.querySelectorAll('.reads  .file-pill[data-file]')].map(el => el.dataset.file);
+      const writeFiles = [...card.querySelectorAll('.writes .file-pill[data-file]')].map(el => el.dataset.file);
+      const activeFids = new Set([...readFiles, ...writeFiles]);
+
+      ftFiles.forEach(f => {
+        f.classList.remove('af-r', 'af-w', 'af-dim');
+        const fid = f.dataset.fid;
+        if (readFiles.includes(fid))       f.classList.add('af-r');
+        else if (writeFiles.includes(fid)) f.classList.add('af-w');
+        else if (activeFids.size > 0)      f.classList.add('af-dim');
+      });
+
+      // Highlight parent dirs
+      ftDirs.forEach(d => d.classList.remove('af-active'));
+      activeFids.forEach(fid => {
+        const dir = fileToDir[fid];
+        if (dir) {
+          const dirEl = document.querySelector(`.ftree-dir-label[data-dir="${dir}"]`);
+          if (dirEl) dirEl.classList.add('af-active');
+        }
+      });
+
+      cards.forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+    });
+
+    card.addEventListener('mouseleave', () => {
+      ftFiles.forEach(f => f.classList.remove('af-r', 'af-w', 'af-dim'));
+      ftDirs.forEach(d => d.classList.remove('af-active'));
+      card.classList.remove('active');
+    });
+  });
+
+  // Overview chip click → scroll to card
+  document.querySelectorAll('.ov-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const name = chip.textContent.trim();
+      const card = [...cards].find(c => c.dataset.skill === name);
+      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  });
+</script>
+
+</body>
+</html>
