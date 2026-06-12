@@ -1,8 +1,8 @@
-# UXUI library skill
+# UXUI Skill Library
 
-Skills และคู่มือสำหรับทีม Designer ใช้ Claude Code ร่วมกับ Figma
+28 skills สำหรับทีม Designer ใช้ Claude Code ร่วมกับ Figma
 
-## 📦 วิธี Setup (ต้องทำก่อนใช้ skill)
+## วิธี Setup
 
 ต้องมี 4 อย่างบนเครื่อง:
 
@@ -13,11 +13,11 @@ Skills และคู่มือสำหรับทีม Designer ใช้
 
 > ดูคู่มือ step-by-step → **[ONBOARDING.md](ONBOARDING.md)**
 
-**วิธีง่ายสุด:** ติดตั้ง Claude Code + plugin (ขั้น 2 ข้างล่าง) แล้วพิมพ์ `/check-setup` ในChat → จะ auto-detect และ guide ที่เหลือให้
+**วิธีง่ายสุด:** ติดตั้ง Claude Code แล้วพิมพ์ `/check-setup` → จะ auto-detect และ guide ที่เหลือให้
 
 ---
 
-## 🚀 วิธีติดตั้ง Skill
+## วิธีติดตั้ง
 
 เลือก **1 วิธี** ก็พอ
 
@@ -29,8 +29,6 @@ npx skills add sittipons-ike/uxui-skill-library
 
 ### วิธีที่ 2 — Claude Code Plugin (ใช้เมื่อ npx ไม่ได้)
 
-ถ้า network บล็อก npm registry — ใช้วิธีนี้แทน:
-
 ```
 claude plugin marketplace add https://github.com/sittipons-ike/uxui-skill-library
 claude plugin install uxui-skills
@@ -38,98 +36,126 @@ claude plugin install uxui-skills
 
 ### หลังติดตั้งเสร็จ
 
-พิมพ์ใน Claude Code:
 ```
 /check-setup
 ```
 
-→ จะเช็ก setup ครบไหม + แนะนำ skill แรกให้ลอง
+---
 
-## Skills ที่มี
+## Skills ที่มี (28 skills)
 
-**พร้อมใช้ทันที**
+### UX / UI Design
 
 | Skill | หน้าที่ |
 |---|---|
-| `check-setup` | Guide ทีมตอน install ครั้งแรก — เช็ก prerequisites + แนะนำ skill แรก |
-| `figma-audit-ui` | ตรวจ Figma DS compliance ก่อน handoff |
-| `ux-skill` | วาง User Flow + Information Architecture |
-| `ui-skill` | Map component + design token จาก Blueprint |
-| `ux-writing` | เขียน / rewrite microcopy บน UI |
+| `check-setup` | เช็ก prerequisites + แนะนำ skill แรกที่ควรลอง |
+| `ux-strategist` | วาง User Flow + Information Architecture |
+| `ui-implementation-specialist` | Map component + design token จาก Blueprint |
+| `ux-writer` | เขียน / rewrite microcopy บน UI |
 | `masterprompt` | แปลง idea คร่าวๆ เป็น structured prompt |
-| `notion-planning` | วางแผนงานลง Notion |
-| `prd` | สร้าง Product Requirements Document |
+| `figma-audit-ui` | ตรวจ Figma DS compliance ก่อน handoff |
 | `audit` | ตรวจ interface quality ด้าน accessibility, performance, responsive |
+| `user-personas` | สร้าง User Persona จาก research data |
 
-**Design System Suite (3-file split architecture)**
+### Product & Planning
 
 | Skill | หน้าที่ |
 |---|---|
-| `design-builder` v6 | สร้าง `design.md` — dual-path (zero / client-given palette + mood + refs) → base tokens + WCAG validation + Known Gaps log |
-| `design-component-builder` v5 | สร้าง `components.json` (DTCG-aligned manifest) + `tokens.css` 2-tier + `components/<name>.html` + `components.html` showcase. Legacy `--format=md` ยังใช้ได้ใน v5–v6 |
-| `design-icon-builder` | populate iconography layer + ดึง SVG จริงจาก Phosphor/Tabler/Heroicons ฯลฯ |
-| `design-ui-builder` v5 | สร้าง `ui.json` + `patterns.json` + `pages/<name>.html` (dual-mode: iframe default for designer iteration / `--render=inline` for dev hand-off) + `patterns/<name>.html` (reusable shells with slot contracts) + `pages.css` (iframe sizing) |
-| `design-md-audit` v6.1 | audit DS (JSON Schema + ref resolver + diff-merge + HTML coverage + hybrid input) + **`--migrate-to-json`** flag (convert legacy MD spec → v6 JSON manifests with auto-extracted patterns) |
-| `design-styleguide` v3 | aggregator mode default (อ่าน components/*.html → single styleguide.html with TOC + theme toggle) หรือ `--regenerate` ใช้ legacy MD mode |
-| `design-remix` | mix design จาก brand references (Linear typography + Notion spacing ฯลฯ) |
-| `design-export-dtcg` v1 | export DS tokens → W3C DTCG `tokens.json` + Style Dictionary config (cross-platform: iOS/Android/Flutter/web/Tailwind) |
-| `figma-push-tokens` v1 | sync DS tokens (design.md / tokens.json) → Figma Variable Collection (light/dark modes, idempotent, alias-aware) |
-| `figma-push-components` v1 | push 5 atoms (button, input, badge, label, card) → Figma Component Sets with auto-layout + Variable bindings (variant × size × state matrix; rest + disabled states; hover/focus via designer Interactions) |
-| `figma-rename-tokens` v1 | normalize existing Figma Variable names → canonical DS naming (Color/Primary/Default, Space/Md ฯลฯ). 4-tier confidence (value/name/category/manual). Non-destructive — preserves bindings/values/modes. ใช้กับ existing projects ก่อน align ทีม |
+| `prd` | สร้าง Product Requirements Document (3 targets: stakeholder / dev / AI agent) |
+| `notion-planning` | วางแผนงานลง Notion |
+| `interview-me` | ดึง intent ที่แท้จริงออกมาก่อนเริ่ม build — ถามทีละคำถามจนมั่นใจ ~95% |
+| `spec-driven-development` | เขียน spec ก่อน code — 4-phase gated workflow |
+| `shipping-and-launch` | เตรียม launch checklist + go-live workflow |
 
-**ต้อง setup ก่อนใช้** ⚠️
+### Engineering
+
+| Skill | หน้าที่ |
+|---|---|
+| `frontend-ui-engineering` | Front-end best practices: component patterns, performance, accessibility |
+| `browser-testing-with-devtools` | ทดสอบ UI ด้วย DevTools — layout, network, console, a11y |
+
+### Design System Suite
+
+| Skill | หน้าที่ |
+|---|---|
+| `design-builder` v6 | สร้าง `design.md` — dual-path (zero / client-given) → base tokens + WCAG validation |
+| `design-component-builder` v5 | สร้าง `components.json` (DTCG) + `tokens.css` + `components/<name>.html` |
+| `design-icon-builder` | populate iconography layer + ดึง SVG จาก Phosphor/Tabler/Heroicons ฯลฯ |
+| `design-ui-builder` v5 | สร้าง `ui.json` + `patterns.json` + `pages/<name>.html` (dual-mode: iframe / `--render=inline`) |
+| `design-md-audit` v6.1 | audit DS + `--migrate-to-json` flag (convert legacy MD → v6 JSON) |
+| `design-styleguide` v3 | aggregator mode: อ่าน `components/*.html` → single `styleguide.html` |
+| `design-remix` | mix design จาก brand references |
+| `design-export-dtcg` v1 | export → W3C DTCG `tokens.json` + Style Dictionary (iOS/Android/Flutter/web/Tailwind) |
+
+### Figma Integration
+
+| Skill | หน้าที่ |
+|---|---|
+| `figma-push-tokens` v1 | sync DS tokens → Figma Variable Collection (light/dark, idempotent) |
+| `figma-push-components` v1 | push 5 atoms → Figma Component Sets + Variable bindings (variant × size × state) |
+| `figma-rename-tokens` v1 | normalize existing Figma Variable names → canonical DS naming (non-destructive) |
+
+### Integrations (ต้อง setup ก่อนใช้)
 
 | Skill | ต้องการ |
 |---|---|
 | `email-summarizer` | Gmail MCP + (optional) Lark webhook |
-| `jira-tracker` | Atlassian MCP + Lark webhook + config Jira project |
+| `jira-tracker` | Atlassian MCP + Lark webhook + Jira project config |
 
-> skill ที่มี ⚠️ จะแสดง checklist setup ให้กรอกก่อนทุกครั้งที่รัน
+> skill กลุ่มนี้จะแสดง checklist setup ให้กรอกก่อนทุกครั้งที่รัน
 
-**ตัวเสริม (ติดตั้งแยก)**
+---
 
-animate, polish, colorize, critique, audit, adapt, arrange, bolder, clarify, distill, delight, extract, frontend-design, harden, normalize, onboard, optimize, overdrive, quieter, teach-impeccable, typeset
+### ตัวเสริม (ติดตั้งแยก)
 
-ติดตั้งด้วย:
+`animate`, `polish`, `colorize`, `critique`, `adapt`, `arrange`, `bolder`, `clarify`, `distill`, `delight`, `extract`, `frontend-design`, `harden`, `normalize`, `onboard`, `optimize`, `overdrive`, `quieter`, `teach-impeccable`, `typeset`
+
 ```
 npx skills add pbakaus/impeccable
 ```
-
-## 🚧 Phase 5 in progress — JSON Manifest Migration
-
-DS spec layer กำลังย้ายจาก `.md` → JSON manifests (DTCG-aligned) เพื่อลด token cost + drift + เพิ่ม scalability
-- `design.md` **อยู่เหมือนเดิม** (designer-facing, YAML-in-MD)
-- `components.json` + `ui.json` + `patterns.json` ใหม่ — แทน `.md` spec
-- HTML files (atoms, pages) **ไม่เปลี่ยน**
-
-อ่าน [docs/architecture-v5.md](docs/architecture-v5.md) สำหรับรายละเอียด, [schemas/ref-resolver.md](schemas/ref-resolver.md) สำหรับ ref syntax
-
-**Status:**
-- ✅ Phase 1A + 1B: schemas + docs
-- ✅ Phase 2A: `design-component-builder v5` (emits `components.json`)
-- ✅ Phase 2B: `design-ui-builder v4` (emits `ui.json` + `patterns.json`)
-- ✅ Phase 2C: `design-builder v6.1` (doc-only pipeline refs)
-- ✅ Phase 2D: `design-icon-builder v2.2` (doc-only)
-- ✅ Phase 3B: `design-styleguide v3.1` (reads JSON, falls back MD)
-- ✅ Phase 3A: `design-md-audit v6.0` (JSON Schema validation + hybrid mode + ref resolver)
-- ✅ Phase 4: `design-md-audit v6.1` (`--migrate-to-json` flag — convert legacy MD → v6 JSON with pattern auto-extraction)
-- ✅ Phase 5: E2E verify ([docs/VERIFICATION-v6.md](docs/VERIFICATION-v6.md)) — all schemas + examples PASS after fixes
-- ✅ Phase 6: `design-export-dtcg v1.0` — DTCG `tokens.json` + Style Dictionary config (cross-platform: web/iOS/Android/Flutter/Tailwind)
-
-**🎉 DS v6 — JSON Manifest Migration COMPLETE**
 
 ---
 
 ## อัปเดต Skills
 
-รันคำสั่งเดิมจากวิธีที่ติดตั้งซ้ำ:
+รันคำสั่งเดิมซ้ำ:
 
-**ถ้าใช้ npx:**
+**npx:**
 ```
 npx skills add sittipons-ike/uxui-skill-library
 ```
 
-**ถ้าใช้ Plugin:**
+**Plugin:**
 ```
 claude plugin marketplace update
 ```
+
+---
+
+## DS Architecture
+
+3-file split architecture (JSON manifest, DTCG-aligned):
+
+```
+design-builder            →  design.md        (YAML tokens, designer-facing)
+design-component-builder  →  components.json  (atoms/molecules/organisms)
+design-icon-builder       →  design.md        (iconography block + ./icons/*.svg)
+design-ui-builder         →  ui.json + patterns.json  (pages/flows/shells)
+design-md-audit           →  validates all files + cross-file refs
+design-styleguide         →  styleguide.html  (aggregator view)
+```
+
+Schemas: [schemas/](schemas/) — ref syntax: [schemas/ref-resolver.md](schemas/ref-resolver.md)  
+Architecture doc: [docs/architecture-v5.md](docs/architecture-v5.md)
+
+**DS v6 + Figma Integration — COMPLETE**
+
+| Phase | Status |
+|---|---|
+| Phase 1–6: DS JSON Migration | ✅ |
+| Phase 7A: `figma-push-tokens` v1 | ✅ |
+| Phase 7C: `figma-rename-tokens` v1 | ✅ |
+| Phase 8: `figma-push-components` v1 | ✅ |
+| Phase 9A: `design-ui-builder` v5 dual-mode | ✅ |
+| Phase 7B: Tokens Studio export (optional) | ⏳ |
+| Phase 9B: Patterns push + Interactions auto-wire | ⏳ |
