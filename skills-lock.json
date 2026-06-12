@@ -8,10 +8,10 @@
       "computedHash": "6a21ad67b348273d57576e01157e6d5b572a42938936177e2d9cd219b0233788"
     },
     "browser-testing-with-devtools": {
-      "source": "addyosmani/agent-skills",
+      "source": "sittipons-ike/uxui-skill-library",
       "sourceType": "github",
       "skillPath": "skills/browser-testing-with-devtools/SKILL.md",
-      "computedHash": "d0c075ca4c9ffa50f7ddcd7cac140a2c809aba1be98d284b285539ebd4045be6"
+      "computedHash": "8fb8aef5678048b7786b4da6738accb58d55754f714d9ad02acee12f5d32a6f0"
     },
     "check-setup": {
       "source": "sittipons-ike/uxui-skill-library",
@@ -86,16 +86,16 @@
       "computedHash": "c5dbd7f606f9aa10f36f6f4ce29feb8d894d9767a8355803271e3129ffc93373"
     },
     "frontend-ui-engineering": {
-      "source": "addyosmani/agent-skills",
+      "source": "sittipons-ike/uxui-skill-library",
       "sourceType": "github",
       "skillPath": "skills/frontend-ui-engineering/SKILL.md",
-      "computedHash": "917f6cf8c3d694c2b145463799ee492a2b88d7bf22ff479e08111d3ea5501e65"
+      "computedHash": "9f9e5b3141c891d866c2a15a11ac3aba4e86ec6c530d054f0534503c2e720cb1"
     },
     "interview-me": {
-      "source": "addyosmani/agent-skills",
+      "source": "sittipons-ike/uxui-skill-library",
       "sourceType": "github",
       "skillPath": "skills/interview-me/SKILL.md",
-      "computedHash": "efded91ac7f7626239b338ce8622afeb557151b86532b632f3c9eb5b2ff9048f"
+      "computedHash": "1d94741d10d2c826cd0c191aea3981ee94c8abb27ef2a166f6a372117d06448f"
     },
     "jira-tracker": {
       "source": "sittipons-ike/uxui-skill-library",
@@ -122,16 +122,16 @@
       "computedHash": "caf8bff2c680bc62e88f25985926ddee95cb4083ec924043cf4a5221213b147c"
     },
     "shipping-and-launch": {
-      "source": "addyosmani/agent-skills",
+      "source": "sittipons-ike/uxui-skill-library",
       "sourceType": "github",
       "skillPath": "skills/shipping-and-launch/SKILL.md",
-      "computedHash": "3cd9f8154c7aa578cf7db15c43b54e358bbe7da03c633d289b0302acf4a83028"
+      "computedHash": "3e54575e5dcdc8f576cd1735aa804a56bb881c342bd6c702fd86531bd6652d56"
     },
     "spec-driven-development": {
-      "source": "addyosmani/agent-skills",
+      "source": "sittipons-ike/uxui-skill-library",
       "sourceType": "github",
       "skillPath": "skills/spec-driven-development/SKILL.md",
-      "computedHash": "c29c9fe28235431984e1f8d5f5a578fc03184d6da17131574f16b240f7c93c3f"
+      "computedHash": "16041b4b6149c0e99d7323f8c1e2104ddca2819bf46f78c402a8f0458938e344"
     },
     "ui-implementation-specialist": {
       "source": "sittipons-ike/uxui-skill-library",
@@ -140,10 +140,10 @@
       "computedHash": "8283c4898199ed8a924952afac52358684fd60d9cc13497e03d433d59a73a56f"
     },
     "user-personas": {
-      "source": "phuryn/pm-skills",
+      "source": "sittipons-ike/uxui-skill-library",
       "sourceType": "github",
-      "skillPath": "pm-market-research/skills/user-personas/SKILL.md",
-      "computedHash": "271152c8d16d09fd3448e3d33707d61373c3c06e4619e8a1e9730d5305c120d4"
+      "skillPath": "skills/user-personas/SKILL.md",
+      "computedHash": "012eb8ea4a6ec51bb72ddf41f48d8520f26c7f4e43ff82d69d1074e3503087ca"
     },
     "ux-strategist": {
       "source": "sittipons-ike/uxui-skill-library",
