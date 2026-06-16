@@ -52,6 +52,7 @@ claude plugin install uxui-skills
 | `ux-strategist` | วาง User Flow + Information Architecture |
 | `ui-implementation-specialist` | Map component + design token จาก Blueprint |
 | `ux-writer` | เขียน / rewrite microcopy บน UI |
+| `modal-writer` | เขียน/review Thai modal copy (Title + Body + CTAs) สำหรับ Desktop web — 6 modal types, 12 forbidden patterns auto-check, Double/Single layout rules |
 | `masterprompt` | แปลง idea คร่าวๆ เป็น structured prompt |
 | `figma-audit-ui` | ตรวจ Figma DS compliance ก่อน handoff |
 | `audit` | ตรวจ interface quality ด้าน accessibility, performance, responsive |
