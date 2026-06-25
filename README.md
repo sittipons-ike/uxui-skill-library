@@ -19,32 +19,17 @@
 
 ## วิธีติดตั้ง
 
-เลือก **1 วิธี** ก็พอ
+ทำตามลำดับ — **Rules ก่อน Skills**
 
-### วิธีที่ 1 — npx (แนะนำ)
-
-```
-npx skills add sittipons-ike/uxui-skill-library
-```
-
-### วิธีที่ 2 — Claude Code Plugin (ใช้เมื่อ npx ไม่ได้)
-
-```
-claude plugin marketplace add https://github.com/sittipons-ike/uxui-skill-library
-claude plugin install uxui-skills
-```
-
-### หลังติดตั้งเสร็จ
-
-```
-/check-setup
-```
+> Rules = guardrails (กัน Claude เดา / leak secret / บอก "เสร็จ" ทั้งที่ยังไม่ verify)
+> Skills = features (เสริมความสามารถเฉพาะทาง UX/UI/DS)
+> ติด skills โดยไม่มี rules = AI ลุยเดาในงาน high-stakes
 
 ---
 
-## ⚡ Team Rules — กฎกลางทีม (สำคัญ)
+### ⚡ ขั้นที่ 1 (สำคัญสุด) — Team Rules
 
-หลัง install skills เสร็จ ติดตั้ง **Team Rules** ด้วย — กฎกลาง 13 ข้อที่ Claude apply ทุก session ทุก project
+กฎกลาง 13 ข้อที่ Claude apply ทุก session ทุก project
 
 | Layer | Rules |
 |---|---|
@@ -52,8 +37,7 @@ claude plugin install uxui-skills
 | 🎯 Engineering | 7-11 (NO MAGIC, VERIFY BEFORE DONE, DISSENT, SCOPE DRIFT, R0/R1/R2) |
 | 📚 Persistence | 12-13 (per-project `MEMORY.md` + `spec.md` — กันลืม / กัน /clear) |
 
-### ติดตั้ง (ทำครั้งเดียว)
-
+**ติดตั้ง (ทำครั้งเดียว):**
 ```bash
 git clone https://github.com/sittipons-ike/uxui-skill-library.git
 cd uxui-skill-library
@@ -65,20 +49,44 @@ Script จะ:
 2. Symlink `~/.claude/team-rules.md` → `<repo>/team-rules/CLAUDE.md`
 3. ใส่ `@~/.claude/team-rules.md` ใน `~/.claude/CLAUDE.md` (idempotent — รันซ้ำได้)
 
-### Update rules + skills (รวบใน 1 command)
+ดูเนื้อหา rules เต็ม → [team-rules/CLAUDE.md](team-rules/CLAUDE.md)
+
+> **Personal customization** — เพิ่ม section ของตัวเองท้าย `~/.claude/CLAUDE.md` ได้ — survive git pull (อยู่คนละไฟล์)
+
+---
+
+### 🧩 ขั้นที่ 2 — Skills (29 ตัว)
+
+หลัง rules ลงเรียบร้อย ค่อยติด skills — เลือก **1 วิธี** ก็พอ
+
+**วิธีที่ 1 — npx (แนะนำ — เร็ว, update บ่อย):**
+```bash
+npx skills add sittipons-ike/uxui-skill-library
+```
+
+**วิธีที่ 2 — Claude Code Plugin (ใช้เมื่อ npx ไม่ได้):**
+```bash
+claude plugin marketplace add https://github.com/sittipons-ike/uxui-skill-library
+claude plugin install uxui-skills
+```
+
+---
+
+### ✅ ขั้นที่ 3 — Verify
+
+```
+/check-setup
+```
+
+---
+
+### 🔄 Update (ต่อจากนี้ — รวบ 1 command)
 
 ```bash
 cd uxui-skill-library && bash update.sh
 ```
 
-Script ทำ:
-1. `git pull` — rules sync (symlink ชี้ของจริง)
-2. `npx skills add ...` — skills latest
-3. แนะนำให้รัน `/check-setup` verify
-
-ดูเนื้อหา rules เต็ม → [team-rules/CLAUDE.md](team-rules/CLAUDE.md)
-
-> **Personal customization** — เพิ่ม section ของตัวเองท้าย `~/.claude/CLAUDE.md` ได้ — survive git pull (อยู่คนละไฟล์)
+Script ทำ: `git pull` (rules) → `npx skills add` (skills) → hint `/check-setup`
 
 ---
 
@@ -153,22 +161,6 @@ Script ทำ:
 
 ```
 npx skills add pbakaus/impeccable
-```
-
----
-
-## อัปเดต Skills + Rules
-
-**วิธีเร็ว (รวบ 1 command):**
-```bash
-cd uxui-skill-library && bash update.sh
-```
-
-**Manual (เลือก 1):**
-```bash
-npx skills add sittipons-ike/uxui-skill-library    # skills เท่านั้น
-claude plugin marketplace update                    # ผ่าน plugin
-cd uxui-skill-library && git pull                   # rules เท่านั้น
 ```
 
 ---
