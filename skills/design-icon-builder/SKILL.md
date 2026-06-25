@@ -1,7 +1,7 @@
 ---
 name: design-icon-builder
 description: Populate the iconography layer of design.md (3-file split architecture) AND optionally fetch real SVG files from a free icon library (Phosphor/Tabler/Heroicons/Lucide/Iconoir/Material Symbols/Bootstrap/Remix) via CDN — no npm install needed. Picks library by mood, downloads 12 starter icons, writes them to ./icons/, and locks library+version into design.md. Falls back to monolithic DESIGN.md if split files not present. Note: icons remain in design.md (resource layer per atomic-design industry practice — Material/Carbon/Tailwind separate icons from components). After running, design-component-builder reads design.md + writes components.json (DTCG-aligned manifest). Triggers on "build icons", "icon system", "iconography", "fetch icons", "download icons", "เพิ่ม icon set", "ดึง icon มาใช้", "ทำ icon style guide".
-version: 2.2.0
+version: 2.3.0
 user-invokable: true
 args:
   - name: source
@@ -67,6 +67,27 @@ All libraries below are MIT/Apache 2.0 licensed and ship SVGs reachable via CDN.
 | Remix Icon | 2,800 | line / fill | `https://cdn.jsdelivr.net/npm/remixicon@latest/icons/<Category>/<name>-<line\|fill>.svg` ⚠️ requires category prefix (Buildings/Business/etc.) |
 
 ## Execution Steps
+
+### 0. Confirm scope + library (REQUIRED — never skip)
+
+**MUST** call `AskUserQuestion` once with 2 questions (multi-question, single round) BEFORE loading source — unless BOTH `scope` AND `library` args were passed explicitly by user.
+
+Questions:
+
+1. **เลือก icon scope** — กี่ icons ที่จะดึงเข้า?
+   - Option A: **starter (12)** — proof-of-concept / landing
+   - Option B: **common (36)** — MVP SaaS
+   - Option C: **extended (60)** — production SaaS
+   - Option D: **custom** — ระบุเอง (ตามด้วย comma-separated list)
+
+2. **เลือก icon library** — หรือให้ skill เลือกตาม mood?
+   - Option A: **ใช้ mood-default** (อ่าน `mood.primary` แล้ว apply mood map)
+   - Option B: **Phosphor** / **Tabler** / **Heroicons** / **Lucide** / **Iconoir** / **Material Symbols** / **Bootstrap** / **Remix** (multiSelect: false — pick one)
+
+Rules:
+- ห้าม default scope=starter เงียบๆ — ถ้า user ไม่ตอบ ABORT พร้อม error: "scope is required — re-run with /design-icon-builder scope=starter|common|extended|custom"
+- ถ้า user เลือก `custom` → ถาม follow-up: "ระบุ icon concepts (comma-separated):" (free text)
+- ถ้า args `scope=` AND `library=` ถูกส่งมาตอนเรียก skill → SKIP Phase 0 (treat as explicit choice)
 
 ### 1. Load source
 - Default: `./design.md` (split-architecture)

@@ -1,6 +1,6 @@
 # UXUI Skill Library
 
-28 skills สำหรับทีม Designer ใช้ Claude Code ร่วมกับ Figma
+29 skills + Team Rules สำหรับทีม Designer ใช้ Claude Code ร่วมกับ Figma
 
 ## วิธี Setup
 
@@ -42,7 +42,42 @@ claude plugin install uxui-skills
 
 ---
 
-## Skills ที่มี (28 skills)
+## ⚡ Team Rules — กฎกลางทีม (สำคัญ)
+
+หลัง install skills เสร็จ ติดตั้ง **Team Rules** ด้วย — กฎกลาง 13 ข้อที่ Claude apply ทุก session ทุก project
+
+| Layer | Rules |
+|---|---|
+| 🔒 Security | 1-6 (secret handling, scan ก่อน commit, rotation, incident response) |
+| 🎯 Engineering | 7-11 (NO MAGIC, VERIFY BEFORE DONE, DISSENT, SCOPE DRIFT, R0/R1/R2) |
+| 📚 Persistence | 12-13 (per-project `MEMORY.md` + `spec.md` — กันลืม / กัน /clear) |
+
+### ติดตั้ง (ทำครั้งเดียว)
+
+```bash
+git clone https://github.com/sittipons-ike/uxui-skill-library.git
+cd uxui-skill-library
+bash team-rules/install-team-rules.sh
+```
+
+Script จะ:
+1. Backup `~/.claude/CLAUDE.md` เดิม (ถ้ามี)
+2. Symlink `~/.claude/team-rules.md` → `<repo>/team-rules/CLAUDE.md`
+3. ใส่ `@~/.claude/team-rules.md` ใน `~/.claude/CLAUDE.md` (idempotent — รันซ้ำได้)
+
+### Update rules ในอนาคต
+
+```bash
+cd uxui-skill-library && git pull    # symlink ชี้ของจริง — auto sync ทุกเครื่อง
+```
+
+ดูเนื้อหา rules เต็ม → [team-rules/CLAUDE.md](team-rules/CLAUDE.md)
+
+> **Personal customization** — เพิ่ม section ของตัวเองท้าย `~/.claude/CLAUDE.md` ได้ — survive git pull (อยู่คนละไฟล์)
+
+---
+
+## Skills ที่มี (29 skills)
 
 ### UX / UI Design
 

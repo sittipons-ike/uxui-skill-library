@@ -23,13 +23,14 @@
 
 ---
 
-## ภาพรวม — ต้องทำ 4 อย่าง
+## ภาพรวม — ต้องทำ 5 อย่าง
 
 ```
 1. ติดตั้ง Node.js + Git
 2. ติดตั้ง Claude Code Desktop
 3. ต่อ Figma เข้า Claude (แก้ไฟล์ config)
-4. ลง Skills ของทีม (claude plugin install) → จากนั้น /check-setup
+4. ลง Skills ของทีม (claude plugin install)
+5. ลง Team Rules (กฎกลาง — apply ทุก session) → จากนั้น /check-setup
 ```
 
 > **ตัวเสริม (ไม่บังคับ):** ลง Design Skills จาก impeccable.style — เพิ่ม skills ด้าน visual design เช่น animate, polish, colorize
@@ -174,6 +175,48 @@ claude plugin install uxui-skills
 > **อัปเดต Skills ในอนาคต:** `claude plugin marketplace update`
 
 > **ทางเลือก** ถ้า network เปิด npm — `npx skills add sittipons-ike/uxui-skill-library`
+
+---
+
+## ขั้นตอนที่ 5 — ติดตั้ง Team Rules (สำคัญ — กฎกลางของทีม)
+
+**Team Rules คืออะไร** — กฎกลาง 13 ข้อที่ Claude apply ทุก session ทุก project:
+
+| Layer | Rules |
+|---|---|
+| 🔒 Security | 1-6 (secret handling, scan ก่อน commit, rotation) |
+| 🎯 Engineering | 7-11 (NO MAGIC, VERIFY BEFORE DONE, DISSENT, SCOPE, R0/R1/R2) |
+| 📚 Persistence | 12-13 (per-project `MEMORY.md` + `spec.md` — กันลืม / กัน /clear) |
+
+**ทำไมต้องลง** — กัน Claude เดา / ลืม / commit secret / บอก "เสร็จ" ทั้งที่ยังไม่ตรวจ
+
+### ติดตั้ง (ทำครั้งเดียว)
+
+```bash
+git clone https://github.com/sittipons-ike/uxui-skill-library.git
+cd uxui-skill-library
+bash team-rules/install-team-rules.sh
+```
+
+Script จะ:
+1. Backup `~/.claude/CLAUDE.md` เดิมไว้ (ถ้ามี)
+2. Symlink `~/.claude/team-rules.md` → `<repo>/team-rules/CLAUDE.md`
+3. ใส่ `@~/.claude/team-rules.md` ใน `~/.claude/CLAUDE.md` (idempotent)
+
+### Verify
+
+```bash
+head -5 ~/.claude/CLAUDE.md          # ต้องเห็นบรรทัด @~/.claude/team-rules.md
+readlink ~/.claude/team-rules.md     # ต้องชี้ไปที่ repo team-rules/CLAUDE.md
+```
+
+### อัปเดต Team Rules
+
+```bash
+cd uxui-skill-library && git pull    # จบ — symlink ชี้ของจริง รับ update auto
+```
+
+> **Personal customization** — ใส่ section ของตัวเองท้ายไฟล์ `~/.claude/CLAUDE.md` ได้ — ไม่หายตอน git pull (เพราะแก้คนละไฟล์)
 
 ---
 
