@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<title>UXUI Skills — Reference (B&W)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: #fff;
+    color: #000;
+    font-family: 'Inter', 'Noto Sans Thai', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .slide {
+    width: 1920px; height: 1080px;
+    background: #fff;
+    padding: 96px 120px;
+    display: flex; flex-direction: column;
+    page-break-after: always;
+  }
+  /* Header */
+  .head {
+    margin-bottom: 48px;
+    padding-bottom: 28px;
+    border-bottom: 2px solid #000;
+  }
+  .head__no {
+    font-size: 16px;
+    color: #666;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    margin-bottom: 12px;
+  }
+  .head__title {
+    font-size: 60px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: #000;
+  }
+  .head__count {
+    color: #999;
+    font-size: 18px;
+    margin-top: 12px;
+    font-weight: 500;
+  }
+
+  /* Grid for skills */
+  .list {
+    flex: 1;
+    display: grid;
+    gap: 32px;
+    align-content: center;
+  }
+  .list--2 { grid-template-columns: 1fr 1fr; }
+  .list--3 { grid-template-columns: 1fr 1fr 1fr; }
+  .list--1 { grid-template-columns: 1fr; }
+
+  .skill {
+    padding-bottom: 24px;
+    border-bottom: 1px solid #ccc;
+  }
+  .skill__name {
+    font-size: 30px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 8px;
+  }
+  .skill__desc {
+    font-size: 19px;
+    color: #444;
+    line-height: 1.5;
+  }
+
+  /* Cover slide */
+  .cover {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 200px;
+  }
+  .cover h1 {
+    font-size: 160px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: 40px;
+    color: #000;
+  }
+  .cover .sub {
+    font-size: 30px;
+    color: #444;
+    margin-bottom: 24px;
+  }
+  .cover .meta {
+    font-size: 18px;
+    color: #999;
+    letter-spacing: 0.06em;
+  }
+  .cover .badges {
+    display: flex;
+    gap: 80px;
+    margin-top: 80px;
+    justify-content: center;
+  }
+  .cover .badge {
+    text-align: center;
+  }
+  .cover .badge__n {
+    font-size: 96px;
+    font-weight: 800;
+    color: #000;
+    line-height: 1;
+  }
+  .cover .badge__l {
+    font-size: 16px;
+    color: #666;
+    margin-top: 12px;
+    letter-spacing: 0.18em;
+  }
+</style>
+</head>
+<body>
+
+<!-- 1 COVER -->
+<section class="slide cover">
+  <h1>UXUI Skills</h1>
+  <div class="sub">เอกสาร skill ทั้งหมดของทีม Designer</div>
+  <div class="meta">github.com/sittipons-ike/uxui-skill-library</div>
+
+  <div class="badges">
+    <div class="badge"><div class="badge__n">29</div><div class="badge__l">SKILLS</div></div>
+    <div class="badge"><div class="badge__n">7</div><div class="badge__l">CATEGORIES</div></div>
+  </div>
+</section>
+
+<!-- 2 DISCOVERY -->
+<section class="slide">
+  <div class="head">
+    <div class="head__no">02 · DISCOVERY</div>
+    <div class="head__title">เข้าใจปัญหา + วาง requirement</div>
+    <div class="head__count">5 skills</div>
+  </div>
+  <div class="list list--2">
+    <div class="skill">
+      <div class="skill__name">interview-me</div>
+      <div class="skill__desc">ถาม user ทีละข้อจนเข้าใจว่าจริงๆ ต้องการอะไร</div>
+    </div>
+    <div class="skill">
+      <div class="skill__name">prd</div>
+      <div class="skill__desc">เขียนเอกสาร requirement สำหรับ feature ใหม่</div>
+    </div>
+    <div class="skill">
+      <div class="skill__name">user-personas</div>
+      <div class="skill__desc">สร้าง persona ของ user จาก research</div>
+    </div>
+    <div class="skill">
+      <div class="skill__name">notion-planning</div>
+      <div class="skill__desc">วางแผนงานใน Notion — แตก task + assign</div>
+    </div>
+    <div class="skill">
+      <div class="skill__name">masterprompt</div>
+      <div class="skill__desc">แปลง idea ของคุณ → prompt ที่ AI ตัวอื่นทำงานต่อได้</div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 STRATEGY -->
+<section class="slide">
+  <div class="head">
+    <div class="head__no">03 · STRATEGY</div>
+    <div class="head__title">วาง UX flow + technical spec</div>
+    <div class="head__count">2 skills</div>
+  </div>
+  <div class="list list--1">
+    <div class="skill">
+      <div class="skill__name">ux-strategist</div>
+      <div class="skill__desc">วางลำดับขั้น user flow + edge cases ของ feature · มี diagram ให้เห็นภาพ</div>
+    </div>
+    <div class="skill">
+      <div class="skill__name">spec-driven-development</div>
+      <div class="skill__desc">เขียน spec ก่อนเริ่ม code — กัน dev เดาว่างานเสร็จเมื่อไหร่</div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 DS BASE -->
+<section class="slide">
+  <div class="head">
+    <div class="head__no">04 · DS BASE</div>
+    <div class="head__title">สร้าง Design System ของ project</div>
+    <div class="head__count">5 skills</div>
+  </div>
+  <div class="list list--2">
+    <div class="skill">
+      <div class="skill__name">design-builder</div>
+      <div class="skill__desc">สร้าง design system พื้นฐาน — color, font, spacing</div>
+    </div>
+    <div class="skill">
+      <div class="skill__name">design-icon-builder</div>
+      <div class="skill__desc">เลือก icon library + ดึง SVG มาใช้</div>
+    </div>
+    <div class="skill">
+      <div class="skill__name">design-component-builder</div>
+      <div class="skill__desc">สร้าง component library — button, input, card</div>
+    </div>
+    <div class="skill">
+      <div class="skill__name">design-md-audit</div>
+      <div class="skill__desc">ตรวจ design system ว่าครบ + ตรงตามมาตรฐาน WCAG</div>
+    </div>
+    <div class="skill">
+      <div class="skill__name">design-remix</div>
+      <div class="skill__desc">ผสม design จาก brand reference — "Linear + Notion"</div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 UI -->
+<section class="slide">
+  <div class="head">
+    <div class="head__no">05 · UI</div>
+    <div class="head__title">สร้าง pages + ส่งต่อ dev</div>
+    <div class="head__count">3 skills</div>
+  </div>
+  <div class="list list--1">
+    <div class="skill">
+      <div class="skill__name">design-ui-builder</div>
+      <div class="skill__desc">สร้าง pages ตาม blueprint — รวม component เป็นหน้าจอ</div>
+    </div>
+    <div class="skill">
+      <div class="skill__name">ui-implementation-specialist</div>
+      <div class="skill__desc">แปลง design → code-ready blueprint สำหรับ dev</div>
+    </div>
+    <div class="skill">
+      <div class="skill__name">frontend-ui-engineering</div>
+      <div class="skill__desc">รีวิว code ด้าน performance + accessibility</div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 COPY -->
+<section class="slide">
+  <div class="head">
+    <div class="head__no">06 · COPY + QA</div>
+    <div class="head__title">เขียน copy + ตรวจคุณภาพ</div>
+    <div class="head__count">4 skills</div>
+  </div>
+  <div class="list list--2">
+    <div class="skill">
+      <div class="skill__name">ux-writer</div>
+      <div class="skill__desc">เขียน microcopy — label, error, empty state</div>
+    </div>
+    <div class="skill">
+      <div class="skill__name">modal-writer</div>
+      <div class="skill__desc">เขียน Thai modal — Title + Body + 2 ปุ่ม</div>
+    </div>
+    <div class="skill">
+      <div class="skill__name">audit</div>
+      <div class="skill__desc">ตรวจคุณภาพ interface — a11y, performance, responsive</div>
+    </div>
+    <div class="skill">
+      <div class="skill__name">browser-testing-with-devtools</div>
+      <div class="skill__desc">ทดสอบ UI ใน browser จริง — DOM, network, console</div>
+    </div>
+  </div>
+</section>
+
+<!-- 7 HANDOFF Figma -->
+<section class="slide">
+  <div class="head">
+    <div class="head__no">07 · HANDOFF (Figma)</div>
+    <div class="head__title">ส่งงานเข้า Figma</div>
+    <div class="head__count">4 skills</div>
+  </div>
+  <div class="list list--2">
+    <div class="skill">
+      <div class="skill__name">figma-audit-ui</div>
+      <div class="skill__desc">ตรวจ Figma ว่าตรง Design System ก่อนส่งงาน</div>
+    </div>
+    <div class="skill">
+      <div class="skill__name">figma-push-tokens</div>
+      <div class="skill__desc">sync tokens เข้า Figma Variables (light + dark)</div>
+    </div>
+    <div class="skill">
+      <div class="skill__name">figma-push-components</div>
+      <div class="skill__desc">push component sets เข้า Figma — variant + state</div>
+    </div>
+    <div class="skill">
+      <div class="skill__name">figma-rename-tokens</div>
+      <div class="skill__desc">เปลี่ยนชื่อ Figma Variables ให้ตรงมาตรฐาน</div>
+    </div>
+  </div>
+</section>
+
+<!-- 8 HANDOFF Export -->
+<section class="slide">
+  <div class="head">
+    <div class="head__no">07 · HANDOFF (Export)</div>
+    <div class="head__title">Export + Launch</div>
+    <div class="head__count">3 skills</div>
+  </div>
+  <div class="list list--1">
+    <div class="skill">
+      <div class="skill__name">design-styleguide</div>
+      <div class="skill__desc">รวม component + page → single styleguide ดูที่เดียวจบ</div>
+    </div>
+    <div class="skill">
+      <div class="skill__name">design-export-dtcg</div>
+      <div class="skill__desc">export tokens → iOS / Android / Flutter / Tailwind</div>
+    </div>
+    <div class="skill">
+      <div class="skill__name">shipping-and-launch</div>
+      <div class="skill__desc">เตรียม launch checklist + monitoring</div>
+    </div>
+  </div>
+</section>
+
+<!-- 9 UTILITIES -->
+<section class="slide">
+  <div class="head">
+    <div class="head__no">08 · UTILITIES</div>
+    <div class="head__title">ตัวช่วยทั่วไป</div>
+    <div class="head__count">3 skills</div>
+  </div>
+  <div class="list list--1">
+    <div class="skill">
+      <div class="skill__name">check-setup</div>
+      <div class="skill__desc">เช็คว่าเครื่องลงครบ — Node, Git, Claude, Figma MCP</div>
+    </div>
+    <div class="skill">
+      <div class="skill__name">jira-tracker</div>
+      <div class="skill__desc">ติดตาม Jira sprint — แจ้ง Mon/Wed/Fri ผ่าน Lark</div>
+    </div>
+    <div class="skill">
+      <div class="skill__name">email-summarizer</div>
+      <div class="skill__desc">สรุป email ใน Gmail → ส่งเข้า Lark</div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 SUMMARY -->
+<section class="slide cover" style="padding: 96px 200px;">
+  <div style="text-align: center;">
+    <div style="font-size: 16px; color: #666; font-weight: 600; letter-spacing: 0.2em; margin-bottom: 16px;">SUMMARY</div>
+    <h1 style="font-size: 96px; margin-bottom: 48px;">29 skills · 7 หมวด</h1>
+    <div style="font-size: 26px; color: #444; line-height: 1.6; max-width: 1200px; margin: 0 auto;">
+      ทำงานเรียงตามลำดับ — Discovery → Strategy → DS Base → UI → Copy → Handoff<br><br>
+      หรือใช้ทีละ skill แยกตามต้องการ
+    </div>
+    <div style="margin-top: 80px; font-size: 18px; color: #999;">
+      ดูรายละเอียดเพิ่มเติม → README.md
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
