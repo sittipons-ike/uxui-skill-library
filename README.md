@@ -65,11 +65,16 @@ Script จะ:
 2. Symlink `~/.claude/team-rules.md` → `<repo>/team-rules/CLAUDE.md`
 3. ใส่ `@~/.claude/team-rules.md` ใน `~/.claude/CLAUDE.md` (idempotent — รันซ้ำได้)
 
-### Update rules ในอนาคต
+### Update rules + skills (รวบใน 1 command)
 
 ```bash
-cd uxui-skill-library && git pull    # symlink ชี้ของจริง — auto sync ทุกเครื่อง
+cd uxui-skill-library && bash update.sh
 ```
+
+Script ทำ:
+1. `git pull` — rules sync (symlink ชี้ของจริง)
+2. `npx skills add ...` — skills latest
+3. แนะนำให้รัน `/check-setup` verify
 
 ดูเนื้อหา rules เต็ม → [team-rules/CLAUDE.md](team-rules/CLAUDE.md)
 
@@ -152,18 +157,18 @@ npx skills add pbakaus/impeccable
 
 ---
 
-## อัปเดต Skills
+## อัปเดต Skills + Rules
 
-รันคำสั่งเดิมซ้ำ:
-
-**npx:**
-```
-npx skills add sittipons-ike/uxui-skill-library
+**วิธีเร็ว (รวบ 1 command):**
+```bash
+cd uxui-skill-library && bash update.sh
 ```
 
-**Plugin:**
-```
-claude plugin marketplace update
+**Manual (เลือก 1):**
+```bash
+npx skills add sittipons-ike/uxui-skill-library    # skills เท่านั้น
+claude plugin marketplace update                    # ผ่าน plugin
+cd uxui-skill-library && git pull                   # rules เท่านั้น
 ```
 
 ---

@@ -280,15 +280,21 @@ Rewrite copy ใน Figma นี้: [วาง Figma link]
 
 ---
 
-## อัปเดต Skills เมื่อทีม lead เพิ่ม skill ใหม่
+## อัปเดต Skills + Rules
 
-รันคำสั่งเดิมจากขั้นตอนที่ 4 ซ้ำได้เลย:
-
+**วิธีเร็ว (รวบ skills + rules ใน 1 command):**
+```bash
+cd uxui-skill-library && bash update.sh
 ```
-npx skills add sittipons-ike/uxui-skill-library
-```
 
-ดึง skill ใหม่ลงเครื่องให้อัตโนมัติ
+Script ทำให้ทั้ง:
+1. `git pull` — team-rules sync
+2. `npx skills add` — skills latest
+3. แนะนำให้รัน `/check-setup` verify
+
+**Manual (ถ้าอยากอัพเดทแยก):**
+- Skills เท่านั้น → `npx skills add sittipons-ike/uxui-skill-library`
+- Rules เท่านั้น → `cd uxui-skill-library && git pull`
 
 ---
 
