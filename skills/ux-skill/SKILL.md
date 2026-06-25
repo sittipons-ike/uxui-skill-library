@@ -1,7 +1,7 @@
 ---
 name: ux-strategist
-description: Analyze problems and create UX Blueprints with user flows, information architecture, edge cases, AND embedded Mermaid flow + decision diagrams (auto-rendered in GitHub/Notion). Phase 0 scans docs/intent/, docs/blueprints/, docs/product/, docs/brand/ — uses what's there as evidence to skip resolved fields. Scale-aware (feature default, also page/product). Saves to docs/blueprints/<feature>.md by default. Use when user asks to plan, structure, or strategize a new feature before UI design.
-version: 3.1.0
+description: Analyze problems and create UX Blueprints with user flows, information architecture, edge cases, AND embedded Mermaid flow + decision diagrams (auto-rendered in GitHub/Notion). Phase 0 scans docs/intent/, docs/blueprints/, docs/product/, docs/brand/ — uses what's there as evidence to skip resolved fields. Scale-aware (feature default, also page/product). Saves to docs/blueprints/ux-<feature>.md by default. Use when user asks to plan, structure, or strategize a new feature before UI design.
+version: 3.2.0
 category: Design/UX
 mcps_required: []
 mcps_optional: [atlassian]
@@ -63,9 +63,9 @@ Invoke this skill when user:
 Match the ask against one of:
 | Scale | Cues | Default output path |
 |---|---|---|
-| **feature** *(default)* | "เพิ่ม feature X", "redesign flow Y", "user journey" | `docs/blueprints/<feature>.md` |
-| **page** | "หน้า X", "1 screen", "redesign homepage" | `docs/blueprints/page-<name>.md` |
-| **product** | "ทั้ง app", "vision", "north-star structure" | `docs/blueprints/product-overview.md` |
+| **feature** *(default)* | "เพิ่ม feature X", "redesign flow Y", "user journey" | `docs/blueprints/ux-<feature>.md` |
+| **page** | "หน้า X", "1 screen", "redesign homepage" | `docs/blueprints/ux-page-<name>.md` |
+| **product** | "ทั้ง app", "vision", "north-star structure" | `docs/blueprints/ux-product-overview.md` |
 
 If ambiguous → ask 1 confirm question.
 
@@ -229,7 +229,7 @@ Note: `/flowchart` + `/mid-wireframe` ติดแค่บางเครื่
 
 ## 📤 Output Format (v3.0 — save by default)
 
-**Always save** to `docs/blueprints/<feature>.md` (path scale-aware — see Step 0.0).
+**Always save** to `docs/blueprints/ux-<feature>.md` (path scale-aware — see Step 0.0).
 
 ### Frontmatter
 
