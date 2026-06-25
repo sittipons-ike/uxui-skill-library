@@ -107,9 +107,21 @@
   เทียบกับ <a href="test-mermaid.md" style="color: var(--accent);">test-mermaid.md</a> (GitHub markdown clip 1-2 ตัวอักษร)
 </div>
 
-<h2>1. User Flow — Checkout One-Tap</h2>
+<div class="card" style="margin-bottom: 24px;">
+  <div class="card__label">COLOR CONVENTION (apply กับทุก diagram)</div>
+  <div style="display: flex; flex-wrap: wrap; gap: 12px 20px; font-size: 13px;">
+    <span><span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:#8B5CF6;vertical-align:middle;margin-right:6px;"></span>Start / End (round) — entry/exit</span>
+    <span><span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:#3B82F6;vertical-align:middle;margin-right:6px;"></span>Action (rect) — user does X</span>
+    <span><span style="display:inline-block;width:14px;height:14px;background:#F59E0B;transform:rotate(45deg);vertical-align:middle;margin-right:6px;"></span>Decision (diamond) — branch</span>
+    <span><span style="display:inline-block;width:14px;height:14px;border-radius:4px;background:#22C55E;vertical-align:middle;margin-right:6px;"></span>Success state</span>
+    <span><span style="display:inline-block;width:14px;height:14px;border-radius:4px;background:#EF4444;vertical-align:middle;margin-right:6px;"></span>Error state</span>
+    <span><span style="display:inline-block;width:14px;height:14px;border-radius:4px;background:#94A3B8;vertical-align:middle;margin-right:6px;"></span>Side path / fallback</span>
+  </div>
+</div>
+
+<h2>1. User Flow — Checkout One-Tap (color-coded)</h2>
 <div class="card">
-  <div class="card__label">FLOWCHART TD</div>
+  <div class="card__label">FLOWCHART TD · COLOR-CODED</div>
   <div class="mermaid">
 flowchart TD
     Start([เปิดหน้า Product])
@@ -137,12 +149,22 @@ flowchart TD
     Payment -->|No| AddPay
     AddPay --> Confirm
     Confirm --> Success
+
+    classDef startend fill:#8B5CF6,stroke:#6D28D9,color:#FFFFFF,stroke-width:2px
+    classDef action fill:#3B82F6,stroke:#1D4ED8,color:#FFFFFF,stroke-width:2px
+    classDef decision fill:#F59E0B,stroke:#B45309,color:#000000,stroke-width:2px
+    classDef sidepath fill:#94A3B8,stroke:#475569,color:#FFFFFF,stroke-width:2px
+
+    class Start,Success startend
+    class Cart,Login,Address,Payment decision
+    class Confirm action
+    class AddAddr,AddPay,Loginflow,EmptyState sidepath
   </div>
 </div>
 
-<h2>2. Decision Tree — Edge Cases</h2>
+<h2>2. Decision Tree — Edge Cases (สีแยกตาม semantic)</h2>
 <div class="card">
-  <div class="card__label">FLOWCHART LR</div>
+  <div class="card__label">FLOWCHART LR · COLOR-CODED</div>
   <div class="mermaid">
 flowchart LR
     Tap[User taps Buy Now]
@@ -161,7 +183,23 @@ flowchart LR
     Stock -->|Yes| Pay
     Pay -->|No| Failed
     Pay -->|Yes| Done
+
+    classDef action fill:#3B82F6,stroke:#1D4ED8,color:#FFFFFF,stroke-width:2px
+    classDef decision fill:#F59E0B,stroke:#B45309,color:#000000,stroke-width:2px
+    classDef success fill:#22C55E,stroke:#15803D,color:#FFFFFF,stroke-width:2px
+    classDef error fill:#EF4444,stroke:#B91C1C,color:#FFFFFF,stroke-width:2px
+
+    class Tap action
+    class Net,Stock,Pay decision
+    class Done success
+    class Retry,Sold,Failed error
   </div>
+</div>
+
+<div class="note" style="background: rgba(96, 165, 250, 0.08); border-left-color: #60A5FA;">
+  <strong>Color rules:</strong><br>
+  🔵 Action (blue) · 🟠 Decision (orange diamond) · 🟢 Success (green) · 🔴 Error (red)<br>
+  → designer + PO เห็น semantic ทันที ไม่ต้องอ่าน label
 </div>
 
 <h2>3. Sequence — API Interaction</h2>
@@ -186,32 +224,70 @@ sequenceDiagram
   </div>
 </div>
 
-<h2>4. State Diagram — Loading States (เคยมี bug ใน GitHub)</h2>
+<h2>4. State Diagram — Loading States (เปลี่ยนเป็น flowchart + color)</h2>
 <div class="card">
-  <div class="card__label">STATE DIAGRAM v2</div>
+  <div class="card__label">FLOWCHART (แทน stateDiagram) · COLOR-CODED</div>
   <div class="mermaid">
-stateDiagram-v2
-    [*] --> Idle
-    Idle --> Loading: User taps CTA
-    Loading --> Success: Response OK
-    Loading --> Error: Response fail
-    Error --> Loading: Tap retry
-    Success --> [*]
-    Error --> Idle: Tap cancel
+flowchart TD
+    Start([Start])
+    Idle[Idle state]
+    Loading[Loading state]
+    Success[Success state]
+    Error[Error state]
+    End([Done])
+
+    Start --> Idle
+    Idle -->|User taps CTA| Loading
+    Loading -->|Response OK| Success
+    Loading -->|Response fail| Error
+    Error -->|Tap retry| Loading
+    Error -->|Tap cancel| Idle
+    Success --> End
+
+    classDef startend fill:#8B5CF6,stroke:#6D28D9,color:#FFFFFF,stroke-width:2px
+    classDef idle fill:#94A3B8,stroke:#475569,color:#FFFFFF,stroke-width:2px
+    classDef loading fill:#F59E0B,stroke:#B45309,color:#000000,stroke-width:2px
+    classDef success fill:#22C55E,stroke:#15803D,color:#FFFFFF,stroke-width:2px
+    classDef error fill:#EF4444,stroke:#B91C1C,color:#FFFFFF,stroke-width:2px
+
+    class Start,End startend
+    class Idle idle
+    class Loading loading
+    class Success success
+    class Error error
   </div>
 </div>
 
-<h2>5. Thai text — flowchart</h2>
+<h2>5. Thai text — flowchart (color-coded)</h2>
 <div class="card">
-  <div class="card__label">FLOWCHART + THAI</div>
+  <div class="card__label">FLOWCHART + THAI · COLOR-CODED</div>
   <div class="mermaid">
 flowchart TD
-    A([เริ่มต้น]) --> B{มี Account?}
-    B -->|มี| C[เข้าหน้า Dashboard]
-    B -->|ไม่มี| D[หน้าลงทะเบียน]
-    D --> E[กรอก OTP]
+    A([เริ่มต้น])
+    B{มี Account?}
+    C[เข้าหน้า Dashboard]
+    D[หน้าลงทะเบียน]
+    E{กรอก OTP}
+    F[Block 5 นาที]
+
+    A --> B
+    B -->|มี| C
+    B -->|ไม่มี| D
+    D --> E
     E -->|สำเร็จ| C
-    E -->|ผิด 3 ครั้ง| F[Block 5 นาที]
+    E -->|ผิด 3 ครั้ง| F
+
+    classDef startend fill:#8B5CF6,stroke:#6D28D9,color:#FFFFFF,stroke-width:2px
+    classDef decision fill:#F59E0B,stroke:#B45309,color:#000000,stroke-width:2px
+    classDef success fill:#22C55E,stroke:#15803D,color:#FFFFFF,stroke-width:2px
+    classDef action fill:#3B82F6,stroke:#1D4ED8,color:#FFFFFF,stroke-width:2px
+    classDef error fill:#EF4444,stroke:#B91C1C,color:#FFFFFF,stroke-width:2px
+
+    class A startend
+    class B,E decision
+    class C success
+    class D action
+    class F error
   </div>
 </div>
 
