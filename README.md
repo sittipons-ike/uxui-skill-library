@@ -2,7 +2,7 @@
 
 29 skills + Team Rules สำหรับทีม Designer ใช้ Claude Code ร่วมกับ Figma
 
-## วิธี Setup
+## ก่อนติดตั้งสกิล ต้องมี 4 อย่างนี้
 
 ต้องมี 4 อย่างบนเครื่อง:
 
