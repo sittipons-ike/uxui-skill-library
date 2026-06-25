@@ -1,7 +1,8 @@
 ---
 name: modal-writer
-description: Write or review Thai modal copy (Title + Body + Primary CTA + Secondary CTA) for Desktop web apps following Thai UX writing standards. Covers 6 modal types — Confirmation (general/destructive), Success, Error, Info, Loading. Enforces verb+noun titles, action-mirrored CTAs, ≤80 char body, Double/Single button layout rules, WCAG 1.4.1 color+shape. Forbidden patterns auto-flagged (no "ยืนยัน" CTAs, no "?" in titles, no "กด" for Desktop, no jargon in body). Triggers on "เขียน modal", "modal copy", "modal text", "modal confirmation", "modal error", "review modal", "ตรวจ modal", "modal UX".
+description: Write or review Thai modal copy (Title + Body + Primary CTA + Secondary CTA) for Desktop web apps following Thai UX writing standards. Phase 0 auto-scans docs/brand/voice-tone.md for brand voice rules + docs/blueprints/ux-*.md for screen context. Covers 6 modal types — Confirmation (general/destructive), Success, Error, Info, Loading. Enforces verb+noun titles, action-mirrored CTAs, ≤80 char body, Double/Single button layout rules, WCAG 1.4.1 color+shape. Forbidden patterns auto-flagged (no "ยืนยัน" CTAs, no "?" in titles, no "กด" for Desktop, no jargon in body). Triggers on "เขียน modal", "modal copy", "modal text", "modal confirmation", "modal error", "review modal", "ตรวจ modal", "modal UX".
 license: MIT
+version: 2.0.0
 ---
 
 # Modal Writer (Thai UX)
@@ -237,11 +238,45 @@ Button:   ไม่มีปุ่ม
 
 ### Mode A — Write new modal (default)
 
-**Step 1: Gather context (ใช้ AskUserQuestion)**
+**Step 0: Phase 0 — Auto-scan brand voice + blueprint (v2.0 NEW)**
 
-ถามรอบเดียว 4-5 ข้อ:
-- Feature name?
-- Action (ผู้ใช้กำลังทำอะไร)?
+Before asking, scan project for context:
+
+| File | Provides |
+|---|---|
+| `docs/brand/voice-tone.md` | brand voice rules · forbidden words · tone constraints |
+| `docs/brand/brand-book.md` (fallback) | voice section if no voice-tone.md |
+| `docs/blueprints/ux-<feature>.md` | feature flow · which step triggers modal · user emotional state |
+| `docs/intent/<topic>.md` | user pain → emotional context for tone calibration |
+
+Show scan results:
+```
+PHASE 0 SCAN:
+  ✓ docs/brand/voice-tone.md
+    → voice: "concise, ตรงไปตรงมา, ไม่เร่งร้อน"
+    → forbidden: ['!', 'ตื่นเต้น', 'พิเศษสุด', 'wow']
+  ✓ docs/blueprints/ux-checkout.md
+    → step "Payment failed" → emotional: anxious
+    → user just lost flow state → tone: calm + actionable
+Pre-filled: voice rules, feature name, action context
+Asking only: modal type, reversible flag
+```
+
+Skip Step 1 AskUserQuestion params that docs already answered.
+
+**Source attribution** in every modal output:
+```
+[voice: docs/brand/voice-tone.md]
+[context: docs/blueprints/ux-checkout.md — "Payment failed" step]
+```
+
+---
+
+**Step 1: Gather context (ใช้ AskUserQuestion — only on gaps)**
+
+ถามเฉพาะที่ Phase 0 ยังไม่ resolved:
+- Feature name? *(skip if found in blueprint)*
+- Action (ผู้ใช้กำลังทำอะไร)? *(skip if blueprint step name available)*
 - Modal type (Confirmation / Destructive / Success / Error / Info / Loading)?
 - Reversible? (สำหรับ Confirmation)
 - Data ที่ต้องแสดง (ถ้ามี)?

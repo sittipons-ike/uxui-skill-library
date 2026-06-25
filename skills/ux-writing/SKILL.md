@@ -1,7 +1,7 @@
 ---
 name: ux-writer
 description: Craft clear, concise microcopy for UI — headlines, body text, CTAs, error messages. Use when user asks to write, rewrite, or review copy on a screen/flow.
-version: 2.0.0
+version: 2.1.0
 category: Design/UX
 mcps_required: []
 mcps_optional: [figma, atlassian]
@@ -56,6 +56,40 @@ Invoke this skill when user:
 ---
 
 ## 🔄 Execution Steps
+
+### Step 0: Phase 0 — Auto-scan brand voice + blueprint (v2.1 NEW)
+
+**Before context analysis**, scan project for context that pre-fills input params:
+
+| File | Provides |
+|---|---|
+| `docs/brand/voice-tone.md` | brand voice rules → `brand_voice_guide` |
+| `docs/brand/brand-book.md` (fallback) | voice section if no voice-tone.md |
+| `docs/blueprints/ux-<feature>.md` | screen flow + user emotional state per step |
+| `docs/intent/<topic>.md` | user pain points → emotional state cues |
+
+Show what was found:
+```
+PHASE 0 SCAN:
+  ✓ docs/brand/voice-tone.md
+    → voice: trustworthy, concise, no jargon
+    → forbidden words: ['ตื่นเต้น', '!', 'พิเศษสุด']
+  ✓ docs/blueprints/ux-checkout.md
+    → step "Payment fail" → user_emotional_state: anxious
+    → primary action: retry
+Pre-filled: brand_voice_guide, screen_context, action_goal
+Asking only: existing_copy (if rewriting)
+```
+
+Skip input params already resolved by docs.
+
+#### Source attribution (REQUIRED)
+
+Every copy variant cites source rules:
+- `[voice: docs/brand/voice-tone.md — "concise + warm"]`
+- `[context: docs/blueprints/ux-checkout.md — payment fail step]`
+
+→ Audit trail: PO รู้ว่า copy ตามแนวทาง brand ครบไหม
 
 ### Step 1: Context Analysis
 - Identify user's emotional state on this screen
