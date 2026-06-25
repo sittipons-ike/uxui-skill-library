@@ -165,13 +165,44 @@ Script ทำ: `git pull` (rules) → `npx skills add` (skills) → hint `/check
 
 ---
 
-### ตัวเสริม (ติดตั้งแยก)
+## 🧰 ตัวเสริมแนะนำ (ติดตั้งแยก — ไม่ใช่ skill ของทีม)
 
-`animate`, `polish`, `colorize`, `critique`, `adapt`, `arrange`, `bolder`, `clarify`, `distill`, `delight`, `extract`, `frontend-design`, `harden`, `normalize`, `onboard`, `optimize`, `overdrive`, `quieter`, `teach-impeccable`, `typeset`
+7 ตัวที่ designer ใช้บ่อย — ติดตั้งจาก Claude Code Plugin Marketplace
 
-```
+### ตรง designer
+
+| Skill | ทำอะไร | Install |
+|---|---|---|
+| **ui-ux-pro-max** | 161 palettes · 57 font pairs · 99 UX rules · CLI search design system | Plugin marketplace |
+| **figma-usability-review** | Nielsen 10 heuristics บน Figma (ไทย) — annotation บน canvas | Anthropic skills |
+| **accessibility-review** | a11y audit (WCAG 2.1/2.2 check) | design plugin |
+| **design-handoff** | dev handoff workflow + token export | design plugin |
+| **ux-copy** | UX copy review + microcopy patterns | design plugin |
+
+### ส่งงาน / present
+
+| Skill | ทำอะไร | Install |
+|---|---|---|
+| **pptx** | export slide deck (.pptx) | Anthropic skills |
+| **pdf** | สร้าง / อ่าน / แก้ PDF | Anthropic skills |
+
+### Visual design pack (impeccable)
+
+`animate` · `polish` · `colorize` · `critique` · `adapt` · `arrange` · `bolder` · `clarify` · `distill` · `delight` · `extract` · `frontend-design` · `harden` · `normalize` · `onboard` · `optimize` · `overdrive` · `quieter` · `teach-impeccable` · `typeset`
+
+```bash
 npx skills add pbakaus/impeccable
 ```
+
+> ตัวเสริมเหล่านี้ **ไม่ผ่าน team-rules update flow** — designer ต้องเลือก install เองตามใจ
+
+---
+
+## 📊 Pipeline Diagram
+
+ดู visual pipeline ของทั้ง 29 skills (7 phases · DS chain · trigger pattern):
+
+→ [docs/pipeline.html](docs/pipeline.html) — เปิดใน browser หรือ GitHub Preview
 
 ---
 

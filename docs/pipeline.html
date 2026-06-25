@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UXUI Skill Pipeline · 29 skills · 7 phases</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0F172A;
+    --bg-2: #1E293B;
+    --bg-3: #272F42;
+    --fg: #F8FAFC;
+    --fg-2: #CBD5E1;
+    --fg-3: #94A3B8;
+    --border: #334155;
+    --border-2: #475569;
+    --accent: #22C55E;
+    --accent-bg: rgba(34, 197, 94, 0.08);
+    --accent-border: rgba(34, 197, 94, 0.35);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 24px;
+    --space-6: 32px;
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #F8FAFC;
+      --bg-2: #FFFFFF;
+      --bg-3: #F1F5F9;
+      --fg: #0F172A;
+      --fg-2: #334155;
+      --fg-3: #64748B;
+      --border: #E2E8F0;
+      --border-2: #CBD5E1;
+      --accent: #16A34A;
+      --accent-bg: rgba(34, 197, 94, 0.10);
+      --accent-border: rgba(22, 163, 74, 0.35);
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Inter', 'Noto Sans Thai', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: var(--space-6) var(--space-5);
+  }
+  header {
+    margin-bottom: var(--space-6);
+  }
+  header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 var(--space-2);
+    letter-spacing: -0.01em;
+  }
+  header .meta {
+    color: var(--fg-3);
+    font-size: 13px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+  }
+  header .meta span::before { content: "·"; margin-right: var(--space-2); color: var(--border-2); }
+  header .meta span:first-child::before { content: ""; margin-right: 0; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: var(--space-5);
+  }
+  @media (max-width: 880px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+
+  /* Phase cards */
+  .phases { display: flex; flex-direction: column; gap: 0; }
+  .phase {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: var(--space-5);
+    position: relative;
+  }
+  .phase + .connector {
+    width: 2px;
+    height: 24px;
+    background: var(--border-2);
+    margin: 0 auto;
+    position: relative;
+  }
+  .phase + .connector::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid var(--border-2);
+  }
+  .phase.is-star {
+    background: var(--accent-bg);
+    border-color: var(--accent-border);
+  }
+  .phase__num {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--fg-3);
+    margin-bottom: var(--space-2);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+  .phase.is-star .phase__num { color: var(--accent); }
+  .star {
+    color: var(--accent);
+    font-size: 13px;
+  }
+  .phase__title {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 var(--space-2);
+    color: var(--fg);
+  }
+  .phase__desc {
+    color: var(--fg-3);
+    font-size: 13px;
+    margin: 0 0 var(--space-4);
+  }
+  .skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 12.5px;
+    font-weight: 500;
+    background: var(--bg-3);
+    color: var(--fg-2);
+    border: 1px solid var(--border);
+    font-family: 'Inter', monospace;
+  }
+  .pill.is-primary {
+    background: var(--bg);
+    color: var(--fg);
+    border-color: var(--border-2);
+  }
+  .phase.is-star .pill.is-primary {
+    border-color: var(--accent-border);
+    color: var(--fg);
+  }
+  .pill__dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--fg-3);
+  }
+  .phase.is-star .pill__dot { background: var(--accent); }
+
+  /* Pipeline within phase 3 (DS chain) */
+  .chain {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .chain__step {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    background: var(--bg-2);
+    border: 1px solid var(--accent-border);
+    border-radius: var(--radius-sm);
+  }
+  .chain__num {
+    width: 22px; height: 22px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    display: grid; place-items: center;
+  }
+  .chain__name { font-weight: 600; font-size: 13.5px; color: var(--fg); }
+  .chain__out {
+    margin-left: auto;
+    font-size: 11.5px;
+    color: var(--fg-3);
+    font-family: 'Inter', monospace;
+  }
+
+  /* Sidebar */
+  aside { display: flex; flex-direction: column; gap: var(--space-4); }
+  .card {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: var(--space-4);
+  }
+  .card__label {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    color: var(--fg-3);
+    margin-bottom: var(--space-3);
+  }
+  .card__list { margin: 0; padding: 0; list-style: none; }
+  .card__list li {
+    padding: 7px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .card__list li:last-child { border-bottom: 0; }
+  .card__list strong {
+    color: var(--fg);
+    font-weight: 600;
+  }
+  .card__list span { color: var(--fg-3); font-size: 11.5px; }
+
+  .triggers code {
+    display: block;
+    background: var(--bg-3);
+    border-radius: 6px;
+    padding: 6px 10px;
+    color: var(--fg);
+    font-size: 12px;
+    font-family: 'Inter', monospace;
+    margin-bottom: 6px;
+  }
+  .triggers code:last-child { margin-bottom: 0; }
+
+  .legend { display: flex; gap: var(--space-3); align-items: center; flex-wrap: wrap; }
+  .legend__item { display: flex; align-items: center; gap: var(--space-2); font-size: 12px; color: var(--fg-3); }
+  .legend__swatch {
+    width: 14px; height: 14px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+  .legend__swatch.is-star { background: var(--accent-bg); border-color: var(--accent-border); }
+  .legend__swatch.is-std { background: var(--bg-2); }
+
+  footer {
+    margin-top: var(--space-6);
+    color: var(--fg-3);
+    font-size: 12.5px;
+    line-height: 1.7;
+    border-top: 1px solid var(--border);
+    padding-top: var(--space-4);
+  }
+  footer a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  footer a:hover { text-decoration: underline; }
+
+  /* a11y */
+  *:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+  @media (prefers-reduced-motion: no-preference) {
+    .pill { transition: background-color 200ms ease, border-color 200ms ease; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <h1>UXUI Skill Pipeline</h1>
+    <div class="meta">
+      <span>29 skills</span>
+      <span>7 phases</span>
+      <span>Discovery → Launch</span>
+      <span>github.com/sittipons-ike/uxui-skill-library</span>
+    </div>
+  </header>
+
+  <div class="grid">
+
+    <!-- Main column · phases -->
+    <main class="phases">
+
+      <!-- PHASE 1 -->
+      <section class="phase">
+        <div class="phase__num">PHASE 1 · DISCOVERY</div>
+        <h2 class="phase__title">เข้าใจปัญหา + วาง requirement</h2>
+        <p class="phase__desc">ดึง intent · วาง persona · เขียน PRD · plan sprint</p>
+        <div class="skills">
+          <span class="pill is-primary"><span class="pill__dot"></span>interview-me</span>
+          <span class="pill"><span class="pill__dot"></span>user-personas</span>
+          <span class="pill"><span class="pill__dot"></span>prd</span>
+          <span class="pill"><span class="pill__dot"></span>notion-planning</span>
+          <span class="pill"><span class="pill__dot"></span>masterprompt</span>
+        </div>
+      </section>
+      <div class="connector"></div>
+
+      <!-- PHASE 2 -->
+      <section class="phase">
+        <div class="phase__num">PHASE 2 · UX STRATEGY</div>
+        <h2 class="phase__title">วาง flow + IA + spec</h2>
+        <p class="phase__desc">user journey · information architecture · spec ก่อน design</p>
+        <div class="skills">
+          <span class="pill is-primary"><span class="pill__dot"></span>ux-strategist</span>
+          <span class="pill"><span class="pill__dot"></span>spec-driven-development</span>
+        </div>
+      </section>
+      <div class="connector"></div>
+
+      <!-- PHASE 3 ★ -->
+      <section class="phase is-star">
+        <div class="phase__num">PHASE 3 · DESIGN SYSTEM <span class="star">★</span></div>
+        <h2 class="phase__title">สร้าง DS — tokens → atoms → pages</h2>
+        <p class="phase__desc">7 skills · pipeline ใน pipeline · ของชิ้นเอกของทีม</p>
+        <div class="chain">
+          <div class="chain__step">
+            <div class="chain__num">1</div>
+            <div class="chain__name">design-builder</div>
+            <div class="chain__out">→ design.md</div>
+          </div>
+          <div class="chain__step">
+            <div class="chain__num">2</div>
+            <div class="chain__name">design-icon-builder</div>
+            <div class="chain__out">→ ./icons/*.svg</div>
+          </div>
+          <div class="chain__step">
+            <div class="chain__num">3</div>
+            <div class="chain__name">design-component-builder</div>
+            <div class="chain__out">→ components.json + HTML</div>
+          </div>
+          <div class="chain__step">
+            <div class="chain__num">4</div>
+            <div class="chain__name">design-ui-builder</div>
+            <div class="chain__out">→ ui.json + patterns.json</div>
+          </div>
+          <div class="chain__step">
+            <div class="chain__num">5</div>
+            <div class="chain__name">design-md-audit</div>
+            <div class="chain__out">→ validate ทุก spec</div>
+          </div>
+          <div class="chain__step">
+            <div class="chain__num">6</div>
+            <div class="chain__name">design-styleguide</div>
+            <div class="chain__out">→ styleguide.html</div>
+          </div>
+          <div class="chain__step">
+            <div class="chain__num">7</div>
+            <div class="chain__name">design-remix</div>
+            <div class="chain__out">→ mix brand refs</div>
+          </div>
+        </div>
+      </section>
+      <div class="connector"></div>
+
+      <!-- PHASE 4 -->
+      <section class="phase">
+        <div class="phase__num">PHASE 4 · IMPLEMENTATION</div>
+        <h2 class="phase__title">แปลง spec → code-ready</h2>
+        <p class="phase__desc">map blueprint · component patterns · performance</p>
+        <div class="skills">
+          <span class="pill is-primary"><span class="pill__dot"></span>ui-implementation-specialist</span>
+          <span class="pill"><span class="pill__dot"></span>frontend-ui-engineering</span>
+        </div>
+      </section>
+      <div class="connector"></div>
+
+      <!-- PHASE 5 -->
+      <section class="phase">
+        <div class="phase__num">PHASE 5 · QA + POLISH</div>
+        <h2 class="phase__title">ตรวจคุณภาพ + เขียน copy</h2>
+        <p class="phase__desc">a11y · responsive · modal copy · microcopy · browser test</p>
+        <div class="skills">
+          <span class="pill is-primary"><span class="pill__dot"></span>audit</span>
+          <span class="pill is-primary"><span class="pill__dot"></span>modal-writer</span>
+          <span class="pill"><span class="pill__dot"></span>ux-writer</span>
+          <span class="pill"><span class="pill__dot"></span>browser-testing-with-devtools</span>
+        </div>
+      </section>
+      <div class="connector"></div>
+
+      <!-- PHASE 6 ★ -->
+      <section class="phase is-star">
+        <div class="phase__num">PHASE 6 · HANDOFF + EXPORT <span class="star">★</span></div>
+        <h2 class="phase__title">ส่งงาน Figma / Dev / Mobile</h2>
+        <p class="phase__desc">DS compliance · sync Figma vars · DTCG export</p>
+        <div class="skills">
+          <span class="pill is-primary"><span class="pill__dot"></span>figma-audit-ui</span>
+          <span class="pill is-primary"><span class="pill__dot"></span>figma-push-tokens</span>
+          <span class="pill is-primary"><span class="pill__dot"></span>figma-push-components</span>
+          <span class="pill"><span class="pill__dot"></span>figma-rename-tokens</span>
+          <span class="pill"><span class="pill__dot"></span>design-styleguide</span>
+          <span class="pill is-primary"><span class="pill__dot"></span>design-export-dtcg</span>
+        </div>
+      </section>
+      <div class="connector"></div>
+
+      <!-- PHASE 7 -->
+      <section class="phase">
+        <div class="phase__num">PHASE 7 · LAUNCH</div>
+        <h2 class="phase__title">เตรียม go-live</h2>
+        <p class="phase__desc">checklist · pre-launch · monitoring</p>
+        <div class="skills">
+          <span class="pill is-primary"><span class="pill__dot"></span>shipping-and-launch</span>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Sidebar -->
+    <aside>
+
+      <div class="card">
+        <div class="card__label">UTILITIES (ALWAYS-ON)</div>
+        <ul class="card__list">
+          <li><strong>check-setup</strong><span>ครั้งแรก · เช็ค prerequisites</span></li>
+          <li><strong>jira-tracker</strong><span>sprint monitor · Mon/Wed/Fri</span></li>
+          <li><strong>email-summarizer</strong><span>Gmail digest → Lark</span></li>
+          <li><strong>design-md-audit</strong><span>validate spec ตลอดทาง</span></li>
+          <li><strong>masterprompt</strong><span>idea → structured prompt</span></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card__label">FLOW EXAMPLE — DS PROJECT</div>
+        <ul class="card__list">
+          <li><strong>1. interview-me</strong><span>ดึง brand intent</span></li>
+          <li><strong>2. design-builder</strong><span>→ design.md (tokens)</span></li>
+          <li><strong>3. design-icon-builder</strong><span>→ ./icons/*.svg</span></li>
+          <li><strong>4. design-component-builder</strong><span>→ components.json</span></li>
+          <li><strong>5. design-ui-builder</strong><span>→ ui.json + patterns.json</span></li>
+          <li><strong>6. figma-push-tokens</strong><span>→ Figma Variables</span></li>
+        </ul>
+      </div>
+
+      <div class="card triggers">
+        <div class="card__label">TRIGGER PATTERN</div>
+        <p style="margin: 0 0 var(--space-3); color: var(--fg-3); font-size: 12px;">พิมพ์ใน Claude Code ตามใจ — auto match skill:</p>
+        <code>"สร้าง design.md"</code>
+        <code>"build components"</code>
+        <code>"ตรวจ Figma DS"</code>
+        <code>"เขียน modal warning"</code>
+        <code>"audit interface"</code>
+      </div>
+
+      <div class="card">
+        <div class="card__label">LEGEND</div>
+        <div class="legend">
+          <div class="legend__item">
+            <span class="legend__swatch is-star"></span>
+            ★ Key phase
+          </div>
+          <div class="legend__item">
+            <span class="legend__swatch is-std"></span>
+            Standard
+          </div>
+        </div>
+      </div>
+
+    </aside>
+
+  </div>
+
+  <footer>
+    <p><strong>★ = ของชิ้นเอก:</strong> Design System (Phase 3) + Handoff (Phase 6) — 2 phase ที่ทีมใช้ทำงานจริงบ่อยสุด</p>
+    <p>Pipeline เป็น guideline ไม่ใช่บังคับ — designer ข้าม / ย้อน / ทำคู่กันได้ ตามขอบเขตงาน</p>
+    <p>รายละเอียดเต็มแต่ละ skill → <a href="../README.md">README.md</a> · Team Rules → <a href="../team-rules/CLAUDE.md">team-rules/CLAUDE.md</a></p>
+  </footer>
+
+</div>
+</body>
+</html>
