@@ -1,6 +1,7 @@
 ---
 name: interview-me
-description: Extracts what the user actually wants instead of what they think they should want. Achieves this through one-question-at-a-time interview until ~95% confidence about the underlying intent. Use when an ask is underspecified ("build me X" without "for whom" or "why now"), when the user explicitly invokes ("interview me", "grill me", "are we sure?", "stress-test my thinking"), or when you catch yourself silently filling in ambiguous requirements before any plan, spec, or code exists.
+description: Extracts what the user actually wants instead of what they think they should want. Achieves this through one-question-at-a-time interview until ~95% confidence about the underlying intent. Phase 0 auto-scans docs/brand/, docs/product/, docs/intent/ for existing context — uses what's there as evidence to skip resolved dimensions, asks only on gaps. Saves output to docs/intent/<topic>.md by default for downstream skills (prd, design-builder, ux-strategist) to chain. Use when an ask is underspecified ("build me X" without "for whom" or "why now"), when the user explicitly invokes ("interview me", "grill me", "are we sure?", "stress-test my thinking"), or when you catch yourself silently filling in ambiguous requirements before any plan, spec, or code exists.
+version: 2.0.0
 ---
 
 # Interview Me
@@ -30,6 +31,63 @@ Apply this skill when:
 - Pure information requests ("how does X work?", "what does this code do?")
 - Mechanical operations (renames, formats, file moves)
 - You already have ≥95% confidence; re-read the stop condition below before assuming you don't
+
+## Phase 0 — Scan Existing Context (v2.0)
+
+**Before asking any question**, scan project for existing context. Skill becomes a `confidence-driven` interview, not a fixed script.
+
+### Step 0.1 — Scan directories
+
+Look for files in (in priority order):
+- `docs/brand/` — brand-book.md, voice-tone.md, palette.md (marketing-provided)
+- `docs/product/` — product-overview.md, positioning.md, target-users.md
+- `docs/intent/` — previous intent saves from this or earlier projects
+- Project root: `BRAND.md`, `PRODUCT.md`, `README.md` (top-level fallback)
+
+If nothing found → go straight to The Process (full interview).
+
+### Step 0.2 — Map doc coverage to intent dimensions
+
+Four dimensions interview-me checks:
+| Dimension | Doc-likely source | If doc covers it well |
+|---|---|---|
+| **WHO** (user/audience) | product-overview, target-users | confidence ↑↑ |
+| **WHY** (problem to solve) | product-overview, positioning | confidence ↑ |
+| **SUCCESS** (what done looks like) | rarely in branding | usually need to ask |
+| **CONSTRAINT** (timeline/scope/cost) | almost never in branding | always need to ask |
+
+For each dimension, score 0–100% from doc evidence. **Doc never gives 100%** — at most 90% (always confirm 1 round).
+
+### Step 0.3 — Decision matrix per dimension
+
+| Doc says | Age | Action |
+|---|---|---|
+| ตอบครบ + ชัด | <3 months | 1 confirm question (e.g. "doc บอกว่า persona = X. ยังใช่มั้ย?") |
+| ตอบครบ + เก่า | 3-12 months | 2-3 confirm rounds |
+| ตอบบางส่วน | any | ถาม gap dimension เท่านั้น |
+| ไม่ตอบ / no doc | any | full process for that dimension |
+
+### Step 0.4 — Conflict handling
+
+If user statement contradicts doc → **flag explicitly**:
+```
+HYPOTHESIS: docs/brand/brand-book.md says target is "Gen Z", 
+            but your ask suggests Boomer. 
+CONFIDENCE: 40% — need to resolve conflict before proceeding.
+Q: Doc บอก Gen Z แต่งานนี้ดูเหมือนทำ Boomer — อันไหนถูก? 
+   หรือเป็นสาขาใหม่?
+```
+
+### Step 0.5 — Source attribution
+
+When restating (Step 4), every dimension must cite source:
+- `[from docs/brand/brand-book.md]` — taken from doc
+- `[confirmed in chat]` — doc said + user confirmed
+- `[asked in interview]` — fresh from interview
+
+This becomes the audit trail in the saved intent file.
+
+---
 
 ## Loading Constraints
 
@@ -131,11 +189,63 @@ If yes, you have shared understanding. Stop interviewing and produce the restate
 
 This is a checkable test, not a vibe. It also has a floor: if you've gone several rounds and still can't predict, that's information about the ask, not a reason to keep grinding. Stop and tell the user: "I've asked X questions and I still can't predict your reactions. Something foundational is missing. Want to step back?"
 
-## Output
+## Output (v2.0 — save by default)
 
-The output of this skill is a **confirmed statement of intent**: the restate from Step 4, with an explicit yes from Step 5. That's the deliverable. Specs, plans, and task lists are downstream; they consume the intent this skill produces.
+Two outputs, **both produced every run**:
 
-If the user wants the intent to persist (a multi-session project, a handoff to another collaborator), offer to save it to `docs/intent/[topic].md`. Only save if they confirm.
+### 1. In-chat restate (primary deliverable)
+The confirmed statement of intent — restate from Step 4, with explicit yes from Step 5. Used immediately in this session.
+
+### 2. Saved intent file (default — for chain continuity)
+**Always save to `docs/intent/<topic>.md`** unless user explicitly says "don't save".
+
+Why save by default (changed from v1):
+- `/clear` or new session = restate lost → next skill (prd, design-builder) has no context → expensive re-interview
+- Team handoff: another designer / agent picks up where you left off
+- Audit trail: which decisions came from doc vs interview
+
+### Saved file format
+
+```markdown
+---
+topic: <slug>
+created: <YYYY-MM-DD>
+sources:
+  - docs/brand/brand-book.md            # cited evidence
+  - docs/product/product-overview.md
+  - chat-interview                       # net-new from this session
+confidence: 95%
+---
+
+# Intent: <restate one-liner>
+
+## WHO
+<who the user is> [source: brand-book.md]
+
+## WHY
+<problem to solve> [source: product-overview.md]
+
+## SUCCESS
+<what "done" looks like — measurable> [source: chat-interview]
+
+## CONSTRAINT
+<binding limits — timeline, scope, must-not> [source: chat-interview]
+
+## Notes
+<conflicts resolved, tradeoffs declared, hypotheses still open>
+```
+
+### Downstream chain
+
+Skills that read `docs/intent/<topic>.md`:
+- `prd` — Phase 0 scan, skip resolved questions
+- `design-builder` — path B (client assets) uses brand info
+- `ux-strategist` — flow design from WHO + WHY
+- `spec-driven-development` — spec writes against confirmed intent
+
+If user explicitly opts out of save (`"don't save"` or `--no-save`):
+- Skip file write
+- Warn: "intent lives in chat only — will be lost on /clear"
 
 ## Example
 
