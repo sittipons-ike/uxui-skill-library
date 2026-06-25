@@ -86,6 +86,8 @@ sequenceDiagram
 
 ## 4. State Diagram — Loading States
 
+### ⚠️ 4a. ปัญหา — stateDiagram-v2 render ใน GitHub มี bug clip text
+
 ```mermaid
 stateDiagram-v2
     [*] --> Idle
@@ -95,6 +97,46 @@ stateDiagram-v2
     Error --> Loading: Tap retry
     Success --> [*]
     Error --> Idle: Tap cancel
+```
+
+→ ตัวอักษรหายไป 1-2 ตัว (Idl/Loadi/Succe/Erro)
+
+### ✅ 4b. Fix 1 — state alias syntax (force longer label)
+
+```mermaid
+stateDiagram-v2
+    state "Idle (waiting)" as idle
+    state "Loading..." as loading
+    state "Success ✓" as success
+    state "Error ✗" as error
+    
+    [*] --> idle
+    idle --> loading: User taps CTA
+    loading --> success: Response OK
+    loading --> error: Response fail
+    error --> loading: Tap retry
+    success --> [*]
+    error --> idle: Tap cancel
+```
+
+### ✅ 4c. Fix 2 — ใช้ flowchart แทน (render เสถียรกว่ามาก) ⭐ แนะนำ
+
+```mermaid
+flowchart TD
+    Start([Start])
+    Idle[Idle state]
+    Loading[Loading state]
+    Success[Success state]
+    Error[Error state]
+    End([Done])
+    
+    Start --> Idle
+    Idle -->|User taps CTA| Loading
+    Loading -->|Response OK| Success
+    Loading -->|Response fail| Error
+    Error -->|Tap retry| Loading
+    Error -->|Tap cancel| Idle
+    Success --> End
 ```
 
 ---
