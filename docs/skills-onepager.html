@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<title>UXUI Skills — One-Pager (A4)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4 portrait; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: #fff;
+    color: #000;
+    font-family: 'Inter', 'Noto Sans Thai', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* A4 portrait at 96dpi = 794 × 1123 px */
+  .page {
+    width: 794px;
+    height: 1123px;
+    background: #fff;
+    padding: 36px 40px 32px;
+    display: flex;
+    flex-direction: column;
+    page-break-after: avoid;
+  }
+
+  /* Header */
+  .head {
+    border-bottom: 2px solid #000;
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .head__title {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    line-height: 1;
+  }
+  .head__sub {
+    font-size: 10px;
+    color: #666;
+    margin-top: 4px;
+  }
+  .head__meta {
+    font-size: 9px;
+    color: #888;
+    text-align: right;
+  }
+  .head__meta strong { color: #000; }
+
+  /* 2-column main grid */
+  .cols {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .col { display: flex; flex-direction: column; gap: 12px; }
+
+  .sec {
+    page-break-inside: avoid;
+  }
+  .sec__hdr {
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: #000;
+    border-bottom: 1px solid #000;
+    padding-bottom: 4px;
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+    text-transform: uppercase;
+  }
+  .sec__hdr span:last-child { color: #888; font-weight: 500; }
+
+  .skill {
+    display: grid;
+    grid-template-columns: minmax(0, max-content) 1fr;
+    gap: 8px;
+    padding: 3.5px 0;
+    align-items: baseline;
+  }
+  .skill__name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    font-weight: 600;
+    color: #000;
+    white-space: nowrap;
+  }
+  .skill__desc {
+    font-size: 8.5px;
+    color: #444;
+    line-height: 1.45;
+  }
+
+  /* Footer */
+  .foot {
+    border-top: 1px solid #ccc;
+    padding-top: 8px;
+    margin-top: 12px;
+    font-size: 8px;
+    color: #999;
+    display: flex;
+    justify-content: space-between;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- Header -->
+  <div class="head">
+    <div>
+      <div class="head__title">UXUI Skills · Reference</div>
+      <div class="head__sub">เอกสาร skill ทั้งหมดของทีม Designer — พิมพ์เป็นใบเดียว</div>
+    </div>
+    <div class="head__meta"><strong>29 skills · 7 หมวด</strong><br>github.com/sittipons-ike/uxui-skill-library</div>
+  </div>
+
+  <!-- Body -->
+  <div class="cols">
+
+    <!-- LEFT COLUMN -->
+    <div class="col">
+
+      <div class="sec">
+        <div class="sec__hdr"><span>01 · Discovery</span><span>5 skills</span></div>
+        <div class="skill"><span class="skill__name">/interview-me</span><span class="skill__desc">ถาม user ทีละข้อจนเข้าใจว่าจริงๆ ต้องการอะไร</span></div>
+        <div class="skill"><span class="skill__name">/prd</span><span class="skill__desc">เขียนเอกสาร requirement สำหรับ feature ใหม่</span></div>
+        <div class="skill"><span class="skill__name">/user-personas</span><span class="skill__desc">สร้าง persona ของ user จาก research</span></div>
+        <div class="skill"><span class="skill__name">/notion-planning</span><span class="skill__desc">วางแผนงานใน Notion — แตก task + assign</span></div>
+        <div class="skill"><span class="skill__name">/masterprompt</span><span class="skill__desc">แปลง idea → prompt ที่ AI ตัวอื่นทำงานต่อได้</span></div>
+      </div>
+
+      <div class="sec">
+        <div class="sec__hdr"><span>02 · Strategy</span><span>2 skills</span></div>
+        <div class="skill"><span class="skill__name">/ux-strategist</span><span class="skill__desc">วาง user flow + IA + edge case (มี diagram)</span></div>
+        <div class="skill"><span class="skill__name">/spec-driven-development</span><span class="skill__desc">เขียน spec ก่อน code — กัน dev เดาว่างานเสร็จเมื่อไหร่</span></div>
+      </div>
+
+      <div class="sec">
+        <div class="sec__hdr"><span>03 · DS Base</span><span>5 skills</span></div>
+        <div class="skill"><span class="skill__name">/design-builder</span><span class="skill__desc">สร้าง design system พื้นฐาน — color, font, spacing</span></div>
+        <div class="skill"><span class="skill__name">/design-icon-builder</span><span class="skill__desc">เลือก icon library + ดึง SVG มาใช้</span></div>
+        <div class="skill"><span class="skill__name">/design-component-builder</span><span class="skill__desc">สร้าง component — button, input, card</span></div>
+        <div class="skill"><span class="skill__name">/design-md-audit</span><span class="skill__desc">ตรวจ design system ครบ + WCAG</span></div>
+        <div class="skill"><span class="skill__name">/design-remix</span><span class="skill__desc">ผสม design จาก brand reference</span></div>
+      </div>
+
+      <div class="sec">
+        <div class="sec__hdr"><span>04 · UI</span><span>3 skills</span></div>
+        <div class="skill"><span class="skill__name">/design-ui-builder</span><span class="skill__desc">สร้าง pages ตาม blueprint — รวม component เป็นหน้า</span></div>
+        <div class="skill"><span class="skill__name">/ui-implementation-specialist</span><span class="skill__desc">แปลง design → code-ready blueprint สำหรับ dev</span></div>
+        <div class="skill"><span class="skill__name">/frontend-ui-engineering</span><span class="skill__desc">รีวิว code ด้าน performance + accessibility</span></div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="col">
+
+      <div class="sec">
+        <div class="sec__hdr"><span>05 · Copy + QA</span><span>4 skills</span></div>
+        <div class="skill"><span class="skill__name">/ux-writer</span><span class="skill__desc">เขียน microcopy — label, error, empty state</span></div>
+        <div class="skill"><span class="skill__name">/modal-writer</span><span class="skill__desc">เขียน Thai modal — Title + Body + 2 ปุ่ม</span></div>
+        <div class="skill"><span class="skill__name">/audit</span><span class="skill__desc">ตรวจคุณภาพ interface — a11y, perf, responsive</span></div>
+        <div class="skill"><span class="skill__name">/browser-testing-with-devtools</span><span class="skill__desc">ทดสอบ UI ใน browser จริง — DOM, network, console</span></div>
+      </div>
+
+      <div class="sec">
+        <div class="sec__hdr"><span>06 · Handoff · Figma</span><span>4 skills</span></div>
+        <div class="skill"><span class="skill__name">/figma-audit-ui</span><span class="skill__desc">ตรวจ Figma ว่าตรง Design System ก่อนส่งงาน</span></div>
+        <div class="skill"><span class="skill__name">/figma-push-tokens</span><span class="skill__desc">sync tokens เข้า Figma Variables (light + dark)</span></div>
+        <div class="skill"><span class="skill__name">/figma-push-components</span><span class="skill__desc">push component sets เข้า Figma — variant + state</span></div>
+        <div class="skill"><span class="skill__name">/figma-rename-tokens</span><span class="skill__desc">เปลี่ยนชื่อ Figma Variables ให้ตรงมาตรฐาน</span></div>
+      </div>
+
+      <div class="sec">
+        <div class="sec__hdr"><span>06 · Handoff · Export</span><span>3 skills</span></div>
+        <div class="skill"><span class="skill__name">/design-styleguide</span><span class="skill__desc">รวม component + page → single styleguide</span></div>
+        <div class="skill"><span class="skill__name">/design-export-dtcg</span><span class="skill__desc">export tokens → iOS / Android / Flutter / Tailwind</span></div>
+        <div class="skill"><span class="skill__name">/shipping-and-launch</span><span class="skill__desc">เตรียม launch checklist + monitoring</span></div>
+      </div>
+
+      <div class="sec">
+        <div class="sec__hdr"><span>07 · Utilities</span><span>3 skills</span></div>
+        <div class="skill"><span class="skill__name">/check-setup</span><span class="skill__desc">เช็คว่าเครื่องลงครบ — Node, Git, Claude, Figma MCP</span></div>
+        <div class="skill"><span class="skill__name">/jira-tracker</span><span class="skill__desc">ติดตาม Jira sprint — แจ้ง Mon/Wed/Fri ผ่าน Lark</div>
+        <div class="skill"><span class="skill__name">/email-summarizer</span><span class="skill__desc">สรุป email ใน Gmail → ส่งเข้า Lark</span></div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="foot">
+    <span>UXUI Skill Library · 2026-06-26 · ติดตั้ง: <code style="font-family:monospace;">bash team-rules/install-team-rules.sh</code></span>
+    <span>ทำงานเรียง: Discovery → Strategy → DS Base → UI → Copy → Handoff</span>
+  </div>
+
+</div>
+
+</body>
+</html>
