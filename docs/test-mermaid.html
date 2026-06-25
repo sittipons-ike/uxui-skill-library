@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mermaid Render Test — HTML (no GitHub clip bug)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0F172A;
+    --bg-2: #1E293B;
+    --fg: #F8FAFC;
+    --fg-2: #CBD5E1;
+    --fg-3: #94A3B8;
+    --border: #334155;
+    --accent: #22C55E;
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #F8FAFC;
+      --bg-2: #FFFFFF;
+      --fg: #0F172A;
+      --fg-2: #334155;
+      --fg-3: #64748B;
+      --border: #E2E8F0;
+      --accent: #16A34A;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Inter', 'Noto Sans Thai', system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+  .page { max-width: 1080px; margin: 0 auto; padding: 32px 24px; }
+  header { margin-bottom: 32px; }
+  h1 { font-size: 28px; font-weight: 700; margin: 0 0 8px; }
+  .meta { color: var(--fg-3); font-size: 13px; }
+  h2 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 32px 0 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  .card__label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    color: var(--fg-3);
+    margin-bottom: 12px;
+  }
+  .desc {
+    color: var(--fg-3);
+    font-size: 13px;
+    margin: 0 0 16px;
+  }
+  .mermaid {
+    background: var(--bg);
+    border-radius: 8px;
+    padding: 16px;
+    display: flex;
+    justify-content: center;
+    overflow: auto;
+  }
+  .note {
+    background: rgba(34, 197, 94, 0.08);
+    border-left: 3px solid var(--accent);
+    padding: 12px 16px;
+    border-radius: 4px;
+    color: var(--fg-2);
+    font-size: 13px;
+    margin-bottom: 24px;
+  }
+  footer {
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    color: var(--fg-3);
+    font-size: 12.5px;
+    line-height: 1.7;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header>
+  <h1>Mermaid Render Test — HTML (standalone)</h1>
+  <div class="meta">ใช้ mermaid.js โดยตรง — bypass GitHub markdown parser → ไม่มี clip bug</div>
+</header>
+
+<div class="note">
+  ✓ HTML version = render ผ่าน mermaid.js (CDN jsdelivr) → ทุก text ครบ · ทุก theme
+  เทียบกับ <a href="test-mermaid.md" style="color: var(--accent);">test-mermaid.md</a> (GitHub markdown clip 1-2 ตัวอักษร)
+</div>
+
+<h2>1. User Flow — Checkout One-Tap</h2>
+<div class="card">
+  <div class="card__label">FLOWCHART TD</div>
+  <div class="mermaid">
+flowchart TD
+    Start([เปิดหน้า Product])
+    Cart{มี item ใน cart?}
+    Login{Logged in?}
+    Address{มี address?}
+    Payment{มี payment?}
+    Confirm[Tap Buy Now]
+    Success([Order placed])
+    AddAddr[Add address flow]
+    AddPay[Add payment flow]
+    Loginflow[Login flow]
+    EmptyState[Empty cart state]
+
+    Start --> Cart
+    Cart -->|Yes| Login
+    Cart -->|No| EmptyState
+    Login -->|Yes| Address
+    Login -->|No| Loginflow
+    Loginflow --> Address
+    Address -->|Yes| Payment
+    Address -->|No| AddAddr
+    AddAddr --> Payment
+    Payment -->|Yes| Confirm
+    Payment -->|No| AddPay
+    AddPay --> Confirm
+    Confirm --> Success
+  </div>
+</div>
+
+<h2>2. Decision Tree — Edge Cases</h2>
+<div class="card">
+  <div class="card__label">FLOWCHART LR</div>
+  <div class="mermaid">
+flowchart LR
+    Tap[User taps Buy Now]
+    Net{Network OK?}
+    Stock{Stock available?}
+    Pay{Payment OK?}
+    Done([Success state])
+    Retry[Retry banner]
+    Sold[Sold-out toast]
+    Failed[Payment error modal]
+
+    Tap --> Net
+    Net -->|No| Retry
+    Net -->|Yes| Stock
+    Stock -->|No| Sold
+    Stock -->|Yes| Pay
+    Pay -->|No| Failed
+    Pay -->|Yes| Done
+  </div>
+</div>
+
+<h2>3. Sequence — API Interaction</h2>
+<div class="card">
+  <div class="card__label">SEQUENCE DIAGRAM</div>
+  <div class="mermaid">
+sequenceDiagram
+    autonumber
+    actor User
+    participant App
+    participant API
+    participant DB
+
+    User->>App: Tap Buy Now
+    App->>API: POST /checkout
+    API->>DB: Lock inventory
+    DB-->>API: Locked
+    API->>API: Charge payment
+    API-->>App: Order ID + receipt
+    App-->>User: Success screen
+    Note over User,App: Toast วางขายสำเร็จ
+  </div>
+</div>
+
+<h2>4. State Diagram — Loading States (เคยมี bug ใน GitHub)</h2>
+<div class="card">
+  <div class="card__label">STATE DIAGRAM v2</div>
+  <div class="mermaid">
+stateDiagram-v2
+    [*] --> Idle
+    Idle --> Loading: User taps CTA
+    Loading --> Success: Response OK
+    Loading --> Error: Response fail
+    Error --> Loading: Tap retry
+    Success --> [*]
+    Error --> Idle: Tap cancel
+  </div>
+</div>
+
+<h2>5. Thai text — flowchart</h2>
+<div class="card">
+  <div class="card__label">FLOWCHART + THAI</div>
+  <div class="mermaid">
+flowchart TD
+    A([เริ่มต้น]) --> B{มี Account?}
+    B -->|มี| C[เข้าหน้า Dashboard]
+    B -->|ไม่มี| D[หน้าลงทะเบียน]
+    D --> E[กรอก OTP]
+    E -->|สำเร็จ| C
+    E -->|ผิด 3 ครั้ง| F[Block 5 นาที]
+  </div>
+</div>
+
+<footer>
+  <p><strong>เปรียบเทียบ:</strong></p>
+  <ul>
+    <li>📄 <a href="test-mermaid.md" style="color: var(--accent);">test-mermaid.md</a> — GitHub markdown (มี clip bug)</li>
+    <li>🌐 <strong>test-mermaid.html (this)</strong> — standalone HTML (render ผ่าน mermaid.js · ครบทุกคำ)</li>
+  </ul>
+  <p style="margin-top: 16px;">
+    <strong>Conclusion:</strong> ถ้า ux-strategist v3.0 output Blueprint → save 2 forms:<br>
+    1. <code>docs/blueprints/&lt;feature&gt;.md</code> (Mermaid block — diff-able + good in Notion)<br>
+    2. <code>docs/blueprints/&lt;feature&gt;.html</code> (standalone — ไม่มี clip + present ได้)
+  </p>
+</footer>
+
+</div>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+  // Detect dark mode from system
+  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: isDark ? 'dark' : 'default',
+    securityLevel: 'loose',
+    flowchart: {
+      curve: 'basis',
+      padding: 20,
+      nodeSpacing: 50,
+      rankSpacing: 60,
+      useMaxWidth: true
+    },
+    sequence: {
+      useMaxWidth: true
+    },
+    themeVariables: {
+      fontFamily: 'Inter, Noto Sans Thai, system-ui, sans-serif',
+      fontSize: '14px'
+    }
+  });
+</script>
+</body>
+</html>
