@@ -1,5 +1,48 @@
 # Mermaid Render Test — UX Blueprint Sample
 
+> 🚨 **Known GitHub bug:** dark mode clip node text 1-2 ตัวอักษรท้าย
+> Workaround หลายตัว — เช็คด้านล่าง
+
+## 🧪 Hypothesis Test (อ่านก่อน scroll ลง)
+
+### H1: เพิ่ม trailing whitespace ใน text
+
+```mermaid
+flowchart TD
+    A["Start   "]
+    B["Idle state   "]
+    C["Loading state   "]
+    D["Success state   "]
+    A --> B --> C --> D
+```
+
+### H2: ใช้ longer text เพื่อ force width
+
+```mermaid
+flowchart TD
+    A([Start of flow here])
+    B[Idle waiting state]
+    C[Loading data from API]
+    D[Success — done]
+    A --> B --> C --> D
+```
+
+### H3: ใช้ `&nbsp;` padding (HTML entity)
+
+```mermaid
+flowchart TD
+    A([&nbsp;Start&nbsp;])
+    B[&nbsp;Idle&nbsp;state&nbsp;]
+    C[&nbsp;Loading&nbsp;]
+    D[&nbsp;Success&nbsp;]
+    A --> B --> C --> D
+```
+
+### H4: switch to Light mode (toggle GitHub theme top-right) — render ครบไหม?
+
+---
+
+
 > ทดสอบว่า GitHub render Mermaid block ได้ไหม + ใช้ Thai text ได้ไหม
 > ถ้าเห็น diagram = OK, ถ้าเห็น code block plain = ไม่ render
 
