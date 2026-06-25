@@ -1,7 +1,8 @@
 ---
 name: prd
-description: 'Generate high-quality Product Requirements Documents (PRDs) for software systems and AI-powered features. Includes executive summaries, user stories, technical specifications, and risk analysis.'
+description: 'Generate high-quality Product Requirements Documents (PRDs) for software systems and AI-powered features. Phase 0 auto-scans docs/intent/, docs/brand/, docs/product/ for existing context — skips already-answered questions, only asks on gaps. Cites sources in the final PRD. Includes executive summaries, user stories, technical specifications, and risk analysis. Chains downstream from interview-me (intent) and upstream to ux-strategist / design-builder.'
 license: MIT
+version: 2.0.0
 ---
 
 # Product Requirements Document (PRD)
@@ -22,11 +23,70 @@ Use this skill when:
 
 ## Operational Workflow
 
-### Phase 1: Discovery (ใช้ AskUserQuestion)
+### Phase 0: Scan Existing Context (v2.0 — REQUIRED before Phase 1)
 
-**MUST** ใช้ `AskUserQuestion` tool ถามรอบเดียว 3 คำถามพร้อมกัน — ห้ามถามทีละข้อ ห้ามเดา
+**Before AskUserQuestion**, scan project for existing docs that may have already answered some questions.
 
-คำถามที่ต้องถาม:
+#### Step 0.1 — Scan directories (priority order)
+
+| Folder / file | What it likely answers |
+|---|---|
+| `docs/intent/<topic>.md` | problem, success, user, constraint (highest priority — from interview-me) |
+| `docs/product/product-overview.md` | user, value prop, features, positioning |
+| `docs/brand/brand-book.md` | target audience, voice, brand-level constraint |
+| `BRAND.md` / `PRODUCT.md` / `README.md` (root) | fallback if no docs/ folder |
+
+If nothing found → skip to Phase 1 (full AskUserQuestion).
+
+#### Step 0.2 — Map doc coverage to Phase 1 questions
+
+3 questions Phase 1 asks:
+| Q | Likely doc source | Action if doc answers |
+|---|---|---|
+| **Q1 ปัญหาหลัก** | intent.md (WHY/SUCCESS), product-overview (problem) | skip Q1, cite source |
+| **Q2 KPI** | intent.md (SUCCESS), product-overview (metrics) | usually missing → ask anyway, but pre-fill default from doc |
+| **Q3 Target audience** | always asked — user-specific (stakeholder/dev/AI agent) — never in doc | always ask |
+
+#### Step 0.3 — Build reduced AskUserQuestion
+
+After scan:
+- If Q1 + Q2 both resolved by docs → ask only Q3 (1 question)
+- If Q1 resolved, Q2 partial → ask Q2 + Q3 (2 questions)
+- If nothing → full Phase 1 (3 questions)
+
+**Show user what was found before asking:**
+```
+PHASE 0 SCAN RESULTS:
+  ✓ docs/intent/checkout-revamp.md (created 2026-06-20)
+    → problem: cart abandonment 40%, success: <25% within Q3
+  ✓ docs/product/product-overview.md
+    → user: returning customers, value: faster checkout
+
+Skipping Q1 + Q2 (answered by docs above).
+Q3 only:
+```
+
+#### Step 0.4 — Conflict / staleness
+
+- If doc says X but user statement contradicts → **flag + ask clarify** before proceeding
+- If doc older than 3 months → confirm explicitly: "doc บอก X. ยังใช่มั้ย?"
+
+#### Step 0.5 — Source attribution in final PRD
+
+Every section in the output PRD must cite where its info came from:
+- `[source: docs/intent/<topic>.md]`
+- `[source: docs/product/product-overview.md]`
+- `[source: user — Phase 1 interview]`
+
+→ Audit trail: PR reviewer / stakeholder รู้ว่าอะไรมาจากไหน
+
+---
+
+### Phase 1: Discovery (ใช้ AskUserQuestion — only on gaps)
+
+**MUST** ใช้ `AskUserQuestion` tool ถามรอบเดียว — แต่ **ถามเฉพาะคำถามที่ Phase 0 ยังไม่ resolved**
+
+คำถามเต็ม (ถ้า doc ไม่ตอบเลย):
 
 1. **ปัญหาหลัก** — user ติด friction ตรงไหน? หรืออยากได้ feature อะไร?
    - ให้ user พิมพ์เอง (free text)
