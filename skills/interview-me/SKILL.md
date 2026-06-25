@@ -1,7 +1,7 @@
 ---
 name: interview-me
 description: Extracts what the user actually wants instead of what they think they should want. Achieves this through one-question-at-a-time interview until ~95% confidence about the underlying intent. Phase 0 auto-scans docs/brand/, docs/product/, docs/intent/ for existing context — uses what's there as evidence to skip resolved dimensions, asks only on gaps. Saves output to docs/intent/<topic>.md by default for downstream skills (prd, design-builder, ux-strategist) to chain. Use when an ask is underspecified ("build me X" without "for whom" or "why now"), when the user explicitly invokes ("interview me", "grill me", "are we sure?", "stress-test my thinking"), or when you catch yourself silently filling in ambiguous requirements before any plan, spec, or code exists.
-version: 2.0.0
+version: 2.1.0
 ---
 
 # Interview Me
@@ -32,9 +32,39 @@ Apply this skill when:
 - Mechanical operations (renames, formats, file moves)
 - You already have ≥95% confidence; re-read the stop condition below before assuming you don't
 
-## Phase 0 — Scan Existing Context (v2.0)
+## Phase 0 — Scale Detection + Scan Existing Context (v2.1)
 
-**Before asking any question**, scan project for existing context. Skill becomes a `confidence-driven` interview, not a fixed script.
+**Before asking any question**, do two things in order:
+1. **Detect scale** of the ask (product / feature / page / task)
+2. **Scan project** for existing context at that scale
+
+Skill becomes a `confidence-driven, scale-aware` interview — different dimensions per scale.
+
+---
+
+### Step 0.0 — Detect scale (NEW in v2.1)
+
+Pattern-match the user's ask against 4 scales. Each scale has its own dimension set:
+
+| Scale | Cues / triggers | Dimension set (what to extract) |
+|---|---|---|
+| **product** | "สร้าง app / platform / SaaS", "new product", vision-level, "north-star metric" | VISION · MARKET · NORTH-STAR · CORE PERSONA · MOAT |
+| **feature** | "เพิ่ม feature X", "ใหม่ checkout flow", "redesign onboarding", "MVP scope" | WHO · WHY · SUCCESS · CONSTRAINT (default — current 4 dims) |
+| **page** | "หน้า landing", "redesign homepage", "1 screen for X", "ปรับ page Y" | PURPOSE · PRIMARY ACTION · IA · ENTRY CONTEXT · EXIT |
+| **task** | "เลือก library ไหน", "ตัดสินใจ A vs B", "ควรใช้ X ดีไหม", one-off decision | OPTIONS · CRITERIA · TIE-BREAKER · CONSTRAINT |
+
+**If ambiguous** → ask first round to nail scale before continuing:
+```
+HYPOTHESIS: Sounds like a feature-level ask ("add checkout flow"), 
+            not a product-level one.
+CONFIDENCE: 60% — could be wider (whole checkout redesign) 
+            or narrower (just the success page).
+Q: ขอบเขตที่คิดอยู่ — เพิ่ม feature นึง (feature scale), 
+   รื้อทั้ง checkout (product-scope feature), 
+   หรือแค่หน้า success (page scale)?
+```
+
+**Once scale confirmed** → use the dimension set for that scale in all subsequent steps (Step 1 hypothesis, Step 4 restate, Output template).
 
 ### Step 0.1 — Scan directories
 
@@ -46,15 +76,43 @@ Look for files in (in priority order):
 
 If nothing found → go straight to The Process (full interview).
 
-### Step 0.2 — Map doc coverage to intent dimensions
+### Step 0.2 — Map doc coverage to intent dimensions (scale-aware)
 
-Four dimensions interview-me checks:
+Use the dimension set from the scale detected in Step 0.0:
+
+**For `feature` scale (most common default):**
 | Dimension | Doc-likely source | If doc covers it well |
 |---|---|---|
-| **WHO** (user/audience) | product-overview, target-users | confidence ↑↑ |
-| **WHY** (problem to solve) | product-overview, positioning | confidence ↑ |
+| **WHO** (user/audience) | product-overview, target-users, personas | confidence ↑↑ |
+| **WHY** (problem to solve) | product-overview, intent of related features | confidence ↑ |
 | **SUCCESS** (what done looks like) | rarely in branding | usually need to ask |
 | **CONSTRAINT** (timeline/scope/cost) | almost never in branding | always need to ask |
+
+**For `product` scale:**
+| Dimension | Doc source | Coverage |
+|---|---|---|
+| VISION | brand-book, founding doc | confidence ↑↑ if exists |
+| MARKET | product-overview, competitive-brief | confidence ↑ |
+| NORTH-STAR | usually missing | almost always ask |
+| CORE PERSONA | personas.md | confidence ↑↑ |
+| MOAT (defensibility) | rarely written | almost always ask |
+
+**For `page` scale:**
+| Dimension | Doc source | Coverage |
+|---|---|---|
+| PURPOSE | blueprints/<feature>.md | confidence ↑↑ |
+| PRIMARY ACTION | prd.md (user stories) | confidence ↑ |
+| IA (sections) | blueprints/<feature>.md | confidence ↑ |
+| ENTRY CONTEXT | flow doc | confidence ↑ |
+| EXIT | flow doc | confidence ↑ |
+
+**For `task` scale (decision):**
+| Dimension | Doc source | Coverage |
+|---|---|---|
+| OPTIONS being considered | rarely written | usually ask |
+| CRITERIA for choice | depends — sometimes in spec.md | partial |
+| TIE-BREAKER | almost never | always ask |
+| CONSTRAINT (must-have / must-avoid) | sometimes in CLAUDE.md / engineering doc | partial |
 
 For each dimension, score 0–100% from doc evidence. **Doc never gives 100%** — at most 90% (always confirm 1 round).
 
@@ -206,9 +264,11 @@ Why save by default (changed from v1):
 
 ### Saved file format
 
-```markdown
+**Frontmatter (all scales):**
+```yaml
 ---
 topic: <slug>
+scale: product | feature | page | task
 created: <YYYY-MM-DD>
 sources:
   - docs/brand/brand-book.md            # cited evidence
@@ -216,7 +276,12 @@ sources:
   - chat-interview                       # net-new from this session
 confidence: 95%
 ---
+```
 
+**Body — sections depend on scale:**
+
+`scale: feature` (default):
+```markdown
 # Intent: <restate one-liner>
 
 ## WHO
@@ -233,6 +298,41 @@ confidence: 95%
 
 ## Notes
 <conflicts resolved, tradeoffs declared, hypotheses still open>
+```
+
+`scale: product`:
+```markdown
+# Intent: <product vision one-liner>
+
+## VISION       [source]
+## MARKET       [source]
+## NORTH-STAR   [source]
+## CORE PERSONA [source]
+## MOAT         [source]
+## Notes
+```
+
+`scale: page`:
+```markdown
+# Intent: <page purpose one-liner>
+
+## PURPOSE         [source]
+## PRIMARY ACTION  [source]
+## IA              [source]
+## ENTRY CONTEXT   [source]
+## EXIT            [source]
+## Notes
+```
+
+`scale: task`:
+```markdown
+# Intent: <decision one-liner>
+
+## OPTIONS      [source]
+## CRITERIA     [source]
+## TIE-BREAKER  [source]
+## CONSTRAINT   [source]
+## Notes
 ```
 
 ### Downstream chain
