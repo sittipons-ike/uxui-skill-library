@@ -198,11 +198,12 @@ npx skills add pbakaus/impeccable
 
 ---
 
-## 📊 Pipeline Diagram
+## 📊 Pipeline Diagrams
 
-ดู visual pipeline ของทั้ง 29 skills (7 phases · DS chain · trigger pattern):
-
-→ [docs/pipeline.html](docs/pipeline.html) — เปิดใน browser หรือ GitHub Preview
+| Diagram | สำหรับ |
+|---|---|
+| [docs/pipeline.html](docs/pipeline.html) | **Overview** — 29 skills · 7 phases · ทีมเลือก skill ตาม phase |
+| [docs/data-flow.html](docs/data-flow.html) | **Data Flow** — skill ไหน output ไฟล์อะไร · skill ถัดไปอ่านอะไร |
 
 ---
 
