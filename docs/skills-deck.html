@@ -1,0 +1,606 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<title>UXUI Skill Reference — 29 skills</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @page { size: 1920px 1080px; margin: 0; }
+  :root {
+    --bg: #0F172A;
+    --bg-2: #1E293B;
+    --bg-3: #272F42;
+    --fg: #F8FAFC;
+    --fg-2: #CBD5E1;
+    --fg-3: #94A3B8;
+    --border: #334155;
+    --accent: #22C55E;
+    --c1: #8B5CF6; --c2: #3B82F6; --c3: #F59E0B; --c4: #22C55E;
+    --c5: #EC4899; --c6: #14B8A6; --c7: #F97316; --c8: #A78BFA;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: #000; color: var(--fg);
+    font-family: 'Inter', 'Noto Sans Thai', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .slide {
+    width: 1920px; height: 1080px;
+    background: var(--bg);
+    padding: 56px 64px 48px;
+    display: flex; flex-direction: column;
+    page-break-after: always;
+    page-break-inside: avoid;
+    position: relative;
+  }
+  .slide:last-child { page-break-after: auto; }
+
+  /* Header */
+  .head { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+  .head__no { font-size: 13px; color: var(--c, var(--accent)); font-weight: 700; letter-spacing: 0.18em; margin-bottom: 4px; }
+  .head__title { font-size: 42px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; }
+  .head__sub { font-size: 18px; color: var(--fg-3); margin-top: 6px; }
+  .head__meta { color: var(--fg-3); font-size: 14px; text-align: right; }
+  .head__meta strong { color: var(--c, var(--accent)); }
+
+  /* Grid for skill cards */
+  .grid { flex: 1; display: grid; gap: 18px; }
+  .grid--2 { grid-template-columns: 1fr 1fr; }
+  .grid--3 { grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr 1fr 1fr; }
+  .grid--2x3 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr 1fr; }
+  .grid--2x2 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
+
+  .card {
+    background: var(--bg-2);
+    border-radius: 14px;
+    padding: 22px 24px;
+    border-left: 4px solid var(--c, var(--accent));
+    display: flex; flex-direction: column;
+    min-height: 0;
+  }
+  .card__name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px; font-weight: 600;
+    color: var(--fg); margin-bottom: 2px;
+  }
+  .card__ver { color: var(--fg-3); font-size: 13px; font-weight: 500; margin-left: 6px; }
+  .card__what {
+    font-size: 14px; color: var(--fg-2);
+    margin: 8px 0 14px; line-height: 1.5;
+  }
+  .row { font-size: 12.5px; color: var(--fg-3); display: flex; gap: 6px; margin: 4px 0; line-height: 1.5; }
+  .row__label { min-width: 60px; color: var(--fg-3); font-weight: 600; flex-shrink: 0; }
+  .row__val { color: var(--fg-2); font-family: 'JetBrains Mono', monospace; font-size: 11.5px; }
+  .row__val code {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 1px 5px;
+    color: var(--c, var(--accent));
+    font-size: 11px;
+    margin-right: 3px;
+    display: inline-block;
+    margin-bottom: 2px;
+  }
+  .trigger {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border);
+    font-size: 11.5px; color: var(--fg-3);
+  }
+  .trigger strong { color: var(--fg-2); font-weight: 500; }
+
+  /* Cover slide */
+  .cover { justify-content: center; align-items: center; text-align: center; padding: 0 120px; }
+  .cover h1 { font-size: 108px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; margin-bottom: 28px; }
+  .cover h1 .acc { color: var(--accent); }
+  .cover .sub { font-size: 24px; color: var(--fg-2); margin-bottom: 16px; }
+  .cover .meta { font-size: 16px; color: var(--fg-3); }
+  .cover .badges { display: flex; gap: 18px; margin-top: 56px; flex-wrap: wrap; justify-content: center; }
+  .cover .badge {
+    background: var(--bg-2); border-radius: 10px; padding: 14px 22px;
+    display: flex; flex-direction: column; align-items: center; min-width: 130px;
+    border-top: 3px solid var(--badge-c, var(--accent));
+  }
+  .cover .badge__n { font-size: 36px; font-weight: 800; color: var(--badge-c, var(--accent)); }
+  .cover .badge__l { font-size: 13px; color: var(--fg-3); margin-top: 4px; letter-spacing: 0.1em; }
+
+  /* Summary slide */
+  .sum { flex: 1; display: flex; flex-direction: column; gap: 24px; }
+  .sum__title { font-size: 22px; font-weight: 700; color: var(--accent); letter-spacing: 0.06em; }
+  .sum__flow {
+    background: var(--bg-2);
+    border-radius: 14px;
+    padding: 28px;
+    border: 1px solid var(--border);
+    display: flex; flex-wrap: wrap;
+    align-items: center; gap: 10px;
+    font-family: 'JetBrains Mono', monospace; font-size: 14px;
+  }
+  .sum__file {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 6px; padding: 6px 12px;
+    color: var(--f-c, var(--fg)); font-weight: 500;
+  }
+  .sum__arr { color: var(--fg-3); font-size: 16px; }
+  .sum__row { background: var(--bg-2); border-radius: 14px; padding: 20px 24px; }
+  .sum__row h3 { font-size: 16px; color: var(--accent); font-weight: 700; margin-bottom: 8px; letter-spacing: 0.1em; }
+  .sum__row p { font-size: 14px; color: var(--fg-2); line-height: 1.6; }
+  .sum__row p code { background: var(--bg); padding: 2px 6px; border-radius: 3px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 1 · COVER -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section class="slide cover">
+  <h1>UXUI Skill <span class="acc">Reference</span></h1>
+  <div class="sub">เอกสาร skill ทั้ง 29 ตัวของทีม Designer · doc-driven chain</div>
+  <div class="meta">github.com/sittipons-ike/uxui-skill-library · v2 refactored · 2026-06-26</div>
+
+  <div class="badges">
+    <div class="badge" style="--badge-c: var(--c1);"><div class="badge__n">29</div><div class="badge__l">SKILLS</div></div>
+    <div class="badge" style="--badge-c: var(--c2);"><div class="badge__n">7</div><div class="badge__l">CATEGORIES</div></div>
+    <div class="badge" style="--badge-c: var(--c3);"><div class="badge__n">8</div><div class="badge__l">DOC TYPES</div></div>
+    <div class="badge" style="--badge-c: var(--c4);"><div class="badge__n">13</div><div class="badge__l">TEAM RULES</div></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 2 · DISCOVERY -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section class="slide" style="--c: var(--c2);">
+  <div class="head">
+    <div>
+      <div class="head__no">02 · DISCOVERY</div>
+      <div class="head__title">Intent + PRD + Planning</div>
+      <div class="head__sub">ดึง intent ที่แท้จริง · เขียน requirement · วาง task</div>
+    </div>
+    <div class="head__meta"><strong>5</strong> skills</div>
+  </div>
+
+  <div class="grid grid--2x3">
+    <div class="card">
+      <div><span class="card__name">interview-me</span><span class="card__ver">v2.1</span></div>
+      <p class="card__what">ดึง intent ที่แท้จริงจาก user — ถามทีละข้อจน confidence 95% · scale-aware (product/feature/page/task)</p>
+      <div class="row"><span class="row__label">reads</span><span class="row__val"><code>docs/brand/</code><code>docs/product/</code><code>docs/intent/</code></span></div>
+      <div class="row"><span class="row__label">writes</span><span class="row__val"><code>docs/intent/&lt;topic&gt;.md</code></span></div>
+      <div class="trigger"><strong>trigger:</strong> "interview me" · "grill me" · "are we sure?" · vague ask</div>
+    </div>
+
+    <div class="card">
+      <div><span class="card__name">prd</span><span class="card__ver">v2.0</span></div>
+      <p class="card__what">Product Requirements Document · 3 targets (stakeholder / dev / AI agent) · Phase 0 scan + cite sources</p>
+      <div class="row"><span class="row__label">reads</span><span class="row__val"><code>docs/intent/</code><code>docs/product/</code><code>docs/brand/</code></span></div>
+      <div class="row"><span class="row__label">writes</span><span class="row__val"><code>prd.md</code></span></div>
+      <div class="trigger"><strong>trigger:</strong> "write PRD" · "document requirements" · "plan a feature"</div>
+    </div>
+
+    <div class="card">
+      <div><span class="card__name">user-personas</span></div>
+      <p class="card__what">สร้าง User Persona จาก research data — demographic + goals + pains + behavior</p>
+      <div class="row"><span class="row__label">reads</span><span class="row__val">research notes · interview transcripts</span></div>
+      <div class="row"><span class="row__label">writes</span><span class="row__val"><code>personas.md</code></span></div>
+      <div class="trigger"><strong>trigger:</strong> "create persona" · "user persona"</div>
+    </div>
+
+    <div class="card">
+      <div><span class="card__name">notion-planning</span></div>
+      <p class="card__what">วางแผนงานลง Notion DB — แตก task · sprint · assign owner</p>
+      <div class="row"><span class="row__label">reads</span><span class="row__val"><code>prd.md</code><code>personas.md</code></span></div>
+      <div class="row"><span class="row__label">writes</span><span class="row__val">Notion pages + tasks</span></div>
+      <div class="trigger"><strong>trigger:</strong> "plan in Notion" · "วาง task"</div>
+    </div>
+
+    <div class="card">
+      <div><span class="card__name">masterprompt</span></div>
+      <p class="card__what">แปลง idea หยาบ → structured prompt — universal prompt engineer · สำหรับ delegate ให้ AI ตัวอื่น</p>
+      <div class="row"><span class="row__label">reads</span><span class="row__val">user idea + context</span></div>
+      <div class="row"><span class="row__label">writes</span><span class="row__val">structured prompt (in chat)</span></div>
+      <div class="trigger"><strong>trigger:</strong> "help me write a prompt" · "I want to create..."</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 3 · STRATEGY -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section class="slide" style="--c: var(--c3);">
+  <div class="head">
+    <div>
+      <div class="head__no">03 · STRATEGY</div>
+      <div class="head__title">UX Blueprint + Spec</div>
+      <div class="head__sub">วาง flow + IA + edge case · เขียน technical spec ก่อน code</div>
+    </div>
+    <div class="head__meta"><strong>2</strong> skills</div>
+  </div>
+
+  <div class="grid grid--2">
+    <div class="card">
+      <div><span class="card__name">ux-strategist</span><span class="card__ver">v3.2</span></div>
+      <p class="card__what">UX Blueprint · user flow + IA + edge cases + heuristics · auto-embed Mermaid diagrams (color-coded) · scale-aware (feature/page/product) · save dual md+html</p>
+      <div class="row"><span class="row__label">reads</span><span class="row__val"><code>docs/intent/</code><code>docs/blueprints/</code><code>docs/product/</code><code>docs/brand/</code><code>prd.md</code></span></div>
+      <div class="row"><span class="row__label">writes</span><span class="row__val"><code>docs/blueprints/ux-&lt;feature&gt;.md</code><code>docs/blueprints/ux-&lt;feature&gt;.html</code></span></div>
+      <div class="trigger"><strong>trigger:</strong> "plan a feature" · "user flow" · "wireframe" · "UX blueprint"</div>
+    </div>
+
+    <div class="card">
+      <div><span class="card__name">spec-driven-development</span></div>
+      <p class="card__what">เขียน spec ก่อน code — 4-phase gated workflow (Specify → Plan → Tasks → Implement) · ห้ามข้าม phase</p>
+      <div class="row"><span class="row__label">reads</span><span class="row__val"><code>prd.md</code><code>docs/blueprints/</code></span></div>
+      <div class="row"><span class="row__label">writes</span><span class="row__val"><code>spec.md</code> + plan + tasks</span></div>
+      <div class="trigger"><strong>trigger:</strong> "write spec" · "new project" · "spec ก่อน code"</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 4 · DS BASE -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section class="slide" style="--c: var(--c4);">
+  <div class="head">
+    <div>
+      <div class="head__no">04 · DS BASE</div>
+      <div class="head__title">Design System</div>
+      <div class="head__sub">tokens · icons · atoms · validate · remix · 1 ครั้งต่อ project</div>
+    </div>
+    <div class="head__meta"><strong>5</strong> skills</div>
+  </div>
+
+  <div class="grid grid--2x3">
+    <div class="card">
+      <div><span class="card__name">design-builder</span><span class="card__ver">v6.2</span></div>
+      <p class="card__what">สร้าง design.md (tokens-only) · dual-path (zero / client-given) · WCAG validate · mood-driven · Phase 0a scan docs/brand/</p>
+      <div class="row"><span class="row__label">reads</span><span class="row__val"><code>docs/brand/</code><code>docs/product/</code> + user input</span></div>
+      <div class="row"><span class="row__label">writes</span><span class="row__val"><code>design.md</code></span></div>
+      <div class="trigger"><strong>trigger:</strong> "build design system" · "create design.md"</div>
+    </div>
+
+    <div class="card">
+      <div><span class="card__name">design-icon-builder</span><span class="card__ver">v2.3</span></div>
+      <p class="card__what">เลือก icon library ตาม mood · fetch SVG จาก CDN · ถาม scope ก่อน (starter 12 / common 36 / extended 60 / custom)</p>
+      <div class="row"><span class="row__label">reads</span><span class="row__val"><code>design.md</code></span></div>
+      <div class="row"><span class="row__label">writes</span><span class="row__val"><code>design.md</code> (iconography block) + <code>./icons/*.svg</code></span></div>
+      <div class="trigger"><strong>trigger:</strong> "build icons" · "icon system" · "ดึง icon"</div>
+    </div>
+
+    <div class="card">
+      <div><span class="card__name">design-component-builder</span><span class="card__ver">v5</span></div>
+      <p class="card__what">atoms / molecules / organisms · DTCG-aligned · 2-tier tokens (sys + comp) · diff-only variants · 9 atoms default</p>
+      <div class="row"><span class="row__label">reads</span><span class="row__val"><code>design.md</code></span></div>
+      <div class="row"><span class="row__label">writes</span><span class="row__val"><code>components.json</code><code>tokens.css</code><code>components/&lt;name&gt;.html</code></span></div>
+      <div class="trigger"><strong>trigger:</strong> "build components" · "atomic components"</div>
+    </div>
+
+    <div class="card">
+      <div><span class="card__name">design-md-audit</span><span class="card__ver">v6.1</span></div>
+      <p class="card__what">audit DS — schema validate · cross-file refs · WCAG AA contrast · downward direction · `--migrate-to-json` flag</p>
+      <div class="row"><span class="row__label">reads</span><span class="row__val"><code>design.md</code><code>components.json</code><code>ui.json</code><code>patterns.json</code></span></div>
+      <div class="row"><span class="row__label">writes</span><span class="row__val"><code>audit-report.md</code></span></div>
+      <div class="trigger"><strong>trigger:</strong> "audit DS" · "validate design system"</div>
+    </div>
+
+    <div class="card">
+      <div><span class="card__name">design-remix</span></div>
+      <p class="card__what">mix design จาก brand references — "Linear's typography + Notion's spacing + Stripe's color" → synthesize เป็น DESIGN.md ใหม่</p>
+      <div class="row"><span class="row__label">reads</span><span class="row__val">brand refs · design-library/</span></div>
+      <div class="row"><span class="row__label">writes</span><span class="row__val"><code>design.md</code> (mixed)</span></div>
+      <div class="trigger"><strong>trigger:</strong> "mix design" · "remix design"</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 5 · UI -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section class="slide" style="--c: var(--c5);">
+  <div class="head">
+    <div>
+      <div class="head__no">05 · UI</div>
+      <div class="head__title">Pages + Patterns + Impl</div>
+      <div class="head__sub">compose atoms → pages ตาม blueprint · ส่งต่อ implementation</div>
+    </div>
+    <div class="head__meta"><strong>3</strong> skills</div>
+  </div>
+
+  <div class="grid grid--2x2">
+    <div class="card">
+      <div><span class="card__name">design-ui-builder</span><span class="card__ver">v5.1</span></div>
+      <p class="card__what">สร้าง ui.json + patterns.json + pages — dual-mode (iframe / inline) · Phase 0 scan docs/blueprints/ux-*.md auto pages</p>
+      <div class="row"><span class="row__label">reads</span><span class="row__val"><code>design.md</code><code>components.json</code><code>docs/blueprints/ux-*.md</code></span></div>
+      <div class="row"><span class="row__label">writes</span><span class="row__val"><code>ui.json</code><code>patterns.json</code><code>pages/&lt;name&gt;.html</code></span></div>
+      <div class="trigger"><strong>trigger:</strong> "build UI" · "create pages" · "compose page"</div>
+    </div>
+
+    <div class="card">
+      <div><span class="card__name">ui-implementation-specialist</span></div>
+      <p class="card__what">map component + design token จาก Blueprint → code-ready · ใช้ตอน handoff dev</p>
+      <div class="row"><span class="row__label">reads</span><span class="row__val"><code>components.json</code><code>ui.json</code><code>tokens.css</code> + design spec</span></div>
+      <div class="row"><span class="row__label">writes</span><span class="row__val">component code + blueprint</span></div>
+      <div class="trigger"><strong>trigger:</strong> "implement UI" · "map components" · "handoff"</div>
+    </div>
+
+    <div class="card">
+      <div><span class="card__name">frontend-ui-engineering</span></div>
+      <p class="card__what">Front-end best practices — component patterns · performance · accessibility · review</p>
+      <div class="row"><span class="row__label">reads</span><span class="row__val">component source code</span></div>
+      <div class="row"><span class="row__label">writes</span><span class="row__val">review notes</span></div>
+      <div class="trigger"><strong>trigger:</strong> "review code" · "frontend best practice"</div>
+    </div>
+
+    <div class="card" style="background: transparent; border: 1px dashed var(--border); border-left: 4px dashed var(--c);">
+      <div style="color: var(--fg-3); font-size: 14px; line-height: 1.6;">
+        <strong style="color: var(--c);">💡 Pattern</strong><br><br>
+        UI phase ทำ <strong>ต่อ feature</strong> (ไม่ใช่ทั้ง product)<br><br>
+        DS Base ทำ <strong>ครั้งเดียวต่อ project</strong> — UI re-use ตลอด<br><br>
+        Blueprint คือ input หลัก — กำหนดว่า pages อะไรต้องสร้าง
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 6 · COPY -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section class="slide" style="--c: var(--c6);">
+  <div class="head">
+    <div>
+      <div class="head__no">06 · COPY + QA</div>
+      <div class="head__title">Microcopy + Quality</div>
+      <div class="head__sub">brand-voice-aware copy · modal · audit · browser test</div>
+    </div>
+    <div class="head__meta"><strong>4</strong> skills</div>
+  </div>
+
+  <div class="grid grid--2x2">
+    <div class="card">
+      <div><span class="card__name">ux-writer</span><span class="card__ver">v2.1</span></div>
+      <p class="card__what">microcopy · labels · errors · empty states · CTA · scannability + a11y check · Phase 0 scan brand voice</p>
+      <div class="row"><span class="row__label">reads</span><span class="row__val"><code>docs/brand/voice-tone.md</code><code>docs/blueprints/</code><code>docs/intent/</code></span></div>
+      <div class="row"><span class="row__label">writes</span><span class="row__val"><code>microcopy.md</code></span></div>
+      <div class="trigger"><strong>trigger:</strong> "write copy" · "microcopy" · "rewrite UI text"</div>
+    </div>
+
+    <div class="card">
+      <div><span class="card__name">modal-writer</span><span class="card__ver">v2.0</span></div>
+      <p class="card__what">Thai modal copy (Title + Body + 2 CTAs) · 6 modal types · 12 forbidden patterns auto-flag · Phase 0 scan brand voice</p>
+      <div class="row"><span class="row__label">reads</span><span class="row__val"><code>docs/brand/voice-tone.md</code><code>docs/blueprints/</code></span></div>
+      <div class="row"><span class="row__label">writes</span><span class="row__val"><code>modal-copy.md</code></span></div>
+      <div class="trigger"><strong>trigger:</strong> "เขียน modal" · "review modal" · "modal copy"</div>
+    </div>
+
+    <div class="card">
+      <div><span class="card__name">audit</span></div>
+      <p class="card__what">audit interface — accessibility · performance · theming · responsive · severity rating + recommendations</p>
+      <div class="row"><span class="row__label">reads</span><span class="row__val">HTML/CSS source + screenshot</span></div>
+      <div class="row"><span class="row__label">writes</span><span class="row__val"><code>audit-report.md</code></span></div>
+      <div class="trigger"><strong>trigger:</strong> "audit interface" · "a11y check"</div>
+    </div>
+
+    <div class="card">
+      <div><span class="card__name">browser-testing-with-devtools</span></div>
+      <p class="card__what">test UI ใน real browser via Chrome DevTools MCP — DOM · network · console · performance · a11y</p>
+      <div class="row"><span class="row__label">reads</span><span class="row__val">live URL + DevTools data</span></div>
+      <div class="row"><span class="row__label">writes</span><span class="row__val"><code>test-report.md</code></span></div>
+      <div class="trigger"><strong>trigger:</strong> "test in browser" · "DevTools check"</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 7 · HANDOFF (1/2) -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section class="slide" style="--c: var(--c7);">
+  <div class="head">
+    <div>
+      <div class="head__no">07 · HANDOFF (Figma)</div>
+      <div class="head__title">Figma Integration</div>
+      <div class="head__sub">DS compliance check · sync Figma Variables + Component Sets</div>
+    </div>
+    <div class="head__meta"><strong>4</strong> skills</div>
+  </div>
+
+  <div class="grid grid--2x2">
+    <div class="card">
+      <div><span class="card__name">figma-audit-ui</span></div>
+      <p class="card__what">audit Figma file — DS compliance check (Thai · consumer apps) · per-element pinpoint · draft-before-post</p>
+      <div class="row"><span class="row__label">reads</span><span class="row__val">Figma file (via MCP)</span></div>
+      <div class="row"><span class="row__label">writes</span><span class="row__val"><code>audit-report.md</code> + Figma comments</span></div>
+      <div class="trigger"><strong>trigger:</strong> "audit Figma" · "ตรวจ Figma DS"</div>
+    </div>
+
+    <div class="card">
+      <div><span class="card__name">figma-push-tokens</span></div>
+      <p class="card__what">sync DS tokens → Figma Variable Collection · light + dark mode · idempotent (รันซ้ำได้)</p>
+      <div class="row"><span class="row__label">reads</span><span class="row__val"><code>design.md</code> (semantic tokens)</span></div>
+      <div class="row"><span class="row__label">writes</span><span class="row__val">Figma Variable Collection</span></div>
+      <div class="trigger"><strong>trigger:</strong> "push tokens to Figma" · "sync variables"</div>
+    </div>
+
+    <div class="card">
+      <div><span class="card__name">figma-push-components</span></div>
+      <p class="card__what">push 5 atoms → Figma Component Sets · variant × size × state · Variable bindings auto</p>
+      <div class="row"><span class="row__label">reads</span><span class="row__val"><code>components.json</code> + Figma Variables</span></div>
+      <div class="row"><span class="row__label">writes</span><span class="row__val">Figma Component Sets</span></div>
+      <div class="trigger"><strong>trigger:</strong> "push components" · "sync atoms to Figma"</div>
+    </div>
+
+    <div class="card">
+      <div><span class="card__name">figma-rename-tokens</span></div>
+      <p class="card__what">normalize Figma Variable names → canonical DS naming · non-destructive (preserve bindings)</p>
+      <div class="row"><span class="row__label">reads</span><span class="row__val">Figma Variables (current state)</span></div>
+      <div class="row"><span class="row__label">writes</span><span class="row__val">Figma Variables (renamed)</span></div>
+      <div class="trigger"><strong>trigger:</strong> "rename Figma variables" · "normalize tokens"</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 8 · HANDOFF (2/2) -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section class="slide" style="--c: var(--c7);">
+  <div class="head">
+    <div>
+      <div class="head__no">07 · HANDOFF (Export + Launch)</div>
+      <div class="head__title">Export + Styleguide + Launch</div>
+      <div class="head__sub">cross-platform export · single styleguide · go-live</div>
+    </div>
+    <div class="head__meta"><strong>3</strong> skills</div>
+  </div>
+
+  <div class="grid grid--2x2">
+    <div class="card">
+      <div><span class="card__name">design-styleguide</span><span class="card__ver">v3</span></div>
+      <p class="card__what">aggregator — รวม components/*.html + pages/*.html + patterns/*.html → single styleguide.html + TOC</p>
+      <div class="row"><span class="row__label">reads</span><span class="row__val"><code>components/*.html</code><code>pages/*.html</code><code>patterns/*.html</code></span></div>
+      <div class="row"><span class="row__label">writes</span><span class="row__val"><code>styleguide.html</code></span></div>
+      <div class="trigger"><strong>trigger:</strong> "build styleguide" · "aggregate components"</div>
+    </div>
+
+    <div class="card">
+      <div><span class="card__name">design-export-dtcg</span></div>
+      <p class="card__what">export → W3C DTCG tokens.json + Style Dictionary configs · cross-platform (iOS Swift / Android Kotlin / Flutter Dart / Tailwind)</p>
+      <div class="row"><span class="row__label">reads</span><span class="row__val"><code>design.md</code><code>components.json</code></span></div>
+      <div class="row"><span class="row__label">writes</span><span class="row__val"><code>tokens.json</code> + Style Dictionary configs</span></div>
+      <div class="trigger"><strong>trigger:</strong> "export DTCG" · "tokens.json" · "cross-platform tokens"</div>
+    </div>
+
+    <div class="card">
+      <div><span class="card__name">shipping-and-launch</span></div>
+      <p class="card__what">เตรียม launch checklist + go-live workflow — pre-launch sanity · monitoring setup · rollback plan</p>
+      <div class="row"><span class="row__label">reads</span><span class="row__val">ทุก artifact ก่อนหน้า + audit reports</span></div>
+      <div class="row"><span class="row__label">writes</span><span class="row__val"><code>launch-checklist.md</code></span></div>
+      <div class="trigger"><strong>trigger:</strong> "launch" · "go-live" · "shipping checklist"</div>
+    </div>
+
+    <div class="card" style="background: transparent; border: 1px dashed var(--border); border-left: 4px dashed var(--c);">
+      <div style="color: var(--fg-3); font-size: 14px; line-height: 1.6;">
+        <strong style="color: var(--c);">🚦 Handoff order</strong><br><br>
+        <code style="background: var(--bg); padding: 2px 6px; border-radius: 3px; color: var(--c);">design-md-audit</code> ก่อนเสมอ<br>
+        → gate ไม่ให้ broken refs push เข้า Figma<br><br>
+        <code style="background: var(--bg); padding: 2px 6px; border-radius: 3px; color: var(--c);">figma-push-tokens</code> ก่อน components<br>
+        → tokens ต้องมีก่อน components ผูก binding ได้<br><br>
+        <code style="background: var(--bg); padding: 2px 6px; border-radius: 3px; color: var(--c);">design-export-dtcg</code> ส่วนสุดท้าย<br>
+        → ส่ง dev mobile/web ใช้
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 9 · UTILITIES -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section class="slide" style="--c: var(--c8);">
+  <div class="head">
+    <div>
+      <div class="head__no">08 · UTILITIES</div>
+      <div class="head__title">Always-on Helpers</div>
+      <div class="head__sub">setup · sprint tracking · email digest</div>
+    </div>
+    <div class="head__meta"><strong>3</strong> skills</div>
+  </div>
+
+  <div class="grid grid--3">
+    <div class="card">
+      <div><span class="card__name">check-setup</span></div>
+      <p class="card__what">onboarding guide — auto-detect Node/Git/Claude/Figma MCP · แสดง diagnostic · install ที่ขาดทีละ step</p>
+      <div class="row"><span class="row__label">reads</span><span class="row__val">system state · env vars</span></div>
+      <div class="row"><span class="row__label">writes</span><span class="row__val">diagnostic report (chat)</span></div>
+      <div class="trigger"><strong>trigger:</strong> "/check-setup" · "เริ่มยังไง" · "first time"</div>
+    </div>
+
+    <div class="card">
+      <div><span class="card__name">jira-tracker</span></div>
+      <p class="card__what">sprint tracking — รัน Mon/Wed/Fri 9am · status change · manday overrun · sprint ending alert · Lark webhook</p>
+      <div class="row"><span class="row__label">reads</span><span class="row__val">Jira API (Atlassian MCP) + state.json</span></div>
+      <div class="row"><span class="row__label">writes</span><span class="row__val">Lark message + state diff</span></div>
+      <div class="trigger"><strong>trigger:</strong> scheduled (Mon/Wed/Fri) หรือ "check sprint"</div>
+    </div>
+
+    <div class="card">
+      <div><span class="card__name">email-summarizer</span></div>
+      <p class="card__what">Gmail digest → Lark webhook · filter by label · summary + action items extract</p>
+      <div class="row"><span class="row__label">reads</span><span class="row__val">Gmail (MCP)</span></div>
+      <div class="row"><span class="row__label">writes</span><span class="row__val">Lark message digest</span></div>
+      <div class="trigger"><strong>trigger:</strong> scheduled หรือ "summarize email"</div>
+    </div>
+
+    <!-- Placeholder slots to fill grid -->
+    <div class="card" style="background: transparent; border: 1px dashed var(--border); border-left: 4px dashed var(--c); grid-column: span 3;">
+      <div style="color: var(--fg-3); font-size: 14px; line-height: 1.6;">
+        <strong style="color: var(--c);">💡 Always-on pattern</strong> — utilities 3 ตัวนี้ไม่ใช่ chain step (ไม่ produce file ที่ skill อื่นอ่าน). ใช้ได้ทุกตอนของ project · เปิด Claude Code session ใหม่ แล้วเรียกเลย<br><br>
+        <strong>check-setup</strong> — session แรกของ onboarding · ใช้ครั้งเดียว<br>
+        <strong>jira-tracker</strong> — รัน cron / scheduled-task auto<br>
+        <strong>email-summarizer</strong> — มี Gmail MCP setup ก่อน
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 10 · SUMMARY -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section class="slide" style="--c: var(--accent);">
+  <div class="head">
+    <div>
+      <div class="head__no">SUMMARY</div>
+      <div class="head__title">Pipeline Overview</div>
+      <div class="head__sub">end-to-end chain · doc-driven · เริ่มจาก marketing → handoff</div>
+    </div>
+    <div class="head__meta">29 skills · 7 stages</div>
+  </div>
+
+  <div class="sum">
+    <div class="sum__title">CORE FILE FLOW</div>
+    <div class="sum__flow">
+      <span class="sum__file" style="--f-c: var(--c1);">docs/brand/*</span>
+      <span class="sum__arr">▸</span>
+      <span class="sum__file" style="--f-c: var(--c2);">docs/intent/&lt;topic&gt;.md</span>
+      <span class="sum__arr">▸</span>
+      <span class="sum__file" style="--f-c: var(--c2);">prd.md</span>
+      <span class="sum__arr">▸</span>
+      <span class="sum__file" style="--f-c: var(--c3);">docs/blueprints/ux-&lt;feature&gt;.md</span>
+      <span class="sum__arr">▸</span>
+      <span class="sum__file" style="--f-c: var(--c4);">design.md + components.json</span>
+      <span class="sum__arr">▸</span>
+      <span class="sum__file" style="--f-c: var(--c5);">ui.json + pages/*.html</span>
+      <span class="sum__arr">▸</span>
+      <span class="sum__file" style="--f-c: var(--c7);">Figma Variables + tokens.json</span>
+    </div>
+
+    <div class="sum__row">
+      <h3>5 RULES TO AVOID CONFLICT</h3>
+      <p>
+        <strong>R1.</strong> prd Target C vs spec-driven → ใช้คู่กันได้ (Target C = artifact, spec-driven = process)<br>
+        <strong>R2.</strong> ux-strategist scan prd — อย่าเขียน user goals ใหม่<br>
+        <strong>R3.</strong> spec-driven scan blueprint — อย่าเขียน business context ใหม่<br>
+        <strong>R4.</strong> DS chain มาทีหลัง — consume blueprint + components.json<br>
+        <strong>R5.</strong> Source attribution ทุก section (cite source file) — ไม่มี orphan content
+      </p>
+    </div>
+
+    <div class="sum__row">
+      <h3>TEAM RULES (apply ทุก session)</h3>
+      <p>
+        13 ข้อ · 3 layers: <code>Security 1-6</code> · <code>Engineering 7-11</code> · <code>Persistence 12-13</code><br>
+        ติดตั้งครั้งเดียว: <code>bash team-rules/install-team-rules.sh</code> → symlink + @import → git pull = auto sync
+      </p>
+    </div>
+
+    <div class="sum__row">
+      <h3>VIEW MORE</h3>
+      <p>
+        📊 <code>docs/pipeline.html</code> — overview ตาม phase<br>
+        🔄 <code>docs/data-flow.html</code> — file flow ระหว่าง skills<br>
+        🖼️ <code>docs/pipeline-slide.jpg</code> — 16:9 slide ของ pipeline<br>
+        📑 <code>docs/skills-deck.html</code> — เอกสารนี้ (slide deck)
+      </p>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
