@@ -1,7 +1,7 @@
 ---
 name: design-builder
 description: Build the BASE of a design system — outputs design.md (tokens-only file). DUAL-PATH (v6.0.0):accepts brand inputs from scratch OR ingests client-given assets (palette, mood, brand refs, typography). Phase 0 inventory check detects what user already has, then asks ONLY for missing pieces. Includes primitive + semantic + mood + iconography-placeholder. Biases token defaults by mood. Tailwind v3.4+ palette for primitives. Part of a 4-file split architecture (design.md + components.json + ui.json + patterns.json). Component layer, icons, UI compositions, and patterns are built by separate skills (design-component-builder, design-icon-builder, design-ui-builder). Supports light/dark modes. Triggers on "build design system", "create design.md", "design system from scratch", "brand design guide", "มี palette แล้ว", "ใช้ brand kit ที่มี", "have palette ready", "สร้าง design system", "ออกแบบ DS ใหม่".
-version: 6.1.0
+version: 6.2.0
 user-invokable: true
 ---
 
@@ -34,7 +34,59 @@ design-styleguide         →  renders styleguide.html (reads JSON when present,
 
 ## Execution Steps
 
+### Phase 0a — Auto-scan `docs/brand/` (NEW v6.2.0 — run BEFORE asking)
+
+**Before AskUserQuestion**, scan project for marketing-provided brand assets:
+
+| File / folder | Provides → maps to InputBundle |
+|---|---|
+| `docs/brand/brand-book.md` | mood + voice + brand-refs → `has_mood=true`, `has_brand_refs=true` |
+| `docs/brand/palette.md` *(or `colors.md`)* | hex list → `has_palette=true` |
+| `docs/brand/typography.md` *(or `fonts.md`)* | font family + pairing → `has_typography=true` |
+| `docs/brand/logo.svg` / `docs/brand/assets/` | logo + visual refs → `has_brand_refs=true` |
+| `BRAND.md` (root) | fallback if no `docs/brand/` |
+
+Also scan `docs/product/product-overview.md` → may have positioning + audience (skip those questions).
+
+**Show user what was found:**
+```
+PHASE 0a SCAN RESULTS:
+  ✓ docs/brand/brand-book.md (2026-06-20)
+    → mood: premium-editorial
+    → voice: trustworthy, concise
+  ✓ docs/brand/palette.md
+    → primary: #7C3AED, secondary: #1E293B
+  ✓ docs/product/product-overview.md
+    → positioning: "trusted lottery ticket marketplace"
+    → audience: 30-55, Thai mid-income
+
+InputBundle pre-filled:
+  has_palette: ✓
+  has_mood: ✓
+  has_brand_refs: ✓
+  has_typography: ✗ (no typography.md found)
+```
+
+→ **Skip Phase 0 inventory question entirely if all 4 flags resolved by docs.**
+
+If conflict (e.g. doc says cool palette + user wants warm) → flag explicitly + ask clarify before continuing.
+
+If `docs/brand/` empty / missing → continue to Phase 0 inventory question (legacy behavior).
+
+#### Source attribution (REQUIRED)
+
+Every choice in the generated `design.md` must cite:
+- `[source: docs/brand/palette.md]`
+- `[source: docs/brand/brand-book.md]`
+- `[source: user — Phase 1 input]`
+
+Audit trail = future agents/designers know which decisions came from brand vs interview.
+
+---
+
 ### Phase 0 — Inventory check (MUST use AskUserQuestion)
+
+**Only run if Phase 0a didn't resolve all 4 flags.** Otherwise skip to Step 1-confirm.
 
 **ห้ามถามด้วย text** — ใช้ AskUserQuestion `multiSelect: true` ทันที:
 

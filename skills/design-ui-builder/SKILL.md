@@ -1,7 +1,7 @@
 ---
 name: design-ui-builder
 description: Build the ui.json manifest + patterns.json manifest + per-page HTML files + per-pattern HTML shells in a split-architecture design system. Reads design.md (tokens, YAML-in-MD) + components.json (atomic catalog) + components/*.html (markup source for inlining into pages). Emits ui.json (page/section/flow compositions, per schemas/ui.schema.json), patterns.json (reusable cross-page shells like auth-split / app-shell / empty-state / hero-grid, per schemas/patterns.schema.json), pages/<name>.html, and patterns/<name>.html (template shells with slot placeholders). Pages compose either via a pattern + slot_fills OR direct composes []. Slot contract types — component | section | pattern | inline_html | text | image | icon. Refs use brace syntax {file.path.to.thing} per DTCG; downward only (ui → patterns → components → design). Prefers organism refs over atom refs (promote to molecule/organism if composing atoms directly). Legacy --format=md flag emits ui.md alongside ui.json (deprecated, removed v7). v5 adds dual-mode page rendering — DEFAULT iframe mode for live designer iteration (edit component → page auto-reflects on reload), --render=inline flag for self-contained export to dev. Iframe pages reference ./components/<name>.html via relative path; inline pages keep markup copied at build time. Triggers on "build ui", "build pages", "build patterns", "ui compositions", "create ui.json", "patterns.json", "สร้าง pages", "ui layer", "page composition", "slot fills".
-version: 5.0.0
+version: 5.1.0
 user-invokable: true
 args:
   - name: source-design
@@ -229,6 +229,53 @@ Page-level slot overrides (e.g. swapping a different component into the `footer`
 - `dtcg_version` pinned to `draft-2024-08-09` in `$meta`.
 
 ## Execution Steps
+
+### Step 0a. Phase 0 — Auto-scan `docs/blueprints/` (NEW v5.1.0)
+
+**Before asking page scope (Step 4)**, scan project for UX Blueprints from `ux-strategist`:
+
+| File | Provides |
+|---|---|
+| `docs/blueprints/ux-<feature>.md` | feature name · user flow · IA · edge cases · page list |
+| `docs/blueprints/ux-page-<name>.md` | single-page spec · purpose · primary action · IA |
+| `docs/blueprints/ux-product-overview.md` | product-level structure |
+
+**If found**, derive **Step 4 page list automatically** from the blueprint's "User Flow" + "Information Architecture" sections:
+
+```
+PHASE 0 SCAN RESULTS:
+  ✓ docs/blueprints/ux-checkout.md (2026-06-22)
+    → flow: Cart → Login → Address → Payment → Confirm → Success
+    → pages needed: cart, login, address-form, payment, confirm, success
+  ✓ docs/blueprints/ux-onboarding.md
+    → flow: Welcome → SignUp → OTP → Dashboard
+    → pages needed: welcome, signup, otp, dashboard
+
+Pre-filled page scope: [cart, login, address-form, payment, confirm, success,
+                       welcome, signup, otp, dashboard]
+Patterns inferred:     [auth-split (for login/signup/otp), app-shell (for dashboard)]
+```
+
+→ **Skip Step 4 AskUserQuestion** if blueprint already defines page scope. Just confirm with user:
+```
+Q: ใช้ page list จาก blueprint ทั้งหมด หรือ subset?
+   A. ใช้ทั้งหมด (default)
+   B. subset — ระบุ
+```
+
+If `docs/blueprints/` empty / missing → continue to Step 4 ask-fresh (legacy behavior).
+
+#### Source attribution
+
+Each page generated must include in its `ui.json` entry:
+```json
+"sourceBlueprint": "docs/blueprints/ux-checkout.md",
+"sourceFlowStep": "Cart → Login → Address"
+```
+
+→ Audit trail: dev / QA / reviewer รู้ว่า page นี้มาจาก blueprint ส่วนไหน
+
+---
 
 ### Step 0. Pre-flight — pick render mode
 
