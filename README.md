@@ -38,11 +38,21 @@
 | 📚 Persistence | 12-13 (per-project `MEMORY.md` + `spec.md` — กันลืม / กัน /clear) |
 
 **ติดตั้ง (ทำครั้งเดียว):**
+
+> ⚠️ **คำสั่งด้านล่างต้องรันใน Terminal (ไม่ใช่ใน Claude Code chat)**
+> เปิด Terminal: `Cmd + Space` → พิมพ์ `Terminal` → Enter
+
 ```bash
 git clone https://github.com/sittipons-ike/uxui-skill-library.git
 cd uxui-skill-library
 bash team-rules/install-team-rules.sh
 ```
+
+**ทางอ้อม (ไม่อยากเปิด Terminal)** — พิมพ์ใน Claude Code Desktop:
+```
+ติด Team Rules จาก https://github.com/sittipons-ike/uxui-skill-library ให้หน่อย
+```
+Claude จะ clone + ติดตั้งให้ (ต้อง approve permission ทุก step)
 
 Script จะ:
 1. Backup `~/.claude/CLAUDE.md` เดิม (ถ้ามี)
