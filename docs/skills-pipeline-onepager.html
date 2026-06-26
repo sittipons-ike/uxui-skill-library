@@ -2,365 +2,476 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<title>UXUI Skills · Pipeline (visual flow)</title>
+<title>UXUI Skills · Pipeline + Folder Tree</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   @page { size: A4 landscape; margin: 0; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
-    background: #fff;
-    color: #000;
+    background: #fff; color: #000;
     font-family: 'Inter', 'Noto Sans Thai', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
-
-  /* A4 landscape: 1123 × 794 px */
   .page {
-    width: 1123px;
-    height: 794px;
-    padding: 26px 32px 22px;
-    display: flex;
-    flex-direction: column;
+    width: 1123px; height: 794px;
+    padding: 32px 40px 26px;
+    display: flex; flex-direction: column;
   }
 
   /* Header */
   .head {
     border-bottom: 2px solid #000;
-    padding-bottom: 8px;
-    margin-bottom: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
+    padding-bottom: 10px;
+    margin-bottom: 18px;
+    display: flex; justify-content: space-between; align-items: flex-end;
   }
-  .head__title { font-size: 22px; font-weight: 800; letter-spacing: -0.01em; line-height: 1; }
-  .head__sub { font-size: 9.5px; color: #666; margin-top: 3px; }
-  .head__meta { font-size: 8.5px; color: #888; text-align: right; line-height: 1.5; }
+  .head__title { font-size: 26px; font-weight: 800; letter-spacing: -0.01em; line-height: 1; }
+  .head__sub { font-size: 11px; color: #666; margin-top: 4px; }
+  .head__meta { font-size: 10px; color: #888; text-align: right; line-height: 1.6; }
   .head__meta strong { color: #000; font-weight: 700; }
 
-  /* 4-col grid × 2 rows */
-  .grid {
+  /* ═══ PAGE 1 — PIPELINE (handoff focus) ═══ */
+  .pipe {
     flex: 1;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: 1fr 1fr;
-    gap: 18px 22px;
-    position: relative;
+    grid-template-rows: 1fr 60px 1fr;
+    gap: 0;
+  }
+  .pipe__row {
+    display: grid;
+    grid-template-columns: 1fr 80px 1fr 80px 1fr 80px 1fr;
+    align-items: stretch;
+    gap: 0;
   }
 
-  /* Stage card */
-  .stage {
-    border: 1.5px solid #000;
-    border-radius: 6px;
-    padding: 10px 11px;
-    display: flex;
-    flex-direction: column;
+  .stage-box {
+    border: 2px solid #000;
+    border-radius: 8px;
+    padding: 14px 16px;
+    display: flex; flex-direction: column;
     background: #fff;
     position: relative;
   }
-  .stage__num {
-    font-size: 8.5px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
+  .stage-box--dashed { border-style: dashed; }
+  .stage-box__num {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.18em;
     color: #888;
-    margin-bottom: 2px;
   }
-  .stage__title {
-    font-size: 14px;
-    font-weight: 700;
-    line-height: 1.15;
-    margin-bottom: 1px;
+  .stage-box__title {
+    font-size: 22px; font-weight: 800; letter-spacing: -0.01em;
+    line-height: 1.05;
+    margin: 4px 0 6px;
   }
-  .stage__count {
-    font-size: 8.5px;
-    color: #888;
-    margin-bottom: 8px;
+  .stage-box__count {
+    font-size: 11px; color: #666;
+    margin-bottom: 10px;
   }
-
-  /* IO blocks */
-  .block {
-    margin-top: 7px;
-  }
-  .block__label {
-    font-size: 7.5px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    color: #888;
-    text-transform: uppercase;
-    margin-bottom: 3px;
-    padding-bottom: 2px;
-    border-bottom: 1px dotted #ccc;
-  }
-  .block__list {
+  .stage-box__skills {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 8px;
-    color: #444;
+    font-size: 8.5px; color: #666;
     line-height: 1.5;
-    word-break: break-word;
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px dotted #ccc;
   }
-  .block__list--skills {
-    color: #000;
-    font-size: 8.5px;
-    font-weight: 600;
-    line-height: 1.55;
+  .stage-box__skills::before {
+    content: "skills · ";
+    color: #aaa; font-style: italic;
   }
 
-  /* Horizontal arrow at right side of card */
-  .arrow-h {
-    position: absolute;
-    top: 50%;
-    right: -18px;
-    transform: translateY(-50%);
-    z-index: 10;
-    font-size: 22px;
-    line-height: 1;
-    color: #000;
-    font-weight: 700;
-  }
-  .arrow-h::before { content: "▶"; }
-
-  /* Wrap arrow — end of row 1 (stage 04) curving down-left to start of row 2 (stage 05) */
-  .arrow-wrap {
-    grid-column: 1 / -1;
-    grid-row: 1 / -1;
-    pointer-events: none;
+  /* Handoff arrow + file pill between stages */
+  .hand {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
     position: relative;
-    z-index: 5;
   }
-  .arrow-wrap svg {
+  .hand__arrow {
+    font-size: 28px; font-weight: 900; color: #000;
+    line-height: 1;
+  }
+  .hand__file {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px; font-weight: 600;
+    color: #000;
+    text-align: center;
+    margin-top: 4px;
+    background: #f4f4f4;
+    padding: 3px 6px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    white-space: nowrap;
+    transform: scale(0.92);
+  }
+
+  /* Wrap row (middle) — shows ↩ arrow + file flowing from end row 1 to start row 2 */
+  .pipe__wrap {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: relative;
+    padding: 0 40px;
+  }
+  .wrap-line {
+    flex: 1;
+    border-top: 2px dashed #000;
+    margin: 0 12px;
+    position: relative;
+  }
+  .wrap-line__file {
     position: absolute;
-    top: 45%;
-    left: 0;
-    width: 100%;
-    height: 50px;
+    top: -12px; left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; font-weight: 600;
+    color: #000;
+    padding: 2px 10px;
+    border: 1px solid #000;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .wrap-end {
+    font-size: 28px; font-weight: 900; color: #000;
+  }
+  .wrap-start {
+    font-size: 28px; font-weight: 900; color: #000;
+    transform: rotate(-90deg);
   }
 
   /* Footer */
   .foot {
     border-top: 1px solid #ccc;
-    padding-top: 6px;
-    margin-top: 10px;
-    font-size: 7.5px;
+    padding-top: 8px;
+    margin-top: 12px;
+    font-size: 9px;
     color: #999;
-    display: flex;
-    justify-content: space-between;
+    display: flex; justify-content: space-between;
   }
   .foot code { font-family: 'JetBrains Mono', monospace; color: #555; }
+
+  /* ═══ PAGE 2 — FOLDER TREE ═══ */
+  .tree-wrap {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 24px;
+  }
+  .tree-block {
+    background: #f7f7f7;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 16px 18px;
+    display: flex; flex-direction: column;
+  }
+  .tree-block__label {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.16em;
+    color: #888;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 10px;
+  }
+  .tree {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    line-height: 1.7;
+    color: #000;
+    white-space: pre;
+    overflow: hidden;
+  }
+  .tree b { font-weight: 700; }
+  .tree em { color: #888; font-style: italic; font-weight: 400; }
+  .tree .new { color: #000; font-weight: 600; }
+
+  .legend {
+    display: flex; flex-direction: column;
+    gap: 4px;
+    font-size: 9.5px;
+    color: #555;
+    line-height: 1.5;
+  }
+  .legend__row { display: flex; align-items: center; gap: 8px; }
+  .legend__row code {
+    font-family: 'JetBrains Mono', monospace;
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 1px 6px;
+    border-radius: 3px;
+    color: #000;
+    font-size: 9px;
+    flex-shrink: 0;
+  }
 </style>
 </head>
 <body>
 
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- PAGE 1 — PIPELINE -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
 <div class="page">
 
-  <!-- Header -->
   <div class="head">
     <div>
-      <div class="head__title">UXUI Skills · Pipeline</div>
-      <div class="head__sub">เส้นทางงาน — input → 7 stages → output · มี skill อะไรในแต่ละ stage · ส่ง file อะไรต่อ</div>
+      <div class="head__title">Pipeline · เส้นทางการส่งต่อ</div>
+      <div class="head__sub">เน้นไฟล์ที่ส่งต่อระหว่าง stage · skill ในแต่ละ stage = รายละเอียดประกอบ</div>
     </div>
     <div class="head__meta">
-      <strong>github.com/sittipons-ike/uxui-skill-library</strong><br>
-      29 skills · 7 stages
+      <strong>หน้า 1 / 2 · Pipeline</strong><br>
+      github.com/sittipons-ike/uxui-skill-library
     </div>
   </div>
 
-  <!-- Grid -->
-  <div class="grid">
+  <div class="pipe">
 
     <!-- ROW 1 -->
-
-    <!-- 01 DISCOVERY -->
-    <div class="stage">
-      <div class="stage__num">STAGE 01</div>
-      <div class="stage__title">Discovery</div>
-      <div class="stage__count">5 skills · เข้าใจปัญหา</div>
-
-      <div class="block">
-        <div class="block__label">READ</div>
-        <div class="block__list">docs/brand/*<br>docs/product/*<br>research data</div>
+    <div class="pipe__row">
+      <!-- 01 -->
+      <div class="stage-box">
+        <div class="stage-box__num">STAGE 01</div>
+        <div class="stage-box__title">Discovery</div>
+        <div class="stage-box__count">5 skills · เข้าใจปัญหา</div>
+        <div class="stage-box__skills">/interview-me · /prd · /user-personas · /notion-planning · /masterprompt</div>
       </div>
-
-      <div class="block">
-        <div class="block__label">SKILLS</div>
-        <div class="block__list block__list--skills">/interview-me<br>/prd<br>/user-personas<br>/notion-planning<br>/masterprompt</div>
+      <!-- handoff -->
+      <div class="hand">
+        <div class="hand__arrow">▶</div>
+        <div class="hand__file">docs/intent/&lt;topic&gt;.md</div>
+        <div class="hand__file">prd.md</div>
       </div>
-
-      <div class="block">
-        <div class="block__label">WRITE → ถัดไป</div>
-        <div class="block__list">docs/intent/&lt;topic&gt;.md<br>prd.md<br>personas.md</div>
+      <!-- 02 -->
+      <div class="stage-box">
+        <div class="stage-box__num">STAGE 02</div>
+        <div class="stage-box__title">Strategy</div>
+        <div class="stage-box__count">2 skills · วาง flow + spec</div>
+        <div class="stage-box__skills">/ux-strategist · /spec-driven-development</div>
       </div>
-      <div class="arrow-h" style="right:-18px;"></div>
+      <!-- handoff -->
+      <div class="hand">
+        <div class="hand__arrow">▶</div>
+        <div class="hand__file">docs/blueprints/ux-&lt;f&gt;.md</div>
+        <div class="hand__file">spec.md</div>
+      </div>
+      <!-- 03 -->
+      <div class="stage-box">
+        <div class="stage-box__num">STAGE 03</div>
+        <div class="stage-box__title">DS Base</div>
+        <div class="stage-box__count">5 skills · 1× ต่อ project</div>
+        <div class="stage-box__skills">/design-builder · /design-icon-builder · /design-component-builder · /design-md-audit · /design-remix</div>
+      </div>
+      <!-- handoff -->
+      <div class="hand">
+        <div class="hand__arrow">▶</div>
+        <div class="hand__file">design.md</div>
+        <div class="hand__file">components.json</div>
+        <div class="hand__file">tokens.css</div>
+      </div>
+      <!-- 04 -->
+      <div class="stage-box">
+        <div class="stage-box__num">STAGE 04</div>
+        <div class="stage-box__title">UI Compose</div>
+        <div class="stage-box__count">3 skills · ต่อ feature</div>
+        <div class="stage-box__skills">/design-ui-builder · /ui-implementation-specialist · /frontend-ui-engineering</div>
+      </div>
     </div>
 
-    <!-- 02 STRATEGY -->
-    <div class="stage">
-      <div class="stage__num">STAGE 02</div>
-      <div class="stage__title">Strategy</div>
-      <div class="stage__count">2 skills · วาง flow + spec</div>
-
-      <div class="block">
-        <div class="block__label">READ ← จาก Discovery</div>
-        <div class="block__list">docs/intent/<br>prd.md<br>personas.md<br>docs/blueprints/<br>docs/brand/</div>
+    <!-- WRAP ROW (handoff from end row 1 → start row 2) -->
+    <div class="pipe__wrap">
+      <span class="wrap-end">↘</span>
+      <div class="wrap-line">
+        <span class="wrap-line__file">ui.json · patterns.json · pages/*.html · microcopy/modal-copy</span>
       </div>
-
-      <div class="block">
-        <div class="block__label">SKILLS</div>
-        <div class="block__list block__list--skills">/ux-strategist<br>/spec-driven-development</div>
-      </div>
-
-      <div class="block">
-        <div class="block__label">WRITE → ถัดไป</div>
-        <div class="block__list">docs/blueprints/ux-&lt;f&gt;.md + .html<br>spec.md + plan + tasks</div>
-      </div>
-      <div class="arrow-h" style="right:-18px;"></div>
-    </div>
-
-    <!-- 03 DS BASE -->
-    <div class="stage">
-      <div class="stage__num">STAGE 03</div>
-      <div class="stage__title">DS Base</div>
-      <div class="stage__count">5 skills · 1 ครั้งต่อ project</div>
-
-      <div class="block">
-        <div class="block__label">READ ← จาก Marketing</div>
-        <div class="block__list">docs/brand/*<br>docs/product/*<br>brand refs</div>
-      </div>
-
-      <div class="block">
-        <div class="block__label">SKILLS</div>
-        <div class="block__list block__list--skills">/design-builder<br>/design-icon-builder<br>/design-component-builder<br>/design-md-audit<br>/design-remix</div>
-      </div>
-
-      <div class="block">
-        <div class="block__label">WRITE → ถัดไป</div>
-        <div class="block__list">design.md<br>icons/*.svg<br>components.json<br>tokens.css</div>
-      </div>
-      <div class="arrow-h" style="right:-18px;"></div>
-    </div>
-
-    <!-- 04 UI -->
-    <div class="stage">
-      <div class="stage__num">STAGE 04</div>
-      <div class="stage__title">UI Compose</div>
-      <div class="stage__count">3 skills · ต่อ feature</div>
-
-      <div class="block">
-        <div class="block__label">READ ← Strategy + DS</div>
-        <div class="block__list">docs/blueprints/ux-*.md<br>design.md<br>components.json<br>tokens.css</div>
-      </div>
-
-      <div class="block">
-        <div class="block__label">SKILLS</div>
-        <div class="block__list block__list--skills">/design-ui-builder<br>/ui-implementation-specialist<br>/frontend-ui-engineering</div>
-      </div>
-
-      <div class="block">
-        <div class="block__label">WRITE → ถัดไป</div>
-        <div class="block__list">ui.json<br>patterns.json<br>pages/&lt;name&gt;.html<br>code blueprint</div>
-      </div>
-      <!-- Wrap arrow: down from card 04, points to card 05 -->
-      <div style="position:absolute; right:-6px; bottom:-30px; font-size:22px; font-weight:700; color:#000;">↩</div>
+      <span class="wrap-start">↙</span>
     </div>
 
     <!-- ROW 2 -->
-
-    <!-- 05 COPY + QA -->
-    <div class="stage">
-      <div class="stage__num">STAGE 05</div>
-      <div class="stage__title">Copy + QA</div>
-      <div class="stage__count">4 skills</div>
-
-      <div class="block">
-        <div class="block__label">READ ← UI + Brand</div>
-        <div class="block__list">pages/*.html<br>docs/brand/voice-tone.md<br>docs/blueprints/<br>live URL</div>
+    <div class="pipe__row">
+      <!-- 05 -->
+      <div class="stage-box">
+        <div class="stage-box__num">STAGE 05</div>
+        <div class="stage-box__title">Copy + QA</div>
+        <div class="stage-box__count">4 skills · ตรวจคุณภาพ</div>
+        <div class="stage-box__skills">/ux-writer · /modal-writer · /audit · /browser-testing-with-devtools</div>
       </div>
-
-      <div class="block">
-        <div class="block__label">SKILLS</div>
-        <div class="block__list block__list--skills">/ux-writer<br>/modal-writer<br>/audit<br>/browser-testing-with-devtools</div>
+      <!-- handoff -->
+      <div class="hand">
+        <div class="hand__arrow">▶</div>
+        <div class="hand__file">audit-report.md</div>
+        <div class="hand__file">microcopy.md</div>
       </div>
-
-      <div class="block">
-        <div class="block__label">WRITE → ถัดไป</div>
-        <div class="block__list">microcopy.md<br>modal-copy.md<br>audit-report.md<br>test-report.md</div>
+      <!-- 06A -->
+      <div class="stage-box">
+        <div class="stage-box__num">STAGE 06A</div>
+        <div class="stage-box__title">Handoff · Figma</div>
+        <div class="stage-box__count">4 skills · sync Figma</div>
+        <div class="stage-box__skills">/figma-audit-ui · /figma-push-tokens · /figma-push-components · /figma-rename-tokens</div>
       </div>
-      <div class="arrow-h" style="right:-18px;"></div>
-    </div>
-
-    <!-- 06 HANDOFF FIGMA -->
-    <div class="stage">
-      <div class="stage__num">STAGE 06A</div>
-      <div class="stage__title">Handoff · Figma</div>
-      <div class="stage__count">4 skills</div>
-
-      <div class="block">
-        <div class="block__label">READ ← DS + Figma</div>
-        <div class="block__list">design.md<br>components.json<br>Figma file (MCP)</div>
+      <!-- handoff -->
+      <div class="hand">
+        <div class="hand__arrow">▶</div>
+        <div class="hand__file">Figma Variables</div>
+        <div class="hand__file">Figma Comp Sets</div>
       </div>
-
-      <div class="block">
-        <div class="block__label">SKILLS</div>
-        <div class="block__list block__list--skills">/figma-audit-ui<br>/figma-push-tokens<br>/figma-push-components<br>/figma-rename-tokens</div>
+      <!-- 06B -->
+      <div class="stage-box">
+        <div class="stage-box__num">STAGE 06B</div>
+        <div class="stage-box__title">Handoff · Export</div>
+        <div class="stage-box__count">3 skills · ส่ง dev</div>
+        <div class="stage-box__skills">/design-styleguide · /design-export-dtcg · /shipping-and-launch</div>
       </div>
-
-      <div class="block">
-        <div class="block__label">WRITE → ถัดไป</div>
-        <div class="block__list">Figma Variable Collection<br>Figma Component Sets<br>Figma renamed vars</div>
+      <!-- final result -->
+      <div class="hand">
+        <div class="hand__arrow">▶</div>
+        <div class="hand__file">styleguide.html</div>
+        <div class="hand__file">tokens.json (DTCG)</div>
+        <div class="hand__file">launch-checklist.md</div>
       </div>
-      <div class="arrow-h" style="right:-18px;"></div>
-    </div>
-
-    <!-- 06B HANDOFF EXPORT -->
-    <div class="stage">
-      <div class="stage__num">STAGE 06B</div>
-      <div class="stage__title">Handoff · Export</div>
-      <div class="stage__count">3 skills</div>
-
-      <div class="block">
-        <div class="block__label">READ ← DS + UI</div>
-        <div class="block__list">components/*.html<br>pages/*.html<br>design.md<br>components.json</div>
-      </div>
-
-      <div class="block">
-        <div class="block__label">SKILLS</div>
-        <div class="block__list block__list--skills">/design-styleguide<br>/design-export-dtcg<br>/shipping-and-launch</div>
-      </div>
-
-      <div class="block">
-        <div class="block__label">WRITE → ส่ง dev</div>
-        <div class="block__list">styleguide.html<br>tokens.json (DTCG)<br>Style Dict configs<br>launch-checklist.md</div>
-      </div>
-      <!-- no arrow — Utilities is not next chain step -->
-    </div>
-
-    <!-- 07 UTILITIES (always-on, not chain) -->
-    <div class="stage" style="border-style: dashed;">
-      <div class="stage__num">UTILITIES</div>
-      <div class="stage__title">Always-on</div>
-      <div class="stage__count">3 skills · ไม่ใช่ chain</div>
-
-      <div class="block">
-        <div class="block__label">READ</div>
-        <div class="block__list">system state · Jira · Gmail</div>
-      </div>
-
-      <div class="block">
-        <div class="block__label">SKILLS</div>
-        <div class="block__list block__list--skills">/check-setup<br>/jira-tracker<br>/email-summarizer</div>
-      </div>
-
-      <div class="block">
-        <div class="block__label">WRITE</div>
-        <div class="block__list">diagnostic (chat)<br>Lark message · digest</div>
+      <!-- 07 Utilities (parallel) -->
+      <div class="stage-box stage-box--dashed">
+        <div class="stage-box__num">UTILITIES</div>
+        <div class="stage-box__title">Always-on</div>
+        <div class="stage-box__count">3 skills · ไม่ใช่ chain</div>
+        <div class="stage-box__skills">/check-setup · /jira-tracker · /email-summarizer</div>
       </div>
     </div>
 
   </div>
 
-  <!-- Footer -->
   <div class="foot">
-    <span>UXUI Skill Library · 2026-06-26 · เส้นทางหลัก: Discovery → Strategy → DS Base → UI → Copy/QA → Handoff</span>
+    <span>UXUI Skill Library · 2026-06-26 · หน้า 1 / 2 (Pipeline)</span>
+    <span>หน้า 2 → ดู folder tree ของ project จริง</span>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- PAGE 2 — FOLDER TREE -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="page">
+
+  <div class="head">
+    <div>
+      <div class="head__title">Folder Tree · โครงสร้าง project จริง</div>
+      <div class="head__sub">ตัวอย่างจริงที่ designer จะเจอใน project (e.g. lotteryplus-checkout-v2)</div>
+    </div>
+    <div class="head__meta">
+      <strong>หน้า 2 / 2 · Folder Tree</strong><br>
+      github.com/sittipons-ike/uxui-skill-library
+    </div>
+  </div>
+
+  <div class="tree-wrap">
+
+    <!-- LEFT — main tree -->
+    <div class="tree-block">
+      <div class="tree-block__label">project root — ตัวอย่างจริง</div>
+      <div class="tree"><b>lottery-plus-checkout/</b>
+├── <b>README.md</b>                    <em># project doc</em>
+├── <b>CLAUDE.md</b>                    <em># project-level Claude rules</em>
+├── <b>MEMORY.md</b>                    <em># RULE 12 · บทเรียนที่เคยพลาด</em>
+├── <b>spec.md</b>                      <em># RULE 13 · save point</em>
+│
+├── <b>docs/</b>                        <em># เอกสาร input + output ทั้งหมด</em>
+│   ├── <b>brand/</b>                   <em>← marketing (ใส่เอง)</em>
+│   │   ├── brand-book.md
+│   │   ├── voice-tone.md
+│   │   ├── palette.md
+│   │   └── typography.md
+│   ├── <b>product/</b>                 <em>← marketing</em>
+│   │   ├── product-overview.md
+│   │   └── personas.md
+│   ├── <b>intent/</b>                  <em>← /interview-me</em>
+│   │   ├── product-vision.md
+│   │   ├── feature-one-tap.md
+│   │   └── feature-saved-cart.md
+│   └── <b>blueprints/</b>              <em>← /ux-strategist</em>
+│       ├── ux-one-tap-checkout.md
+│       ├── ux-one-tap-checkout.html
+│       └── ux-saved-cart.md
+│
+├── <b>prd.md</b>                       <em>← /prd</em>
+├── <b>personas.md</b>                  <em>← /user-personas</em>
+│
+├── <b>design.md</b>                    <em>← /design-builder · /design-icon-builder</em>
+├── <b>components.json</b>              <em>← /design-component-builder</em>
+├── <b>tokens.css</b>                   <em>← /design-component-builder</em>
+├── <b>ui.json</b>                      <em>← /design-ui-builder</em>
+├── <b>patterns.json</b>                <em>← /design-ui-builder</em>
+│
+├── <b>icons/</b>                       <em>← /design-icon-builder</em>
+│   ├── home.svg
+│   ├── cart.svg
+│   ├── credit-card.svg
+│   └── ...
+├── <b>components/</b>                  <em>← /design-component-builder</em>
+│   ├── button.html
+│   ├── input.html
+│   ├── select.html
+│   └── ...
+├── <b>pages/</b>                       <em>← /design-ui-builder</em>
+│   ├── cart.html
+│   ├── address.html
+│   ├── payment.html
+│   └── confirm.html
+│
+├── <b>microcopy.md</b>                 <em>← /ux-writer</em>
+├── <b>modal-copy.md</b>                <em>← /modal-writer</em>
+├── <b>audit-report.md</b>              <em>← /audit · /design-md-audit</em>
+├── <b>test-report.md</b>               <em>← /browser-testing-with-devtools</em>
+│
+├── <b>styleguide.html</b>              <em>← /design-styleguide (aggregator)</em>
+├── <b>tokens.json</b>                  <em>← /design-export-dtcg (DTCG)</em>
+├── <b>launch-checklist.md</b>          <em>← /shipping-and-launch</em>
+│
+└── <b>style-dictionary/</b>            <em>← /design-export-dtcg</em>
+    ├── ios/tokens.swift
+    ├── android/tokens.kt
+    ├── flutter/tokens.dart
+    └── web/tokens.scss
+</div>
+    </div>
+
+    <!-- RIGHT — legend + notes -->
+    <div style="display: flex; flex-direction: column; gap: 14px;">
+
+      <div class="tree-block">
+        <div class="tree-block__label">การเข้ามาของไฟล์</div>
+        <div class="legend">
+          <div class="legend__row"><code>docs/brand/</code> <span>marketing เตรียมก่อนเริ่ม project (ใส่เอง)</span></div>
+          <div class="legend__row"><code>docs/product/</code> <span>marketing — overview + persona</span></div>
+          <div class="legend__row"><code>docs/intent/</code> <span>สร้างตอน /interview-me รัน</span></div>
+          <div class="legend__row"><code>docs/blueprints/</code> <span>สร้างตอน /ux-strategist รัน</span></div>
+          <div class="legend__row"><code>design.md</code> <span>สร้าง 1× ต่อ project · DS base</span></div>
+          <div class="legend__row"><code>components.json</code> <span>1× ต่อ project · เพิ่ม component เมื่อมีใหม่</span></div>
+          <div class="legend__row"><code>ui.json + pages/</code> <span>เพิ่มต่อ feature ที่ทำ</span></div>
+          <div class="legend__row"><code>style-dictionary/</code> <span>สร้างตอน export — ส่ง dev</span></div>
+        </div>
+      </div>
+
+      <div class="tree-block">
+        <div class="tree-block__label">หลักการ</div>
+        <div style="font-size: 10px; color: #444; line-height: 1.6;">
+          <p style="margin-bottom: 8px;">📂 <b>docs/</b> = เอกสารทั้งหมดที่ก่อนทำ visual</p>
+          <p style="margin-bottom: 8px;">📄 <b>*.md / *.json / *.css</b> = ข้อมูล + spec ของ DS</p>
+          <p style="margin-bottom: 8px;">🌐 <b>*.html</b> = output visual ที่เปิดดูใน browser</p>
+          <p style="margin-bottom: 8px;">📁 <b>icons/ · components/ · pages/</b> = artifacts ต่อ skill</p>
+          <p>🚀 <b>style-dictionary/</b> = พร้อมส่ง dev iOS/Android/Flutter/web</p>
+        </div>
+      </div>
+
+      <div class="tree-block">
+        <div class="tree-block__label">tip — ทุก skill scan folder เหล่านี้ก่อนทำงาน</div>
+        <div style="font-size: 10px; color: #444; line-height: 1.6;">
+          ใส่ <code style="font-family:monospace; background:#fff; padding:1px 5px; border:1px solid #ccc; border-radius:3px;">docs/brand/</code> + <code style="font-family:monospace; background:#fff; padding:1px 5px; border:1px solid #ccc; border-radius:3px;">docs/product/</code> ตั้งแต่ครั้งแรก · skill ที่เหลือจะ <b>skip คำถามที่ตอบแล้ว</b> · ถาม gap เท่านั้น
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="foot">
+    <span>UXUI Skill Library · 2026-06-26 · หน้า 2 / 2 (Folder Tree)</span>
     <span>ติดตั้ง: <code>bash team-rules/install-team-rules.sh</code> · update: <code>bash update.sh</code></span>
   </div>
 
