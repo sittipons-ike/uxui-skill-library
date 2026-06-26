@@ -184,8 +184,8 @@
   }
   .tree {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    line-height: 1.7;
+    font-size: 9.5px;
+    line-height: 1.55;
     color: #000;
     white-space: pre;
     overflow: hidden;
@@ -362,7 +362,7 @@
   <div class="head">
     <div>
       <div class="head__title">Folder Tree · โครงสร้าง project จริง</div>
-      <div class="head__sub">ตัวอย่างจริงที่ designer จะเจอใน project (e.g. lotteryplus-checkout-v2)</div>
+      <div class="head__sub">ตัวอย่างจริงที่ designer จะเจอใน project (e.g. lottery-plus)</div>
     </div>
     <div class="head__meta">
       <strong>หน้า 2 / 2 · Folder Tree</strong><br>
@@ -375,65 +375,47 @@
     <!-- TOP — main tree -->
     <div class="tree-block">
       <div class="tree-block__label">project root — ตัวอย่างจริง</div>
-      <div class="tree"><b>lottery-plus-checkout/</b>
-├── <b>README.md</b>                    <em># project doc</em>
-├── <b>CLAUDE.md</b>                    <em># project-level Claude rules</em>
-├── <b>MEMORY.md</b>                    <em># RULE 12 · บทเรียนที่เคยพลาด</em>
-├── <b>spec.md</b>                      <em># RULE 13 · save point</em>
-│
-├── <b>docs/</b>                        <em># เอกสาร input + output ทั้งหมด</em>
-│   ├── <b>brand/</b>                   <em>← marketing (ใส่เอง)</em>
+      <div class="tree"><b>lottery-plus/</b>
+├── <b>README.md</b>                <em># project doc</em>
+├── <b>CLAUDE.md</b>                <em># project rules</em>
+├── <b>MEMORY.md</b>                <em># RULE 12 — บทเรียน</em>
+├── <b>spec.md</b>                  <em># RULE 13 — save point</em>
+├── <b>docs/</b>                    <em># เอกสาร input + output</em>
+│   ├── <b>brand/</b>               <em>← marketing</em>
 │   │   ├── brand-book.md
 │   │   ├── voice-tone.md
 │   │   ├── palette.md
 │   │   └── typography.md
-│   ├── <b>product/</b>                 <em>← marketing</em>
+│   ├── <b>product/</b>             <em>← marketing</em>
 │   │   ├── product-overview.md
 │   │   └── personas.md
-│   ├── <b>intent/</b>                  <em>← /interview-me</em>
+│   ├── <b>intent/</b>              <em>← /interview-me</em>
 │   │   ├── product-vision.md
-│   │   ├── feature-one-tap.md
-│   │   └── feature-saved-cart.md
-│   └── <b>blueprints/</b>              <em>← /ux-strategist</em>
-│       ├── ux-one-tap-checkout.md
-│       ├── ux-one-tap-checkout.html
-│       └── ux-saved-cart.md
-│
-├── <b>prd.md</b>                       <em>← /prd</em>
-├── <b>personas.md</b>                  <em>← /user-personas</em>
-│
-├── <b>design.md</b>                    <em>← /design-builder · /design-icon-builder</em>
-├── <b>components.json</b>              <em>← /design-component-builder</em>
-├── <b>tokens.css</b>                   <em>← /design-component-builder</em>
-├── <b>ui.json</b>                      <em>← /design-ui-builder</em>
-├── <b>patterns.json</b>                <em>← /design-ui-builder</em>
-│
-├── <b>icons/</b>                       <em>← /design-icon-builder</em>
-│   ├── home.svg
-│   ├── cart.svg
-│   ├── credit-card.svg
-│   └── ...
-├── <b>components/</b>                  <em>← /design-component-builder</em>
-│   ├── button.html
-│   ├── input.html
-│   ├── select.html
-│   └── ...
-├── <b>pages/</b>                       <em>← /design-ui-builder</em>
-│   ├── cart.html
-│   ├── address.html
-│   ├── payment.html
-│   └── confirm.html
-│
-├── <b>microcopy.md</b>                 <em>← /ux-writer</em>
-├── <b>modal-copy.md</b>                <em>← /modal-writer</em>
-├── <b>audit-report.md</b>              <em>← /audit · /design-md-audit</em>
-├── <b>test-report.md</b>               <em>← /browser-testing-with-devtools</em>
-│
-├── <b>styleguide.html</b>              <em>← /design-styleguide (aggregator)</em>
-├── <b>tokens.json</b>                  <em>← /design-export-dtcg (DTCG)</em>
-├── <b>launch-checklist.md</b>          <em>← /shipping-and-launch</em>
-│
-└── <b>style-dictionary/</b>            <em>← /design-export-dtcg</em>
+│   │   ├── feature-checkout.md
+│   │   ├── feature-saved-cart.md
+│   │   └── ...
+│   └── <b>blueprints/</b>          <em>← /ux-strategist</em>
+│       ├── ux-checkout.md + .html
+│       ├── ux-saved-cart.md + .html
+│       └── ...
+├── <b>prd.md</b>                   <em>← /prd</em>
+├── <b>personas.md</b>              <em>← /user-personas</em>
+├── <b>design.md</b>                <em>← /design-builder · /design-icon-builder</em>
+├── <b>components.json</b>          <em>← /design-component-builder</em>
+├── <b>tokens.css</b>               <em>← /design-component-builder</em>
+├── <b>ui.json</b>                  <em>← /design-ui-builder</em>
+├── <b>patterns.json</b>            <em>← /design-ui-builder</em>
+├── <b>icons/</b>                   <em>← /design-icon-builder (12-60 svg)</em>
+├── <b>components/</b>              <em>← /design-component-builder (button · input · card · ...)</em>
+├── <b>pages/</b>                   <em>← /design-ui-builder (cart · login · checkout · ...)</em>
+├── <b>microcopy.md</b>             <em>← /ux-writer</em>
+├── <b>modal-copy.md</b>            <em>← /modal-writer</em>
+├── <b>audit-report.md</b>          <em>← /audit · /design-md-audit · /figma-audit-ui</em>
+├── <b>test-report.md</b>           <em>← /browser-testing-with-devtools</em>
+├── <b>styleguide.html</b>          <em>← /design-styleguide</em>
+├── <b>tokens.json</b>              <em>← /design-export-dtcg (DTCG)</em>
+├── <b>launch-checklist.md</b>      <em>← /shipping-and-launch</em>
+└── <b>style-dictionary/</b>        <em>← /design-export-dtcg</em>
     ├── ios/tokens.swift
     ├── android/tokens.kt
     ├── flutter/tokens.dart
