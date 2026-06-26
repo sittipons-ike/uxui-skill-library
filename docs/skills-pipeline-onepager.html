@@ -7,7 +7,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  @page { size: A4 landscape; margin: 0; }
+  @page { size: A4; margin: 0; }
+  @page :first { size: A4 landscape; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
     background: #fff; color: #000;
@@ -18,6 +19,10 @@
     width: 1123px; height: 794px;
     padding: 32px 40px 26px;
     display: flex; flex-direction: column;
+  }
+  .page--portrait {
+    width: 794px; height: 1123px;
+    padding: 36px 40px 28px;
   }
 
   /* Header */
@@ -151,12 +156,17 @@
   }
   .foot code { font-family: 'JetBrains Mono', monospace; color: #555; }
 
-  /* ═══ PAGE 2 — FOLDER TREE ═══ */
+  /* ═══ PAGE 2 — FOLDER TREE (portrait) ═══ */
   .tree-wrap {
     flex: 1;
     display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    gap: 24px;
+    grid-template-rows: auto 1fr;
+    gap: 16px;
+  }
+  .tree-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
   }
   .tree-block {
     background: #f7f7f7;
@@ -347,7 +357,7 @@
 <!-- ═══════════════════════════════════════════════════════════════ -->
 <!-- PAGE 2 — FOLDER TREE -->
 <!-- ═══════════════════════════════════════════════════════════════ -->
-<div class="page">
+<div class="page page--portrait">
 
   <div class="head">
     <div>
@@ -362,7 +372,7 @@
 
   <div class="tree-wrap">
 
-    <!-- LEFT — main tree -->
+    <!-- TOP — main tree -->
     <div class="tree-block">
       <div class="tree-block__label">project root — ตัวอย่างจริง</div>
       <div class="tree"><b>lottery-plus-checkout/</b>
@@ -431,38 +441,40 @@
 </div>
     </div>
 
-    <!-- RIGHT — legend + notes -->
-    <div style="display: flex; flex-direction: column; gap: 14px;">
+    <!-- BOTTOM — 3 cards horizontal -->
+    <div class="tree-row">
 
       <div class="tree-block">
         <div class="tree-block__label">การเข้ามาของไฟล์</div>
         <div class="legend">
-          <div class="legend__row"><code>docs/brand/</code> <span>marketing เตรียมก่อนเริ่ม project (ใส่เอง)</span></div>
-          <div class="legend__row"><code>docs/product/</code> <span>marketing — overview + persona</span></div>
-          <div class="legend__row"><code>docs/intent/</code> <span>สร้างตอน /interview-me รัน</span></div>
-          <div class="legend__row"><code>docs/blueprints/</code> <span>สร้างตอน /ux-strategist รัน</span></div>
-          <div class="legend__row"><code>design.md</code> <span>สร้าง 1× ต่อ project · DS base</span></div>
-          <div class="legend__row"><code>components.json</code> <span>1× ต่อ project · เพิ่ม component เมื่อมีใหม่</span></div>
-          <div class="legend__row"><code>ui.json + pages/</code> <span>เพิ่มต่อ feature ที่ทำ</span></div>
-          <div class="legend__row"><code>style-dictionary/</code> <span>สร้างตอน export — ส่ง dev</span></div>
+          <div class="legend__row"><code>docs/brand/</code> <span>marketing เตรียมก่อนเริ่ม</span></div>
+          <div class="legend__row"><code>docs/product/</code> <span>marketing — persona</span></div>
+          <div class="legend__row"><code>docs/intent/</code> <span>/interview-me รัน</span></div>
+          <div class="legend__row"><code>docs/blueprints/</code> <span>/ux-strategist รัน</span></div>
+          <div class="legend__row"><code>design.md</code> <span>1× ต่อ project · DS</span></div>
+          <div class="legend__row"><code>components.json</code> <span>เพิ่ม component ใหม่</span></div>
+          <div class="legend__row"><code>ui.json + pages/</code> <span>เพิ่มต่อ feature</span></div>
+          <div class="legend__row"><code>style-dictionary/</code> <span>export ส่ง dev</span></div>
         </div>
       </div>
 
       <div class="tree-block">
         <div class="tree-block__label">หลักการ</div>
-        <div style="font-size: 10px; color: #444; line-height: 1.6;">
-          <p style="margin-bottom: 8px;">📂 <b>docs/</b> = เอกสารทั้งหมดที่ก่อนทำ visual</p>
-          <p style="margin-bottom: 8px;">📄 <b>*.md / *.json / *.css</b> = ข้อมูล + spec ของ DS</p>
-          <p style="margin-bottom: 8px;">🌐 <b>*.html</b> = output visual ที่เปิดดูใน browser</p>
-          <p style="margin-bottom: 8px;">📁 <b>icons/ · components/ · pages/</b> = artifacts ต่อ skill</p>
-          <p>🚀 <b>style-dictionary/</b> = พร้อมส่ง dev iOS/Android/Flutter/web</p>
+        <div style="font-size: 10px; color: #444; line-height: 1.7;">
+          <p style="margin-bottom: 6px;">📂 <b>docs/</b> = เอกสาร input ก่อนทำ visual</p>
+          <p style="margin-bottom: 6px;">📄 <b>*.md/*.json/*.css</b> = ข้อมูล + spec ของ DS</p>
+          <p style="margin-bottom: 6px;">🌐 <b>*.html</b> = output visual เปิดใน browser</p>
+          <p style="margin-bottom: 6px;">📁 <b>icons/ components/ pages/</b> = artifacts</p>
+          <p>🚀 <b>style-dictionary/</b> = พร้อมส่ง dev (iOS/Android/Flutter/web)</p>
         </div>
       </div>
 
       <div class="tree-block">
-        <div class="tree-block__label">tip — ทุก skill scan folder เหล่านี้ก่อนทำงาน</div>
-        <div style="font-size: 10px; color: #444; line-height: 1.6;">
-          ใส่ <code style="font-family:monospace; background:#fff; padding:1px 5px; border:1px solid #ccc; border-radius:3px;">docs/brand/</code> + <code style="font-family:monospace; background:#fff; padding:1px 5px; border:1px solid #ccc; border-radius:3px;">docs/product/</code> ตั้งแต่ครั้งแรก · skill ที่เหลือจะ <b>skip คำถามที่ตอบแล้ว</b> · ถาม gap เท่านั้น
+        <div class="tree-block__label">tip · ก่อนรัน skill</div>
+        <div style="font-size: 10px; color: #444; line-height: 1.7;">
+          <p style="margin-bottom: 8px;">ใส่ <code style="font-family:monospace; background:#fff; padding:1px 5px; border:1px solid #ccc; border-radius:3px;">docs/brand/</code> + <code style="font-family:monospace; background:#fff; padding:1px 5px; border:1px solid #ccc; border-radius:3px;">docs/product/</code> ตั้งแต่ครั้งแรก</p>
+          <p style="margin-bottom: 8px;">→ skill ที่เหลือ <b>skip คำถามที่ตอบแล้ว</b></p>
+          <p>→ ถาม gap เท่านั้น · ประหยัด token + เวลา</p>
         </div>
       </div>
 
