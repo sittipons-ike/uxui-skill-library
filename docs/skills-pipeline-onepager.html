@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<title>UXUI Skills · Pipeline (read / write / next)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4 landscape; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: #fff;
+    color: #000;
+    font-family: 'Inter', 'Noto Sans Thai', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* A4 landscape at 96dpi = 1123 × 794 px */
+  .page {
+    width: 1123px;
+    height: 794px;
+    padding: 32px 40px 24px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Header */
+  .head {
+    border-bottom: 2px solid #000;
+    padding-bottom: 12px;
+    margin-bottom: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .head__title { font-size: 24px; font-weight: 800; letter-spacing: -0.01em; line-height: 1; }
+  .head__sub { font-size: 10px; color: #666; margin-top: 4px; }
+  .head__meta { font-size: 9px; color: #888; text-align: right; line-height: 1.5; }
+  .head__meta strong { color: #000; font-weight: 700; }
+
+  /* Table */
+  .tbl {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 180px 1fr 1fr 200px;
+    column-gap: 14px;
+    align-content: start;
+  }
+  .col-head {
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: #888;
+    text-transform: uppercase;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 4px;
+  }
+
+  /* Section header */
+  .sec {
+    grid-column: 1 / -1;
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: #000;
+    border-bottom: 1.5px solid #000;
+    padding: 9px 0 4px;
+    margin: 2px 0 4px;
+    display: flex;
+    justify-content: space-between;
+    text-transform: uppercase;
+  }
+  .sec:first-of-type { margin-top: 0; }
+  .sec span:last-child { color: #999; font-weight: 500; }
+
+  /* Cells */
+  .name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    font-weight: 600;
+    color: #000;
+    padding: 4px 0;
+    border-bottom: 1px dashed #e5e5e5;
+    white-space: nowrap;
+  }
+  .reads, .writes {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    color: #444;
+    padding: 4px 0;
+    border-bottom: 1px dashed #e5e5e5;
+    line-height: 1.45;
+  }
+  .next {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: #000;
+    padding: 4px 0;
+    border-bottom: 1px dashed #e5e5e5;
+    line-height: 1.45;
+    font-weight: 500;
+  }
+  .next em { color: #888; font-style: italic; font-weight: 400; }
+
+  /* Footer */
+  .foot {
+    border-top: 1px solid #ccc;
+    padding-top: 8px;
+    margin-top: 10px;
+    font-size: 8px;
+    color: #999;
+    display: flex;
+    justify-content: space-between;
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- PAGE 1 -->
+<!-- ════════════════════════════════════════════════════════════ -->
+<div class="page">
+
+  <div class="head">
+    <div>
+      <div class="head__title">UXUI Skills · Pipeline</div>
+      <div class="head__sub">เรียง skill ตาม chain → อ่านอะไร · เขียนอะไร · ส่งต่อใคร · หน้า 1 / 2 (Building)</div>
+    </div>
+    <div class="head__meta">
+      <strong>github.com/sittipons-ike/uxui-skill-library</strong><br>
+      ติดตั้ง: <code style="font-family:monospace;">bash team-rules/install-team-rules.sh</code>
+    </div>
+  </div>
+
+  <div class="tbl">
+    <div class="col-head">ชื่อสกิล</div>
+    <div class="col-head">← อ่าน (input)</div>
+    <div class="col-head">→ เขียน (output)</div>
+    <div class="col-head">→ ส่งต่อ skill</div>
+
+    <!-- 01 DISCOVERY -->
+    <div class="sec"><span>01 · Discovery</span><span>5 skills</span></div>
+    <div class="name">/interview-me</div>
+    <div class="reads">docs/brand/ · docs/product/ · docs/intent/</div>
+    <div class="writes">docs/intent/&lt;topic&gt;.md</div>
+    <div class="next">/prd</div>
+
+    <div class="name">/prd</div>
+    <div class="reads">docs/intent/ · docs/product/ · docs/brand/</div>
+    <div class="writes">prd.md</div>
+    <div class="next">/ux-strategist · /spec-driven</div>
+
+    <div class="name">/user-personas</div>
+    <div class="reads">research data · interview transcripts</div>
+    <div class="writes">personas.md</div>
+    <div class="next">/ux-strategist</div>
+
+    <div class="name">/notion-planning</div>
+    <div class="reads">prd.md · personas.md</div>
+    <div class="writes">Notion pages + tasks</div>
+    <div class="next"><em>parallel (planning)</em></div>
+
+    <div class="name">/masterprompt</div>
+    <div class="reads">user idea + context</div>
+    <div class="writes">prompt text (chat)</div>
+    <div class="next"><em>standalone</em></div>
+
+    <!-- 02 STRATEGY -->
+    <div class="sec"><span>02 · Strategy</span><span>2 skills</span></div>
+    <div class="name">/ux-strategist</div>
+    <div class="reads">prd.md · docs/intent/ · docs/blueprints/ · docs/brand/</div>
+    <div class="writes">docs/blueprints/ux-&lt;f&gt;.md + .html</div>
+    <div class="next">/design-ui-builder · /ux-writer · /modal-writer</div>
+
+    <div class="name">/spec-driven-development</div>
+    <div class="reads">prd.md · docs/blueprints/</div>
+    <div class="writes">spec.md + plan + tasks</div>
+    <div class="next"><em>implementation</em></div>
+
+    <!-- 03 DS BASE -->
+    <div class="sec"><span>03 · DS Base</span><span>5 skills</span></div>
+    <div class="name">/design-builder</div>
+    <div class="reads">docs/brand/ · docs/product/ + user input</div>
+    <div class="writes">design.md</div>
+    <div class="next">/design-icon-builder</div>
+
+    <div class="name">/design-icon-builder</div>
+    <div class="reads">design.md (mood, spacing)</div>
+    <div class="writes">design.md (iconography) + ./icons/*.svg</div>
+    <div class="next">/design-component-builder</div>
+
+    <div class="name">/design-component-builder</div>
+    <div class="reads">design.md</div>
+    <div class="writes">components.json + tokens.css + components/*.html</div>
+    <div class="next">/design-ui-builder · /figma-push-components</div>
+
+    <div class="name">/design-md-audit</div>
+    <div class="reads">design.md · components.json · ui.json · patterns.json</div>
+    <div class="writes">audit-report.md</div>
+    <div class="next"><em>gate before figma push</em></div>
+
+    <div class="name">/design-remix</div>
+    <div class="reads">brand refs · design-library/</div>
+    <div class="writes">design.md (mixed)</div>
+    <div class="next">/design-icon-builder</div>
+
+    <!-- 04 UI -->
+    <div class="sec"><span>04 · UI</span><span>3 skills</span></div>
+    <div class="name">/design-ui-builder</div>
+    <div class="reads">design.md · components.json · docs/blueprints/ux-*.md</div>
+    <div class="writes">ui.json · patterns.json · pages/&lt;name&gt;.html</div>
+    <div class="next">/design-md-audit · /audit</div>
+
+    <div class="name">/ui-implementation-specialist</div>
+    <div class="reads">components.json · ui.json · tokens.css · design spec</div>
+    <div class="writes">component code blueprint</div>
+    <div class="next"><em>dev team</em></div>
+
+    <div class="name">/frontend-ui-engineering</div>
+    <div class="reads">component source code</div>
+    <div class="writes">review notes</div>
+    <div class="next"><em>parallel</em></div>
+  </div>
+
+  <div class="foot">
+    <span>UXUI Skill Library · 2026-06-26 · หน้า 1 / 2</span>
+    <span>หน้า 2 → Copy / QA + Handoff + Utilities</span>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- PAGE 2 -->
+<!-- ════════════════════════════════════════════════════════════ -->
+<div class="page">
+
+  <div class="head">
+    <div>
+      <div class="head__title">UXUI Skills · Pipeline</div>
+      <div class="head__sub">เรียง skill ตาม chain → อ่านอะไร · เขียนอะไร · ส่งต่อใคร · หน้า 2 / 2 (QA + Handoff)</div>
+    </div>
+    <div class="head__meta">
+      <strong>github.com/sittipons-ike/uxui-skill-library</strong><br>
+      ติดตั้ง: <code style="font-family:monospace;">bash team-rules/install-team-rules.sh</code>
+    </div>
+  </div>
+
+  <div class="tbl">
+    <div class="col-head">ชื่อสกิล</div>
+    <div class="col-head">← อ่าน (input)</div>
+    <div class="col-head">→ เขียน (output)</div>
+    <div class="col-head">→ ส่งต่อ skill</div>
+
+    <!-- 05 COPY + QA -->
+    <div class="sec"><span>05 · Copy + QA</span><span>4 skills</span></div>
+    <div class="name">/ux-writer</div>
+    <div class="reads">docs/brand/voice-tone.md · docs/blueprints/ · docs/intent/</div>
+    <div class="writes">microcopy.md</div>
+    <div class="next">/audit · /figma-audit-ui</div>
+
+    <div class="name">/modal-writer</div>
+    <div class="reads">docs/brand/voice-tone.md · docs/blueprints/</div>
+    <div class="writes">modal-copy.md</div>
+    <div class="next"><em>integrate to UI</em></div>
+
+    <div class="name">/audit</div>
+    <div class="reads">HTML/CSS source + screenshot</div>
+    <div class="writes">audit-report.md</div>
+    <div class="next"><em>fix loop → re-audit</em></div>
+
+    <div class="name">/browser-testing-with-devtools</div>
+    <div class="reads">live URL + DevTools data</div>
+    <div class="writes">test-report.md</div>
+    <div class="next">/shipping-and-launch</div>
+
+    <!-- 06 HANDOFF FIGMA -->
+    <div class="sec"><span>06 · Handoff · Figma</span><span>4 skills</span></div>
+    <div class="name">/figma-audit-ui</div>
+    <div class="reads">Figma file (via MCP)</div>
+    <div class="writes">audit-report.md + Figma comments</div>
+    <div class="next"><em>gate before push</em></div>
+
+    <div class="name">/figma-push-tokens</div>
+    <div class="reads">design.md (semantic tokens)</div>
+    <div class="writes">Figma Variable Collection</div>
+    <div class="next">/figma-push-components</div>
+
+    <div class="name">/figma-push-components</div>
+    <div class="reads">components.json + Figma Variables</div>
+    <div class="writes">Figma Component Sets</div>
+    <div class="next"><em>handoff complete</em></div>
+
+    <div class="name">/figma-rename-tokens</div>
+    <div class="reads">Figma Variables (current state)</div>
+    <div class="writes">Figma Variables (renamed)</div>
+    <div class="next"><em>cleanup pass</em></div>
+
+    <!-- 06 HANDOFF EXPORT -->
+    <div class="sec"><span>06 · Handoff · Export</span><span>3 skills</span></div>
+    <div class="name">/design-styleguide</div>
+    <div class="reads">components/*.html · pages/*.html · patterns/*.html</div>
+    <div class="writes">styleguide.html</div>
+    <div class="next"><em>review / share</em></div>
+
+    <div class="name">/design-export-dtcg</div>
+    <div class="reads">design.md · components.json</div>
+    <div class="writes">tokens.json (DTCG) + Style Dictionary configs</div>
+    <div class="next"><em>dev mobile/web</em></div>
+
+    <div class="name">/shipping-and-launch</div>
+    <div class="reads">ทุก artifact ก่อนหน้า + audit reports</div>
+    <div class="writes">launch-checklist.md</div>
+    <div class="next"><em>go-live</em></div>
+
+    <!-- 07 UTILITIES -->
+    <div class="sec"><span>07 · Utilities</span><span>3 skills — always-on, ไม่ใช่ chain</span></div>
+    <div class="name">/check-setup</div>
+    <div class="reads">system state · env vars</div>
+    <div class="writes">diagnostic report (chat)</div>
+    <div class="next"><em>onboarding</em></div>
+
+    <div class="name">/jira-tracker</div>
+    <div class="reads">Jira API + state.json</div>
+    <div class="writes">Lark message + state diff</div>
+    <div class="next"><em>scheduled (Mon/Wed/Fri)</em></div>
+
+    <div class="name">/email-summarizer</div>
+    <div class="reads">Gmail (via MCP)</div>
+    <div class="writes">Lark message digest</div>
+    <div class="next"><em>scheduled</em></div>
+  </div>
+
+  <div class="foot">
+    <span>UXUI Skill Library · 2026-06-26 · หน้า 2 / 2</span>
+    <span>Pipeline: docs/brand/* ▸ docs/intent/ ▸ prd.md ▸ blueprints/ ▸ design.md ▸ components.json ▸ ui.json ▸ Figma + tokens.json</span>
+  </div>
+
+</div>
+
+</body>
+</html>
