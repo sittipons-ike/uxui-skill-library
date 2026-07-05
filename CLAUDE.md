@@ -111,4 +111,12 @@ bash team-rules/install-team-rules.sh
 
 - **Lead:** sittipon.s@7solutions.co.th
 - **Repo:** github.com/sittipons-ike/uxui-skill-library
-- **Last updated:** 2026-06-25
+- **Last updated:** 2026-06-26
+
+---
+
+## Optional Integrations
+
+- **Astryx Design System** (Meta) — 90+ React components + agent-ready CLI docs
+  - Ref: [docs/astryx.md](docs/astryx.md)
+  - Install: `npx @astryxdesign/cli init --features agents`
