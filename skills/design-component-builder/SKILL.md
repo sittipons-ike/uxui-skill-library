@@ -1,6 +1,6 @@
 ---
 name: design-component-builder
-description: Build the components layer of a split-architecture design system. Reads design.md (tokens + mood) and emits components.json (per schemas/components.schema.json) describing atoms/molecules/organisms with DTCG-aligned refs, plus tokens.css and self-contained components/*.html files. Atoms encode variants/sizes/states as diff-only overrides; one-off variants outside the canonical set go in a governed variant-extensions block (reason + expiry required). Default scope: button, input, select, checkbox, radio, textarea, label, card, badge. Legacy --format=md. Triggers on "build components", "add components", "atomic components", "เพิ่ม component", "สร้าง components", "atomic design", "component layer".
+description: Build the components layer of a split-architecture design system. Reads design.md (tokens + mood) and emits components.json (per schemas/components.schema.json) describing atoms/molecules/organisms with DTCG-aligned refs, plus tokens.css and self-contained components/*.html files. Atoms encode variants/sizes/states as diff-only overrides; one-off variants outside the canonical set go in a governed variant-extensions block (reason + expiry required). Default scope — button, input, select, checkbox, radio, textarea, label, card, badge. Legacy --format=md. Triggers on "build components", "add components", "atomic components", "เพิ่ม component", "สร้าง components", "atomic design", "component layer".
 version: 5.1.0
 user-invocable: true
 ---

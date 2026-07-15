@@ -1,6 +1,6 @@
 ---
 name: design-builder
-description: Build the BASE of a design system — outputs design.md (tokens-only). Dual-path: build from scratch OR ingest client-given assets (palette, mood, brand refs, typography). Phase 0 inventory check detects what the user already has and asks only for missing pieces. First file in a 4-file split architecture (design.md → components.json → ui.json → patterns.json); the component, icon, UI, and pattern layers are separate skills. Supports light/dark modes. Triggers on "build design system", "create design.md", "design system from scratch", "brand design guide", "มี palette แล้ว", "ใช้ brand kit ที่มี", "have palette ready", "สร้าง design system", "ออกแบบ DS ใหม่".
+description: Build the BASE of a design system — outputs design.md (tokens-only). Dual-path — build from scratch OR ingest client-given assets (palette, mood, brand refs, typography). Phase 0 inventory check detects what the user already has and asks only for missing pieces. First file in a 4-file split architecture (design.md → components.json → ui.json → patterns.json); the component, icon, UI, and pattern layers are separate skills. Supports light/dark modes. Triggers on "build design system", "create design.md", "design system from scratch", "brand design guide", "มี palette แล้ว", "ใช้ brand kit ที่มี", "have palette ready", "สร้าง design system", "ออกแบบ DS ใหม่".
 version: 6.2.0
 user-invocable: true
 ---

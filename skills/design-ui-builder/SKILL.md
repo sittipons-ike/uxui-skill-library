@@ -1,6 +1,6 @@
 ---
 name: design-ui-builder
-description: Build the ui.json + patterns.json manifests plus per-page and per-pattern HTML in a split-architecture design system. Reads design.md + components.json + components/*.html; emits page/section/flow compositions and reusable pattern shells (auth-split, app-shell, empty-state, hero-grid) with slot contracts. Downward refs only (ui → patterns → components → design). v5 dual-mode rendering: iframe (default — live designer iteration) or --render=inline (self-contained dev hand-off). Legacy --format=md. Triggers on "build ui", "build pages", "build patterns", "ui compositions", "create ui.json", "patterns.json", "สร้าง pages", "ui layer", "page composition", "slot fills".
+description: Build the ui.json + patterns.json manifests plus per-page and per-pattern HTML in a split-architecture design system. Reads design.md + components.json + components/*.html; emits page/section/flow compositions and reusable pattern shells (auth-split, app-shell, empty-state, hero-grid) with slot contracts. Downward refs only (ui → patterns → components → design). v5 dual-mode rendering — iframe (default — live designer iteration) or --render=inline (self-contained dev hand-off). Legacy --format=md. Triggers on "build ui", "build pages", "build patterns", "ui compositions", "create ui.json", "patterns.json", "สร้าง pages", "ui layer", "page composition", "slot fills".
 version: 5.1.0
 user-invocable: true
 ---
