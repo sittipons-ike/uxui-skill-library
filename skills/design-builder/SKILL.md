@@ -34,6 +34,8 @@ design-styleguide         →  renders styleguide.html (reads JSON when present,
 
 ## Execution Steps
 
+⚠️ **This file shows the shape and defaults to generate — `NAMING.md` is the rulebook.** When a naming decision isn't obvious from the examples below (scale-stop conventions, hue naming, forbidden patterns, migration from an older `design.md`), check `NAMING.md` directly rather than guessing from pattern-matching this file alone — it's the source `design-md-audit` validates against.
+
 ### Phase 0a — Auto-scan `docs/brand/` (NEW v6.2.0 — run BEFORE asking)
 
 **Before AskUserQuestion**, scan project for marketing-provided brand assets:

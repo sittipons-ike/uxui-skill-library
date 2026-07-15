@@ -155,7 +155,12 @@ Hold this flat token map in memory for the later steps. Each semantic path will 
 
 ### Step 3 — Assemble `components.json` (schemas/components.schema.json)
 
-Build a single JSON object with this shape (see `examples/components.example.json` for a worked reference):
+Build a single JSON object with this shape (see `examples/components.example.json` for a worked reference).
+
+⚠️ **The example shows one worked instance — it does not enumerate every rule.** Before naming any prop, state, or variant, check `design-builder/NAMING.md § 6` (Component-scoped tokens) and **§ 8** (Forbidden patterns summary) directly — do not rely on the example alone to know what's disallowed:
+- Prop names: `background`/`foreground`/`border`/`shadow`/`ring` only (§ Prop names — one vocabulary, every layer)
+- States: canonical 7 only — `rest, hover, active, focus, disabled, selected, error` (no invented names like `loading`, `open`, etc. — if a component genuinely needs one, treat it the same way as `variant-extensions` below: flag it, don't silently add it)
+- Variants: canonical 5 for interactive atoms — `primary, secondary, tertiary, ghost, destructive`. A one-off outside this set goes in `variant-extensions` (see below), never silently added to `variants`.
 
 ```jsonc
 {

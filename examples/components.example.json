@@ -56,6 +56,16 @@
           }
         }
       },
+      "variant-extensions": {
+        "campaign-green": {
+          "reason": "Songkran campaign 2026 — marketing requested a green CTA for the promo banner only, not a permanent brand color",
+          "expires": "2026-04-20",
+          "extends": "primary",
+          "tokens": {
+            "--btn-bg": "{design.primitive.color.green.600}"
+          }
+        }
+      },
       "sizes": {
         "sm": {
           "classes": ["btn--sm"],
