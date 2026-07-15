@@ -537,7 +537,7 @@ semantic:
 ```
 Never inline numbers in semantic typography — always ref.
 
-**Optional responsive variance (v6.4+):** a role MAY add a `responsive:` sibling key with diff-only overrides per breakpoint tier (mobile-first cascade — last declared tier at or below the viewport wins):
+**Responsive variance — default on `heading.*` (v6.4+):** mobile-first is the assumed baseline for every project (don't ask). Every `heading.h1`–`h4` role MUST add a `responsive:` sibling key with diff-only overrides per breakpoint tier (mobile-first cascade — last declared tier at or below the viewport wins). Opt-in only (not default) on `body`/`label`/`caption`:
 ```yaml
 semantic:
   typography:
@@ -549,13 +549,14 @@ semantic:
         weight:      '{primitive.typography.weight.bold}'
         tracking:    '{primitive.typography.tracking.tight}'
         responsive:
-          sm: { size: '{primitive.typography.size.4xl}', line-height: '{primitive.typography.line-height.4xl}' }
-          lg: { size: '{primitive.typography.size.6xl}', line-height: '{primitive.typography.line-height.6xl}' }
+          2xs: { size: '{primitive.typography.size.3xl}', line-height: '{primitive.typography.line-height.3xl}' }
+          sm:  { size: '{primitive.typography.size.4xl}', line-height: '{primitive.typography.line-height.4xl}' }
+          lg:  { size: '{primitive.typography.size.6xl}', line-height: '{primitive.typography.line-height.6xl}' }
 ```
-- `responsive:` is optional per role — omit for roles that don't need it (most `body`/`label`/`caption` roles never do)
+- `responsive:` is **required by default on every `heading.*` role** — do not skip or ask first. Optional (same mechanism) on `body`/`label`/`caption`.
 - Tier keys must be from `semantic.breakpoints` (§ Breakpoint roles) — no new tier names invented here
 - Each tier is diff-only — list only the sub-keys that change from base
-- A `design.md` with no `responsive:` key is unaffected — fully backward compatible, no migration required on existing files
+- A `design.md` predating this rule (no `responsive:` on headings) still parses fine — treat as a Minor audit finding to backfill, not a hard failure
 
 ---
 
