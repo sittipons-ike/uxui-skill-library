@@ -39,6 +39,14 @@
             "--btn-border": "{design.semantic.color.edge.subtle}"
           }
         },
+        "tertiary": {
+          "classes": ["btn--tertiary"],
+          "tokens": {
+            "--btn-bg": "{design.semantic.color.transparent}",
+            "--btn-fg": "{design.semantic.color.primary.default}",
+            "--btn-border": "{design.semantic.color.primary.default}"
+          }
+        },
         "ghost": {
           "classes": ["btn--ghost"],
           "tokens": {
@@ -47,12 +55,12 @@
             "--btn-border": "{design.semantic.color.transparent}"
           }
         },
-        "danger": {
-          "classes": ["btn--danger"],
+        "destructive": {
+          "classes": ["btn--destructive"],
           "tokens": {
-            "--btn-bg": "{design.semantic.color.danger.default}",
-            "--btn-fg": "{design.semantic.color.on-danger}",
-            "--btn-border": "{design.semantic.color.danger.default}"
+            "--btn-bg": "{design.semantic.color.error.default}",
+            "--btn-fg": "{design.semantic.color.on-error}",
+            "--btn-border": "{design.semantic.color.error.default}"
           }
         }
       },
@@ -110,12 +118,6 @@
           "a11y": {
             "required_attrs": ["aria-disabled"]
           }
-        },
-        "loading": {
-          "classes": ["btn--loading"],
-          "a11y": {
-            "required_attrs": ["aria-busy"]
-          }
         }
       },
       "a11y": {
@@ -156,7 +158,7 @@
         "invalid": {
           "classes": ["input--invalid"],
           "tokens": {
-            "--input-border": "{design.semantic.color.danger.default}"
+            "--input-border": "{design.semantic.color.error.default}"
           },
           "a11y": {
             "required_attrs": ["aria-invalid", "aria-describedby"]
@@ -251,11 +253,11 @@
             "--badge-fg": "{design.semantic.color.warning.strong}"
           }
         },
-        "danger": {
-          "classes": ["badge--danger"],
+        "error": {
+          "classes": ["badge--error"],
           "tokens": {
-            "--badge-bg": "{design.semantic.color.danger.subtle}",
-            "--badge-fg": "{design.semantic.color.danger.strong}"
+            "--badge-bg": "{design.semantic.color.error.subtle}",
+            "--badge-fg": "{design.semantic.color.error.strong}"
           }
         }
       },
@@ -318,7 +320,7 @@
         "error": {
           "classes": ["help-text--error"],
           "tokens": {
-            "--help-fg": "{design.semantic.color.danger.strong}"
+            "--help-fg": "{design.semantic.color.error.strong}"
           },
           "render": {
             "role": "alert"
