@@ -523,6 +523,8 @@ These constraints are now recorded **in `components.json`** under each atom's `a
 - [ ] Variants/sizes/states are **diff-only** — they do NOT duplicate base keys that aren't changing
 - [ ] Every `composes` entry (molecule/organism) references an atom that exists in this file
 - [ ] Molecule/organism stubs use `status: "planned"` and have no HTML output yet
+- [ ] Prop names use current vocabulary only — `background`/`foreground`/`border`/`shadow`/`ring` (per NAMING.md § Prop names). Flag `surface`/`content`/`edge`/`elevation`/`focus-halo` used as a component prop as deprecated — does not apply to the semantic color role `surface`
+- [ ] `disabled` never appears as a variant name — only as a state on every variant (real-world anti-pattern to catch: a `variant: "disabled"` entry alongside a proper `disabled` state)
 
 **Tokens.css:**
 - [ ] `tokens.css` exists at repo root

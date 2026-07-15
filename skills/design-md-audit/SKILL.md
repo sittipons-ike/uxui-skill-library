@@ -394,9 +394,10 @@ See `design-builder/NAMING.md § 12` for full format spec.
 - [ ] If no `component:` block and no `components.json` → INFO: "Run `design-component-builder` to add components"
 - [ ] If `component:` block exists, must contain `atom:` / `molecule:` / `organism:` keys (3-tier)
 - [ ] Old flat shape (no tier nesting) → Critical: must migrate to atomic
-- [ ] **Prop alias check**: NO `bg`, `fg`, `border`, `shadow`, `ring` keys anywhere — must use `surface`, `content`, `edge`, `elevation`, `focus-halo`
+- [ ] **Prop name check**: NO `surface`, `content`, `edge`, `elevation`, `focus-halo` used as a component prop — must use `background`, `foreground`, `border`, `shadow`, `ring` (per NAMING.md § Prop names — shadcn + DTCG vocab, one word every layer, no swap). Does not apply to the semantic color role `surface` (`{semantic.colors.surface.*}`), which is a different, unrelated token category and keeps its name.
 - [ ] **State alias check**: NO `default`, `pressed`, `focused` keys — must use `rest`, `active`, `focus`
 - [ ] **Ambiguous `active` check**: if `active` appears, verify it's pressed-state. If it's nav-current, must rename to `selected`
+- [ ] **`disabled`-as-variant check**: `disabled` must never appear as a variant name (e.g. a `variants.disabled` entry) — only as a state present on every variant. A `disabled` variant alongside per-variant `disabled` states is a Critical finding (real-world anti-pattern)
 - [ ] Tier flow valid (organism → molecule/atom, molecule → atom)
 - [ ] No upward refs (atom must NOT ref molecule/organism)
 - [ ] Tier A (always required): `button`, `input`, `card`
@@ -409,7 +410,7 @@ See `design-builder/NAMING.md § 12` for full format spec.
 - [ ] If a tier is skipped, Known Gaps MUST name it explicitly: `**Tier X (name)** — skipped because <reason>`
 - [ ] `button` has all 5 variants: primary, secondary, tertiary, ghost, destructive
 - [ ] `alert` / `toast` have all 4 status channels (info/success/warning/error)
-- [ ] Mandatory props per component type present (button: bg+fg; input: bg+fg+border; card: bg)
+- [ ] Mandatory props per component type present (button: background+foreground; input: background+foreground+border; card: background)
 - [ ] Every state value is `{design.semantic.*}` / `{semantic.*}` ref OR literal `'transparent'` / `'none'`
 - [ ] NO `{design.primitive.*}` refs in `component:` block (3-tier separation)
 - [ ] NO raw hex / px in `component:` block
