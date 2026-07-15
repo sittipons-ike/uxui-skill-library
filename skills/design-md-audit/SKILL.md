@@ -1,18 +1,8 @@
 ---
 name: design-md-audit
-description: Audit a design system across three input modes — (1) v6 JSON-primary (design.md + components.json + patterns.json + ui.json) validated against JSON Schema Draft-07 in schemas/*.schema.json, (2) v5 MD-split (design.md + components.md + ui.md), (3) legacy monolithic DESIGN.md. Auto-detects input mix; prefers JSON when both JSON and MD manifests are present (warns 'stale spec'). Resolves brace refs via regex ^\{(design|components|patterns|ui)\.([a-z0-9_.\-]+)\}$, enforces strict downward direction (ui → patterns → components → design), enforces $meta.scope per manifest (components-only / ui-only / patterns-only), runs diff-merge (base → variant → size → state, last-write-wins) on every variant×size×state combo and validates the merged result. Carries forward v5.1 checks — NAMING.md atomic + alias rules, WCAG AA contrast pair matrix, HTML coverage (components/<name>.html, pages/<name>.html, patterns/<name>.html), Known Gaps reserved keywords. Flags expired variant-extensions entries (governed one-off variants past their reason/expiry) as Major, escalating to Critical past 90 days. Reports missing sections, schema violations, broken refs, dangling refs, upward refs, scope violations, snake_case, Tailwind hex drift. Supports --migrate flag to split monolithic into 3 files. Supports --migrate-to-json flag to convert legacy MD spec (components.md + ui.md + monolithic DESIGN.md) into v6 JSON manifests (components.json + ui.json + patterns.json) with pattern auto-extraction. Triggers on "audit", "audit design system", "check design system", "review DS spec", "validate", "ตรวจ design", "audit DS".
+description: Audit a design system for completeness and correctness. Validates JSON manifests (design.md + components.json + patterns.json + ui.json) against JSON Schema Draft-07, checks ref integrity / downward direction / scope, runs diff-merge validation, and applies WCAG AA + NAMING.md + HTML-coverage checks. Also audits legacy MD-split and monolithic DESIGN.md specs (auto-detects input mode). Supports --migrate-to-json to convert legacy MD into v6 JSON manifests. Triggers on "audit", "audit design system", "check design system", "review DS spec", "validate", "ตรวจ design", "audit DS".
 version: 6.1.0
-user-invokable: true
-args:
-  - name: file
-    description: Path to entry file (default ./design.md for split mode, ./DESIGN.md for legacy). Audit auto-discovers sibling manifests from entry directory.
-    required: false
-  - name: json
-    description: Set false to force MD-only audit (skips JSON Schema validation + ref resolver). Default true. Use for v5 / legacy repos that have not migrated.
-    required: false
-  - name: migrate-to-json
-    description: Set true to skip audit and run migration instead — converts legacy MD spec (components.md / ui.md / monolithic DESIGN.md) into v6 JSON manifests (components.json + ui.json + patterns.json). Idempotent and non-destructive (never deletes .md files). Default false.
-    required: false
+user-invocable: true
 ---
 
 # 🔍 Design Md Audit (v6)
@@ -20,6 +10,16 @@ args:
 Audit a design system against the v6 backbone. Surfaces gaps, schema violations, broken refs, scope/direction errors, weak sections, and missing HTML coverage.
 
 v6 is the **first dual-format release**: it audits JSON manifests (`components.json` / `patterns.json` / `ui.json`) AND falls back to MD manifests (`components.md` / `ui.md`) or legacy monolithic `DESIGN.md` when JSON is not present. See [§ Backward Compat](#backward-compat) for the migration path to v7 (MD removal).
+
+## Arguments
+
+_All optional — the skill applies sensible defaults when an argument is omitted._
+
+| Argument | Description |
+|---|---|
+| `file` | Path to entry file (default ./design.md for split mode, ./DESIGN.md for legacy). Audit auto-discovers sibling manifests from entry directory. |
+| `json` | Set false to force MD-only audit (skips JSON Schema validation + ref resolver). Default true. Use for v5 / legacy repos that have not migrated. |
+| `migrate-to-json` | Set true to skip audit and run migration instead — converts legacy MD spec (components.md / ui.md / monolithic DESIGN.md) into v6 JSON manifests (components.json + ui.json + patterns.json). Idempotent and non-destructive (never deletes .md files). Default false. |
 
 ## When to use
 - Inherited a design system and need a completeness check

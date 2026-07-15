@@ -2,7 +2,7 @@
 name: design-export-dtcg
 description: Export DS tokens to W3C DTCG format (tokens.json) + Style Dictionary config for cross-platform compile (web/iOS/Android/Flutter/Tailwind). Reads design.md (semantic + primitive) + components.json. Triggers on "export tokens", "DTCG export", "Style Dictionary", "tokens.json", "cross-platform tokens", "mobile tokens", "iOS tokens", "Android tokens", "Flutter tokens".
 version: 1.0.0
-user-invokable: true
+user-invocable: true
 ---
 
 # design-export-dtcg

@@ -1,32 +1,26 @@
 ---
 name: design-ui-builder
-description: Build the ui.json manifest + patterns.json manifest + per-page HTML files + per-pattern HTML shells in a split-architecture design system. Reads design.md (tokens, YAML-in-MD) + components.json (atomic catalog) + components/*.html (markup source for inlining into pages). Emits ui.json (page/section/flow compositions, per schemas/ui.schema.json), patterns.json (reusable cross-page shells like auth-split / app-shell / empty-state / hero-grid, per schemas/patterns.schema.json), pages/<name>.html, and patterns/<name>.html (template shells with slot placeholders). Pages compose either via a pattern + slot_fills OR direct composes []. Slot contract types — component | section | pattern | inline_html | text | image | icon. Refs use brace syntax {file.path.to.thing} per DTCG; downward only (ui → patterns → components → design). Prefers organism refs over atom refs (promote to molecule/organism if composing atoms directly). Legacy --format=md flag emits ui.md alongside ui.json (deprecated, removed v7). v5 adds dual-mode page rendering — DEFAULT iframe mode for live designer iteration (edit component → page auto-reflects on reload), --render=inline flag for self-contained export to dev. Iframe pages reference ./components/<name>.html via relative path; inline pages keep markup copied at build time. Triggers on "build ui", "build pages", "build patterns", "ui compositions", "create ui.json", "patterns.json", "สร้าง pages", "ui layer", "page composition", "slot fills".
+description: Build the ui.json + patterns.json manifests plus per-page and per-pattern HTML in a split-architecture design system. Reads design.md + components.json + components/*.html; emits page/section/flow compositions and reusable pattern shells (auth-split, app-shell, empty-state, hero-grid) with slot contracts. Downward refs only (ui → patterns → components → design). v5 dual-mode rendering: iframe (default — live designer iteration) or --render=inline (self-contained dev hand-off). Legacy --format=md. Triggers on "build ui", "build pages", "build patterns", "ui compositions", "create ui.json", "patterns.json", "สร้าง pages", "ui layer", "page composition", "slot fills".
 version: 5.1.0
-user-invokable: true
-args:
-  - name: source-design
-    description: Path to design.md (default ./design.md)
-    required: false
-  - name: source-components
-    description: Path to components.json (default ./components.json)
-    required: false
-  - name: components-html-dir
-    description: Directory containing per-component HTML files (default ./components/)
-    required: false
-  - name: categories
-    description: "Comma-separated categories to build: page,pattern,section,flow or 'all'. Default: page,pattern"
-    required: false
-  - name: format
-    description: "Output format. 'json' (default v4+) emits ui.json + patterns.json. 'md' (legacy, v5–v6, removed v7) ALSO emits ui.md alongside ui.json. Emits a deprecation warning."
-    required: false
-  - name: render
-    description: "Page render mode. 'iframe' (default v5+) — pages use <iframe src='../components/<name>.html'> so designer edits to a component HTML are reflected on next page reload, no rebuild needed. 'inline' — pages inline component markup at build time (self-contained for dev hand-off; legacy v4 behavior)."
-    required: false
+user-invocable: true
 ---
 
 # 🖼️ Design UI Builder — v5.0.0
 
 Top layer of the split-architecture design system. Reads `design.md` + `components.json` + `components/*.html` → emits `ui.json` + `patterns.json` + `pages/*.html` + `patterns/*.html`.
+
+## Arguments
+
+_All optional — the skill applies sensible defaults when an argument is omitted._
+
+| Argument | Description |
+|---|---|
+| `source-design` | Path to design.md (default ./design.md) |
+| `source-components` | Path to components.json (default ./components.json) |
+| `components-html-dir` | Directory containing per-component HTML files (default ./components/) |
+| `categories` | Comma-separated categories to build: page,pattern,section,flow or 'all'. Default: page,pattern |
+| `format` | Output format. 'json' (default v4+) emits ui.json + patterns.json. 'md' (legacy, v5–v6, removed v7) ALSO emits ui.md alongside ui.json. Emits a deprecation warning. |
+| `render` | Page render mode. 'iframe' (default v5+) — pages use <iframe src='../components/<name>.html'> so designer edits to a component HTML are reflected on next page reload, no rebuild needed. 'inline' — pages inline component markup at build time (self-contained for dev hand-off; legacy v4 behavior). |
 
 ## What changed in v5 (vs v4)
 

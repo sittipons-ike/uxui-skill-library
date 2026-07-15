@@ -1,18 +1,8 @@
 ---
 name: design-component-builder
-description: Build the components layer of a split-architecture design system. Reads design.md (tokens + mood) and emits components.json — a JSON manifest (per schemas/components.schema.json) describing atoms/molecules/organisms with DTCG-aligned ref syntax {design.semantic.*} — alongside tokens.css and self-contained components/<name>.html files plus a components.html showcase. Atoms encode variants/sizes/states as DIFF-ONLY overrides (merge order base → variant → size → state, last-write-wins). One-off variants outside the canonical set go in a governed variant-extensions block (reason + expiry required, never silently added to canonical variants — prevents variant sprawl seen in production apps). Molecule/organism remain spec stubs (status=planned). Mood-biased state mapping. Default initial atomic scope: button, input, select, checkbox, radio, textarea, label, card, badge. Triggers on "build components", "add components", "atomic components", "เพิ่ม component", "สร้าง components", "atomic design", "component layer". Uses 2-tier token strategy (sys + comp aliases) following Material 3 + Carbon hybrid for optimal agent intent + low output token cost. Legacy --format=md flag dual-emits components.md (deprecated, removed in v7).
+description: Build the components layer of a split-architecture design system. Reads design.md (tokens + mood) and emits components.json (per schemas/components.schema.json) describing atoms/molecules/organisms with DTCG-aligned refs, plus tokens.css and self-contained components/*.html files. Atoms encode variants/sizes/states as diff-only overrides; one-off variants outside the canonical set go in a governed variant-extensions block (reason + expiry required). Default scope: button, input, select, checkbox, radio, textarea, label, card, badge. Legacy --format=md. Triggers on "build components", "add components", "atomic components", "เพิ่ม component", "สร้าง components", "atomic design", "component layer".
 version: 5.1.0
-user-invokable: true
-args:
-  - name: source
-    description: Path to design.md (default ./design.md)
-    required: false
-  - name: scope
-    description: "Comma-separated component names to build. Default: button,input,select,checkbox,radio,textarea,label,card,badge"
-    required: false
-  - name: format
-    description: "Output format. 'json' (default) emits components.json only. 'md' (LEGACY, deprecated v5+v6, removed v7) ALSO emits components.md for tools still parsing Markdown."
-    required: false
+user-invocable: true
 ---
 
 # 🧩 Design Component Builder (v5)
@@ -23,6 +13,16 @@ Tier-3 layer builder. Reads `design.md` and outputs:
 3. `components/<name>.html` — self-contained HTML file per atomic component
 4. `components.html` — showcase aggregating all components via iframes
 5. `components.md` — *only if* `--format=md` (legacy dual-emit, deprecated)
+
+## Arguments
+
+_All optional — the skill applies sensible defaults when an argument is omitted._
+
+| Argument | Description |
+|---|---|
+| `source` | Path to design.md (default ./design.md) |
+| `scope` | Comma-separated component names to build. Default: button,input,select,checkbox,radio,textarea,label,card,badge |
+| `format` | Output format. 'json' (default) emits components.json only. 'md' (LEGACY, deprecated v5+v6, removed v7) ALSO emits components.md for tools still parsing Markdown. |
 
 ## What changed from v4.1 → v5.0
 

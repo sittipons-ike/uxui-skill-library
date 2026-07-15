@@ -2,7 +2,7 @@
 name: design-remix
 description: Combine multiple DESIGN.md references into a new design system. Pick traits from existing brands in design-library/ (e.g. "Linear's typography + Notion's spacing + Stripe's color"), synthesize, and emit a coherent DESIGN.md. Triggers on "mix design", "combine brands", "remix design system", "blend styles", "ผสม design", "รวม design จาก".
 version: 1.0.0
-user-invokable: true
+user-invocable: true
 ---
 
 # 🎛️ Design Remix

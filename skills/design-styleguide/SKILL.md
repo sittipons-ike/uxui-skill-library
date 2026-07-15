@@ -2,22 +2,22 @@
 name: design-styleguide
 description: AGGREGATOR mode (default) — combines existing components/*.html + pages/*.html + patterns/*.html into single styleguide.html with TOC. Reads JSON manifests (components.json / ui.json / patterns.json) preferentially for TOC + section grouping; falls back to legacy MD spec (components.md / ui.md) if JSON not present. Auto-detects format. LEGACY render mode via --regenerate flag re-renders from spec instead of aggregating pre-built HTML.
 version: 3.1.0
-user-invokable: true
-args:
-  - name: source
-    description: Path to DESIGN.md (default ./DESIGN.md) — only used in legacy mode
-    required: false
-  - name: output
-    description: "html | figma | both — default: html"
-    required: false
-  - name: regenerate
-    description: "Flag — force LEGACY spec-based rendering instead of aggregator mode"
-    required: false
+user-invocable: true
 ---
 
 # 🎨 Design Styleguide
 
 Generate a human-readable Style Guide so designers, PMs, and stakeholders can review and discuss the design system without reading YAML.
+
+## Arguments
+
+_All optional — the skill applies sensible defaults when an argument is omitted._
+
+| Argument | Description |
+|---|---|
+| `source` | Path to DESIGN.md (default ./DESIGN.md) — only used in legacy mode |
+| `output` | html \| figma \| both — default: html |
+| `regenerate` | Flag — force LEGACY spec-based rendering instead of aggregator mode |
 
 ## Modes
 

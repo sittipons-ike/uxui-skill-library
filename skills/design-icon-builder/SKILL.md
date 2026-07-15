@@ -1,29 +1,25 @@
 ---
 name: design-icon-builder
-description: Populate the iconography layer of design.md (3-file split architecture) AND optionally fetch real SVG files from a free icon library (Phosphor/Tabler/Heroicons/Lucide/Iconoir/Material Symbols/Bootstrap/Remix) via CDN — no npm install needed. Picks library by mood, downloads 12 starter icons, writes them to ./icons/, and locks library+version into design.md. Falls back to monolithic DESIGN.md if split files not present. Note: icons remain in design.md (resource layer per atomic-design industry practice — Material/Carbon/Tailwind separate icons from components). After running, design-component-builder reads design.md + writes components.json (DTCG-aligned manifest). Triggers on "build icons", "icon system", "iconography", "fetch icons", "download icons", "เพิ่ม icon set", "ดึง icon มาใช้", "ทำ icon style guide".
+description: Populate the iconography layer of design.md and optionally fetch real SVG files from one of 8 free icon libraries (Phosphor, Tabler, Heroicons, Lucide, Iconoir, Material Symbols, Bootstrap, Remix) via CDN — no npm install. Picks a library by mood, downloads a starter set to ./icons/, and locks the choice into design.md. Falls back to monolithic DESIGN.md if split files aren't present. Triggers on "build icons", "icon system", "iconography", "fetch icons", "download icons", "เพิ่ม icon set", "ดึง icon มาใช้", "ทำ icon style guide".
 version: 2.3.0
-user-invokable: true
-args:
-  - name: source
-    description: Path to design.md (default ./design.md) — falls back to ./DESIGN.md
-    required: false
-  - name: fetch
-    description: "If true, download SVGs via CDN to ./icons/. Default true."
-    required: false
-  - name: library
-    description: "Override mood-default library: phosphor | tabler | heroicons | lucide | iconoir | material-symbols | bootstrap | remix"
-    required: false
-  - name: scope
-    description: "Icon set size: starter (12) | common (36) | extended (60) | custom. Default: starter"
-    required: false
-  - name: custom-icons
-    description: "Comma-separated icon concepts (only when scope=custom). Example: 'receipt,invoice,bank,chart-line'"
-    required: false
+user-invocable: true
 ---
 
 # 🎯 Design Icon Builder
 
 Fills the `iconography` block in `DESIGN.md` with mood-driven defaults. Optional SVG starter set.
+
+## Arguments
+
+_All optional — the skill applies sensible defaults when an argument is omitted._
+
+| Argument | Description |
+|---|---|
+| `source` | Path to design.md (default ./design.md) — falls back to ./DESIGN.md |
+| `fetch` | If true, download SVGs via CDN to ./icons/. Default true. |
+| `library` | Override mood-default library: phosphor \| tabler \| heroicons \| lucide \| iconoir \| material-symbols \| bootstrap \| remix |
+| `scope` | Icon set size: starter (12) \| common (36) \| extended (60) \| custom. Default: starter |
+| `custom-icons` | Comma-separated icon concepts (only when scope=custom). Example: 'receipt,invoice,bank,chart-line' |
 
 ## When to use
 - DESIGN.md has primitive + semantic + mood already set

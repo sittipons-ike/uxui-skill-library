@@ -1,6 +1,6 @@
 ---
 name: interview-me
-description: Extracts what the user actually wants instead of what they think they should want. Achieves this through one-question-at-a-time interview until ~95% confidence about the underlying intent. Phase 0 auto-scans docs/brand/, docs/product/, docs/intent/ for existing context — uses what's there as evidence to skip resolved dimensions, asks only on gaps. Saves output to docs/intent/<topic>.md by default for downstream skills (prd, design-builder, ux-strategist) to chain. Use when an ask is underspecified ("build me X" without "for whom" or "why now"), when the user explicitly invokes ("interview me", "grill me", "are we sure?", "stress-test my thinking"), or when you catch yourself silently filling in ambiguous requirements before any plan, spec, or code exists.
+description: Extracts what the user actually wants instead of what they think they should want, through a one-question-at-a-time interview until ~95% confidence about the underlying intent. Phase 0 auto-scans docs/ for existing context and asks only on gaps; saves the result to docs/intent/<topic>.md for downstream skills (prd, design-builder, ux-strategist) to chain. Use when an ask is underspecified ("build me X" without "for whom" or "why now"), when the user explicitly invokes ("interview me", "grill me", "are we sure?", "stress-test my thinking"), or when you catch yourself filling in ambiguous requirements before any plan, spec, or code exists.
 version: 2.1.0
 ---
 

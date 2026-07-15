@@ -2,7 +2,7 @@
 name: figma-rename-tokens
 description: Normalize existing Figma Variable names to match canonical DS naming (Color/Primary/Default, Space/Md, etc.) via figma-console MCP. Non-destructive — preserves all bindings, values, modes. Hybrid auto-suggest + designer approval. Useful for aligning multi-project Figma files with team DS standard before subscribing to DS Library. Triggers on "rename figma variables", "normalize figma tokens", "align figma naming", "เปลี่ยนชื่อ variable figma", "rename token figma", "ทำชื่อ figma ให้ตรง DS".
 version: 1.0.0
-user-invokable: true
+user-invocable: true
 ---
 
 # figma-rename-tokens

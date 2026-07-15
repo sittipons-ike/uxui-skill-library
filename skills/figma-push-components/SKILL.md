@@ -2,7 +2,7 @@
 name: figma-push-components
 description: Push DS atoms (button, input, badge, label, card) from components.json + HTML into Figma as Component Sets with auto-layout + Variable bindings. Every padding/radius/fill binds to Figma Variables (from figma-push-tokens). Variants per atom (primary/secondary/ghost × sm/md/lg). States rest + disabled only (hover/focus via designer Interactions). Idempotent. Triggers on "push components to figma", "sync figma components", "figma components", "push atoms", "อัพ component figma", "สร้าง component figma".
 version: 1.0.0
-user-invokable: true
+user-invocable: true
 ---
 
 # figma-push-components

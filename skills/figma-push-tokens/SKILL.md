@@ -2,7 +2,7 @@
 name: figma-push-tokens
 description: Sync DS tokens (design.md or tokens.json DTCG) to Figma Variables via figma-console MCP. Creates Variable Collection with light/dark modes; aliases (comp tier) become Figma variable refs. Idempotent. Triggers on "push to figma", "sync figma variables", "figma tokens", "push tokens", "อัพ figma", "sync token ขึ้น figma".
 version: 1.0.0
-user-invokable: true
+user-invocable: true
 ---
 
 # figma-push-tokens

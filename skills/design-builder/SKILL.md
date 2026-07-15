@@ -1,8 +1,8 @@
 ---
 name: design-builder
-description: Build the BASE of a design system — outputs design.md (tokens-only file). DUAL-PATH (v6.0.0):accepts brand inputs from scratch OR ingests client-given assets (palette, mood, brand refs, typography). Phase 0 inventory check detects what user already has, then asks ONLY for missing pieces. Includes primitive + semantic + mood + iconography-placeholder. Biases token defaults by mood. Tailwind v3.4+ palette for primitives. Part of a 4-file split architecture (design.md + components.json + ui.json + patterns.json). Component layer, icons, UI compositions, and patterns are built by separate skills (design-component-builder, design-icon-builder, design-ui-builder). Supports light/dark modes. Triggers on "build design system", "create design.md", "design system from scratch", "brand design guide", "มี palette แล้ว", "ใช้ brand kit ที่มี", "have palette ready", "สร้าง design system", "ออกแบบ DS ใหม่".
+description: Build the BASE of a design system — outputs design.md (tokens-only). Dual-path: build from scratch OR ingest client-given assets (palette, mood, brand refs, typography). Phase 0 inventory check detects what the user already has and asks only for missing pieces. First file in a 4-file split architecture (design.md → components.json → ui.json → patterns.json); the component, icon, UI, and pattern layers are separate skills. Supports light/dark modes. Triggers on "build design system", "create design.md", "design system from scratch", "brand design guide", "มี palette แล้ว", "ใช้ brand kit ที่มี", "have palette ready", "สร้าง design system", "ออกแบบ DS ใหม่".
 version: 6.2.0
-user-invokable: true
+user-invocable: true
 ---
 
 # 🏗️ Design Builder

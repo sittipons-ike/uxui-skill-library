@@ -1,6 +1,6 @@
 ---
 name: modal-writer
-description: Write or review Thai modal copy (Title + Body + Primary CTA + Secondary CTA) for Desktop web apps following Thai UX writing standards. Phase 0 auto-scans docs/brand/voice-tone.md for brand voice rules + docs/blueprints/ux-*.md for screen context. Covers 6 modal types — Confirmation (general/destructive), Success, Error, Info, Loading. Enforces verb+noun titles, action-mirrored CTAs, ≤80 char body, Double/Single button layout rules, WCAG 1.4.1 color+shape. Forbidden patterns auto-flagged (no "ยืนยัน" CTAs, no "?" in titles, no "กด" for Desktop, no jargon in body). Triggers on "เขียน modal", "modal copy", "modal text", "modal confirmation", "modal error", "review modal", "ตรวจ modal", "modal UX".
+description: Write or review Thai modal copy (Title + Body + Primary/Secondary CTA) for Desktop web apps, following Thai UX writing standards. Phase 0 auto-scans docs/brand/voice-tone.md + docs/blueprints/ux-*.md for voice and screen context. Covers 6 modal types (Confirmation general/destructive, Success, Error, Info, Loading) and auto-flags forbidden patterns. Triggers on "เขียน modal", "modal copy", "modal text", "modal confirmation", "modal error", "review modal", "ตรวจ modal", "modal UX".
 license: MIT
 version: 2.0.0
 ---
