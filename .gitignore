@@ -3,3 +3,6 @@
 
 design-library/
 test-*/
+
+# npx-skills install mirror — generated from skills/ (source of truth). Do not commit.
+.agents/
