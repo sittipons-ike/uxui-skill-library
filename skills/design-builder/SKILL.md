@@ -338,7 +338,7 @@ primitive:
   opacity:   { 0, 5, 10, 20, 40, 60, 80, 100 }                          # %
   blur:      { 0, 4, 8, 16, 24, 40 }                                    # px
   border-width: { 0, 1, 2, 4, 8 }                                       # px
-  breakpoints:  { 360, 768, 1024, 1280, 1440, 1920 }                    # px
+  breakpoints:  { 320, 340, 360, 768, 1024, 1280, 1440, 1920 }          # px — 320/340 are optional mobile-fine-grain values, only referenced by semantic 2xs/xs if the project opts in (mobile-first apps)
   shadow:
     # Each shadow level is composed of atomic sub-tokens (Figma-style decomposition).
     # Semantic layer combines these into named elevations.
@@ -514,6 +514,12 @@ semantic:
     modal:    '{primitive.shadow.lg}'
     popover:  '{primitive.shadow.xl}'
   breakpoints:
+    # 2xs/xs are OPTIONAL — only add if the project is mobile-first and needs
+    # sub-tiers below sm (e.g. small-phone vs standard-phone layout differences).
+    # Omit both for a standard desktop-first / responsive-web project — sm through
+    # 2xl alone covers that case, exactly as before this addition.
+    2xs: '{primitive.breakpoints.320}'   # optional — very small phones (e.g. iPhone SE)
+    xs:  '{primitive.breakpoints.340}'   # optional — small-mid phones, below the sm/360 baseline
     sm:  '{primitive.breakpoints.360}'
     md:  '{primitive.breakpoints.768}'
     lg:  '{primitive.breakpoints.1024}'
@@ -684,6 +690,8 @@ Named depth: `raised, floating, modal, popover` — each `{primitive.shadow.X}`-
 
 ### Breakpoint roles (required)
 T-shirt: `sm, md, lg, xl, 2xl` — each `{primitive.breakpoints.N}`-ref.
+
+**Optional mobile-fine-grain tiers:** `2xs, xs` — add these ONLY if the project is mobile-first and needs sub-tiers below `sm` (e.g. small-phone vs standard-phone layout differences — similar to how some production mobile-web apps split `xs-mobile`/`sm-mobile`/`mobile` below `tablet`). Ask the user during Phase 0/1 if the project is mobile-first before adding them; otherwise omit — `sm` through `2xl` alone covers standard responsive-web and desktop-first projects, same as before this option existed.
 
 ### Documentation format (in markdown body)
 For each role, show one row:

@@ -149,9 +149,9 @@
         },
         "breakpoints": {
           "type": "object",
-          "description": "Responsive overrides keyed by breakpoint name (sm/md/lg/xl). Diff-only from base.",
+          "description": "Responsive overrides keyed by breakpoint name (2xs/xs/sm/md/lg/xl/2xl). 2xs and xs are optional mobile-first fine-grain tiers (see design-builder/SKILL.md Breakpoint roles) — most projects only need sm through 2xl. Diff-only from base.",
           "patternProperties": {
-            "^(xs|sm|md|lg|xl|2xl)$": { "$ref": "#/definitions/BreakpointOverride" }
+            "^(2xs|xs|sm|md|lg|xl|2xl)$": { "$ref": "#/definitions/BreakpointOverride" }
           },
           "additionalProperties": false
         },
