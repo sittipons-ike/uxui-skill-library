@@ -5,13 +5,13 @@
       "source": "sittipons-ike/uxui-skill-library",
       "sourceType": "github",
       "skillPath": "skills/audit/SKILL.md",
-      "computedHash": "6a21ad67b348273d57576e01157e6d5b572a42938936177e2d9cd219b0233788"
+      "computedHash": "e2531e56eaf0f608f7aab1feef0ebb5d775d879b8981e4da731d5e6ecaa3db37"
     },
     "browser-testing-with-devtools": {
       "source": "sittipons-ike/uxui-skill-library",
       "sourceType": "github",
       "skillPath": "skills/browser-testing-with-devtools/SKILL.md",
-      "computedHash": "8fb8aef5678048b7786b4da6738accb58d55754f714d9ad02acee12f5d32a6f0"
+      "computedHash": "d0c075ca4c9ffa50f7ddcd7cac140a2c809aba1be98d284b285539ebd4045be6"
     },
     "check-setup": {
       "source": "sittipons-ike/uxui-skill-library",
@@ -23,37 +23,49 @@
       "source": "sittipons-ike/uxui-skill-library",
       "sourceType": "github",
       "skillPath": "skills/design-builder/SKILL.md",
-      "computedHash": "b63fa2665efa98483328070ebe1ae2268e02057b41e6c55fc02eba6e99e45013"
+      "computedHash": "ab40f74c56c329b7c8c48d2b66415e9c59ef6d664df6f6c9e603e44df3712427"
+    },
+    "design-component-builder": {
+      "source": "sittipons-ike/uxui-skill-library",
+      "sourceType": "github",
+      "skillPath": "skills/design-component-builder/SKILL.md",
+      "computedHash": "a781e52a5c537968c6769b7dcf421956bdf3a8556e41a3315c02d4aac16f2d00"
     },
     "design-export-dtcg": {
       "source": "sittipons-ike/uxui-skill-library",
       "sourceType": "github",
       "skillPath": "skills/design-export-dtcg/SKILL.md",
-      "computedHash": "4063fef75c47977ff53a3df38ca59a9941d46866793e4cdc24510e063d658dc9"
+      "computedHash": "e3a3e3f93e856453616002cd5537b9da247e8045777cc36ba8f0912238415b59"
+    },
+    "design-icon-builder": {
+      "source": "sittipons-ike/uxui-skill-library",
+      "sourceType": "github",
+      "skillPath": "skills/design-icon-builder/SKILL.md",
+      "computedHash": "43082f923dbda9a12b9b8b80b37923e2547a8ab173c2f78d7e659b82d9dbb076"
     },
     "design-md-audit": {
       "source": "sittipons-ike/uxui-skill-library",
       "sourceType": "github",
       "skillPath": "skills/design-md-audit/SKILL.md",
-      "computedHash": "2458c51bc3cd3f1dd74a5a5b53258588ff14b09987f47f99444919ebbba6898b"
+      "computedHash": "e769f8dbcfca6f443d052dfd381d65d7f4ca58a3c477313a7e305dd649f59e8a"
     },
     "design-remix": {
       "source": "sittipons-ike/uxui-skill-library",
       "sourceType": "github",
       "skillPath": "skills/design-remix/SKILL.md",
-      "computedHash": "623f1875a622d70102c6391f68472e87ee19d419e9918fc90dd762460d871eb6"
+      "computedHash": "d48c8f5ef27ac756fe18d7b321fb7f98fb19ac257efa0b99ad1adae5690f26b3"
     },
     "design-styleguide": {
       "source": "sittipons-ike/uxui-skill-library",
       "sourceType": "github",
       "skillPath": "skills/design-styleguide/SKILL.md",
-      "computedHash": "8394c64c6f997d36632b003a8defeca1c3fbc3555d3a87bae429905f99b32ec7"
+      "computedHash": "bb66fd5a10f42d8c72489f763fface4ccfdfdc041c7dcbcfd0341a82632cb57a"
     },
     "design-ui-builder": {
       "source": "sittipons-ike/uxui-skill-library",
       "sourceType": "github",
       "skillPath": "skills/design-ui-builder/SKILL.md",
-      "computedHash": "ceb6cc08f5614b5863655610fe85f26370ddcecc8fae23eebc912e453324b24e"
+      "computedHash": "35e1667ad1381fbf93955807520927c658b1085c5fe0335db916dd336375a1b7"
     },
     "email-summarizer": {
       "source": "sittipons-ike/uxui-skill-library",
@@ -71,31 +83,31 @@
       "source": "sittipons-ike/uxui-skill-library",
       "sourceType": "github",
       "skillPath": "skills/figma-push-components/SKILL.md",
-      "computedHash": "8d692a34e637fca67e97b091714767d6575e47778d409e8bebb9fd794e803d26"
+      "computedHash": "151768f3f980d5a4df0093cf4980cbad957b85538e6f93863d7bf5731d87a444"
     },
     "figma-push-tokens": {
       "source": "sittipons-ike/uxui-skill-library",
       "sourceType": "github",
       "skillPath": "skills/figma-push-tokens/SKILL.md",
-      "computedHash": "2c37769c151ff1dac4966493173faf26c04d4f35c87aefbb1888e489d6e32f56"
+      "computedHash": "0ddf3955d8fb3317c7911b4d5f24c729f9c3bc44d44c5e46585a5550f205b473"
     },
     "figma-rename-tokens": {
       "source": "sittipons-ike/uxui-skill-library",
       "sourceType": "github",
       "skillPath": "skills/figma-rename-tokens/SKILL.md",
-      "computedHash": "c5dbd7f606f9aa10f36f6f4ce29feb8d894d9767a8355803271e3129ffc93373"
+      "computedHash": "c406cb091dc001c3dd836c2718396a507d46a6d7dcb50854c4e6a1ac37d957d9"
     },
     "frontend-ui-engineering": {
       "source": "sittipons-ike/uxui-skill-library",
       "sourceType": "github",
       "skillPath": "skills/frontend-ui-engineering/SKILL.md",
-      "computedHash": "9f9e5b3141c891d866c2a15a11ac3aba4e86ec6c530d054f0534503c2e720cb1"
+      "computedHash": "917f6cf8c3d694c2b145463799ee492a2b88d7bf22ff479e08111d3ea5501e65"
     },
     "interview-me": {
       "source": "sittipons-ike/uxui-skill-library",
       "sourceType": "github",
       "skillPath": "skills/interview-me/SKILL.md",
-      "computedHash": "1d94741d10d2c826cd0c191aea3981ee94c8abb27ef2a166f6a372117d06448f"
+      "computedHash": "92192e96a078f3940c902034353c39dc2cb708a3731083160d6fc5df065b3cc2"
     },
     "jira-tracker": {
       "source": "sittipons-ike/uxui-skill-library",
@@ -109,6 +121,12 @@
       "skillPath": "skills/masterprompt/SKILL.md",
       "computedHash": "ccbecec6cc2d1e46dc9ab84c03cf55bf6a631cf179aa784a1db5c69ccead98e7"
     },
+    "modal-writer": {
+      "source": "sittipons-ike/uxui-skill-library",
+      "sourceType": "github",
+      "skillPath": "skills/modal-writer/SKILL.md",
+      "computedHash": "4524874c2e086c94d3d198e0c852bf880f174e585729b9afbd7b0d80d4bc67c5"
+    },
     "notion-planning": {
       "source": "sittipons-ike/uxui-skill-library",
       "sourceType": "github",
@@ -119,19 +137,19 @@
       "source": "sittipons-ike/uxui-skill-library",
       "sourceType": "github",
       "skillPath": "skills/prd/SKILL.md",
-      "computedHash": "caf8bff2c680bc62e88f25985926ddee95cb4083ec924043cf4a5221213b147c"
+      "computedHash": "6eca7dcb5db88c6a510b033f596a9c6575140c15ff37c85eb7b3ca187624ec78"
     },
     "shipping-and-launch": {
       "source": "sittipons-ike/uxui-skill-library",
       "sourceType": "github",
       "skillPath": "skills/shipping-and-launch/SKILL.md",
-      "computedHash": "3e54575e5dcdc8f576cd1735aa804a56bb881c342bd6c702fd86531bd6652d56"
+      "computedHash": "3cd9f8154c7aa578cf7db15c43b54e358bbe7da03c633d289b0302acf4a83028"
     },
     "spec-driven-development": {
       "source": "sittipons-ike/uxui-skill-library",
       "sourceType": "github",
       "skillPath": "skills/spec-driven-development/SKILL.md",
-      "computedHash": "16041b4b6149c0e99d7323f8c1e2104ddca2819bf46f78c402a8f0458938e344"
+      "computedHash": "c29c9fe28235431984e1f8d5f5a578fc03184d6da17131574f16b240f7c93c3f"
     },
     "ui-implementation-specialist": {
       "source": "sittipons-ike/uxui-skill-library",
@@ -143,19 +161,19 @@
       "source": "sittipons-ike/uxui-skill-library",
       "sourceType": "github",
       "skillPath": "skills/user-personas/SKILL.md",
-      "computedHash": "012eb8ea4a6ec51bb72ddf41f48d8520f26c7f4e43ff82d69d1074e3503087ca"
+      "computedHash": "271152c8d16d09fd3448e3d33707d61373c3c06e4619e8a1e9730d5305c120d4"
     },
     "ux-strategist": {
       "source": "sittipons-ike/uxui-skill-library",
       "sourceType": "github",
       "skillPath": "skills/ux-skill/SKILL.md",
-      "computedHash": "b6ba2c72bb70b296dfd895f920234c544ad9e44ffe2a89c8bfe4c47056e76f8b"
+      "computedHash": "e69dc88f1adae6a3cd5ef82e31a6a971d8597abaad69b1e441a54b148955a039"
     },
     "ux-writer": {
       "source": "sittipons-ike/uxui-skill-library",
       "sourceType": "github",
       "skillPath": "skills/ux-writing/SKILL.md",
-      "computedHash": "89242b0562e57a5a1355d5187267ad7ee26e20e12cb9fd5809e53fd6a24a41eb"
+      "computedHash": "45581b8f62e755db53baf25ba1adafd4d27e808591aacae8e082802e8fcbc0ec"
     }
   }
 }
