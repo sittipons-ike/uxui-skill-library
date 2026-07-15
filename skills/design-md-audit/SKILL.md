@@ -1,6 +1,6 @@
 ---
 name: design-md-audit
-description: Audit a design system across three input modes — (1) v6 JSON-primary (design.md + components.json + patterns.json + ui.json) validated against JSON Schema Draft-07 in schemas/*.schema.json, (2) v5 MD-split (design.md + components.md + ui.md), (3) legacy monolithic DESIGN.md. Auto-detects input mix; prefers JSON when both JSON and MD manifests are present (warns 'stale spec'). Resolves brace refs via regex ^\{(design|components|patterns|ui)\.([a-z0-9_.\-]+)\}$, enforces strict downward direction (ui → patterns → components → design), enforces $meta.scope per manifest (components-only / ui-only / patterns-only), runs diff-merge (base → variant → size → state, last-write-wins) on every variant×size×state combo and validates the merged result. Carries forward v5.1 checks — NAMING.md atomic + alias rules, WCAG AA contrast pair matrix, HTML coverage (components/<name>.html, pages/<name>.html, patterns/<name>.html), Known Gaps reserved keywords. Reports missing sections, schema violations, broken refs, dangling refs, upward refs, scope violations, snake_case, Tailwind hex drift. Supports --migrate flag to split monolithic into 3 files. Supports --migrate-to-json flag to convert legacy MD spec (components.md + ui.md + monolithic DESIGN.md) into v6 JSON manifests (components.json + ui.json + patterns.json) with pattern auto-extraction. Triggers on "audit", "audit design system", "check design system", "review DS spec", "validate", "ตรวจ design", "audit DS".
+description: Audit a design system across three input modes — (1) v6 JSON-primary (design.md + components.json + patterns.json + ui.json) validated against JSON Schema Draft-07 in schemas/*.schema.json, (2) v5 MD-split (design.md + components.md + ui.md), (3) legacy monolithic DESIGN.md. Auto-detects input mix; prefers JSON when both JSON and MD manifests are present (warns 'stale spec'). Resolves brace refs via regex ^\{(design|components|patterns|ui)\.([a-z0-9_.\-]+)\}$, enforces strict downward direction (ui → patterns → components → design), enforces $meta.scope per manifest (components-only / ui-only / patterns-only), runs diff-merge (base → variant → size → state, last-write-wins) on every variant×size×state combo and validates the merged result. Carries forward v5.1 checks — NAMING.md atomic + alias rules, WCAG AA contrast pair matrix, HTML coverage (components/<name>.html, pages/<name>.html, patterns/<name>.html), Known Gaps reserved keywords. Flags expired variant-extensions entries (governed one-off variants past their reason/expiry) as Major, escalating to Critical past 90 days. Reports missing sections, schema violations, broken refs, dangling refs, upward refs, scope violations, snake_case, Tailwind hex drift. Supports --migrate flag to split monolithic into 3 files. Supports --migrate-to-json flag to convert legacy MD spec (components.md + ui.md + monolithic DESIGN.md) into v6 JSON manifests (components.json + ui.json + patterns.json) with pattern auto-extraction. Triggers on "audit", "audit design system", "check design system", "review DS spec", "validate", "ตรวจ design", "audit DS".
 version: 6.1.0
 user-invokable: true
 args:
@@ -292,6 +292,18 @@ After merge, verify:
 - [ ] Merge order is **base → variant → size → state** (not configurable); if a tool overrides order, audit fails with a config-mismatch error
 
 Worked merge example traced in the report when a failure occurs (per `ref-resolver.md § 5.4`).
+
+### Variant-Extensions Governance (Major; escalates to Critical if expired > 90 days)
+
+For every atom with a `variant-extensions` block:
+- [ ] Every entry has `reason`, `expires`, `extends` (schema requires these — a missing one is a schema-validation Critical, not just a governance Major)
+- [ ] `extends` refers to a variant name that actually exists in that atom's canonical `variants` (or the atom's implicit base) — dangling `extends` is Critical
+- [ ] `expires` is a real, parseable `YYYY-MM-DD` date
+- [ ] **Expired check**: if `expires` is in the past, flag Major — "extension `<name>` on `<atom>` expired `<date>` — promote to canonical `variants` or remove"
+- [ ] **Long-expired check**: if `expires` is more than 90 days in the past, escalate to Critical — stale extensions left unreviewed are exactly the sprawl this mechanism exists to prevent
+- [ ] Report a count in the summary: "N active extensions, M expired" so the team sees accumulation trending up over time, not just per-run pass/fail
+
+This block exists specifically to prevent the variant-sprawl pattern seen in production apps (11+ ungoverned button variants with no record of why each was added) — treat a growing, un-reviewed `variant-extensions` list as a signal the team needs a design-system review pass, not just a rubber-stamped audit pass.
 
 ### Stale Spec Detection (Warning if both `.json` and `.md` present)
 - [ ] If `components.json` AND `components.md` both exist → Warning: "Pick one source — `components.md` flagged as **legacy stale spec**. Recommend delete after porting any unique content to JSON."

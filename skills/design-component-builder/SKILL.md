@@ -1,7 +1,7 @@
 ---
 name: design-component-builder
-description: Build the components layer of a split-architecture design system. Reads design.md (tokens + mood) and emits components.json — a JSON manifest (per schemas/components.schema.json) describing atoms/molecules/organisms with DTCG-aligned ref syntax {design.semantic.*} — alongside tokens.css and self-contained components/<name>.html files plus a components.html showcase. Atoms encode variants/sizes/states as DIFF-ONLY overrides (merge order base → variant → size → state, last-write-wins). Molecule/organism remain spec stubs (status=planned). Mood-biased state mapping. Default initial atomic scope: button, input, select, checkbox, radio, textarea, label, card, badge. Triggers on "build components", "add components", "atomic components", "เพิ่ม component", "สร้าง components", "atomic design", "component layer". Uses 2-tier token strategy (sys + comp aliases) following Material 3 + Carbon hybrid for optimal agent intent + low output token cost. Legacy --format=md flag dual-emits components.md (deprecated, removed in v7).
-version: 5.0.0
+description: Build the components layer of a split-architecture design system. Reads design.md (tokens + mood) and emits components.json — a JSON manifest (per schemas/components.schema.json) describing atoms/molecules/organisms with DTCG-aligned ref syntax {design.semantic.*} — alongside tokens.css and self-contained components/<name>.html files plus a components.html showcase. Atoms encode variants/sizes/states as DIFF-ONLY overrides (merge order base → variant → size → state, last-write-wins). One-off variants outside the canonical set go in a governed variant-extensions block (reason + expiry required, never silently added to canonical variants — prevents variant sprawl seen in production apps). Molecule/organism remain spec stubs (status=planned). Mood-biased state mapping. Default initial atomic scope: button, input, select, checkbox, radio, textarea, label, card, badge. Triggers on "build components", "add components", "atomic components", "เพิ่ม component", "สร้าง components", "atomic design", "component layer". Uses 2-tier token strategy (sys + comp aliases) following Material 3 + Carbon hybrid for optimal agent intent + low output token cost. Legacy --format=md flag dual-emits components.md (deprecated, removed in v7).
+version: 5.1.0
 user-invokable: true
 args:
   - name: source
@@ -391,6 +391,31 @@ Apply mood-biased state mapping (see Mood Overrides below) when picking which to
 | label | variants: rest, required, disabled |
 | card | variants: default (display), interactive — interactive gets rest/hover/active/focus |
 | badge | variants: solid, soft, outline × status: neutral, info, success, warning, error |
+
+### One-off variants — use `variant-extensions`, never add to canonical `variants`
+
+If the user asks for a variant outside the canonical set above (e.g. "ทำปุ่มสีเขียวสำหรับ campaign นี้" / "add a special color for this promo") — do NOT expand `variants` to include it silently. Real production apps that did this ended up with 11+ ungoverned button variants over time (`green`, `green_line`, `green_light`, `red_outline`, `transparent`, ...) with no record of why each exists or whether they're still needed.
+
+Instead, add it under `variant-extensions` on the atom (per `schemas/components.schema.json`):
+
+```json
+"variant-extensions": {
+  "campaign-green": {
+    "reason": "Songkran campaign 2026 — marketing requested a green CTA for the promo banner only",
+    "expires": "2026-04-20",
+    "extends": "primary",
+    "tokens": {
+      "--btn-bg": "{design.primitive.colors.green.600}"
+    }
+  }
+}
+```
+
+Rules:
+- **`extends` is required** — every extension inherits from a canonical variant (`primary`/`secondary`/`tertiary`/`ghost`/`destructive`), it's a diff on top, not a from-scratch variant
+- **`expires` is required** — a real date, not indefinite. `design-md-audit` flags expired extensions as Major ("promote to canonical or remove")
+- **`reason` is required** — one sentence, who asked + why, so a future designer/agent doesn't have to reverse-engineer intent
+- Ask the user for the expiry date if they don't volunteer one — default to +90 days if they have no preference, and say so
 
 **Always WRITE the file with the Write tool. Do NOT include file content in the chat response.**
 

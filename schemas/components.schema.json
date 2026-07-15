@@ -166,6 +166,39 @@
           "description": "Variant-level diffs from base (e.g. primary, secondary, ghost). Merge order: base → variant → size → state.",
           "additionalProperties": { "$ref": "#/definitions/DiffSpec" }
         },
+        "variant-extensions": {
+          "type": "object",
+          "description": "Governed escape valve for one-off variants outside the canonical set (e.g. a campaign-specific button color). Each extension MUST inherit from a canonical variant via `extends` and declare `reason` + `expires` so it doesn't silently accumulate — design-md-audit flags any entry past its `expires` date as Major (\"promote to canonical or remove\"). Do not use this for variants meant to be permanent; add those to the canonical `variants` set instead.",
+          "additionalProperties": {
+            "type": "object",
+            "required": ["reason", "expires", "extends"],
+            "additionalProperties": false,
+            "properties": {
+              "reason": {
+                "type": "string",
+                "description": "Why this one-off variant exists — who asked, what for.",
+                "maxLength": 200,
+                "examples": ["Songkran campaign 2026 — marketing requested a green CTA for the promo banner only"]
+              },
+              "expires": {
+                "type": "string",
+                "description": "ISO date (YYYY-MM-DD) after which design-md-audit flags this extension for review.",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                "examples": ["2026-04-20"]
+              },
+              "extends": {
+                "type": "string",
+                "description": "Canonical variant name this one-off is based on (must exist in `variants`, or be the atom's base if it equals the atom id's implicit default).",
+                "examples": ["primary", "secondary"]
+              },
+              "tokens": {
+                "type": "object",
+                "description": "Diff-only token overrides on top of the extended variant.",
+                "additionalProperties": { "$ref": "#/definitions/Ref" }
+              }
+            }
+          }
+        },
         "sizes": {
           "type": "object",
           "description": "Size-level diffs from base (e.g. sm, md, lg). Merge order: base → variant → size → state.",
