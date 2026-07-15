@@ -244,7 +244,7 @@ Components store variants, sizes, and states as **diffs from base** — not as f
         "rest":     { /* base */ },
         "hover":    { "tokens": { "background": "{design.semantic.color.primary.hover}" } },
         "active":   { "tokens": { "background": "{design.semantic.color.primary.active}" } },
-        "focus":    { "tokens": { "edge.focus-halo": "{design.semantic.edge.focus-halo.default}" } },
+        "focus":    { "tokens": { "ring": "{design.semantic.color.primary.light}@60%" } },
         "disabled": { "tokens": { "background": "{design.semantic.color.surface.disabled}", "foreground": "{design.semantic.color.on-surface.disabled}" } }
       }
     }

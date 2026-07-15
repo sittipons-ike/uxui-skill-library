@@ -347,36 +347,42 @@ organism    → molecules composed (sidebar, topbar, table, hero)
 ```
 {component.<tier>.<name>.<variant>.<prop>.<state>}
                 ↑     ↑       ↑       ↑      ↑
-            atom    button  primary  surface rest
+            atom    button  primary  background rest
 ```
 
 Examples:
 ```
-{component.atom.button.primary.surface.rest}
-{component.atom.button.primary.surface.hover}
-{component.atom.input.text.edge.focus}
-{component.molecule.form-field.error.helper.content.rest}
-{component.organism.sidebar.default.surface.rest}
+{component.atom.button.primary.background.rest}
+{component.atom.button.primary.background.hover}
+{component.atom.input.text.border.focus}
+{component.molecule.form-field.error.helper.foreground.rest}
+{component.organism.sidebar.default.background.rest}
 ```
 
 **Tier is the first segment after `component.`** — non-negotiable order: `component → tier → name → variant → prop → state`.
 
-### Prop aliases — semantic names (not implementation names)
+### Prop names — one vocabulary, every layer (v6.3+)
 
-| Old name | New alias | Meaning |
+**No vocabulary swap.** The same word is used in `design.md`, `components.json`, generated `tokens.css`, and the final HTML/CSS. Previous versions renamed props between spec and runtime (`surface`→`bg`, `content`→`fg`, etc.) — that indirection caused drift between what a designer read in the spec and what a dev saw in the shipped code. Removed.
+
+Naming is based on **shadcn/ui** (the current React/Tailwind convention most devs already know), with gaps filled from the **W3C DTCG** composite-type vocabulary:
+
+| Prop | Source | Meaning |
 |---|---|---|
-| `bg` | **`surface`** | container fill |
-| `fg` | **`content`** | text + icon foreground |
-| `border` | **`edge`** | outline / stroke |
-| `shadow` | **`elevation`** | depth |
-| `ring` | **`focus-halo`** | accessibility focus indicator |
-| `padding-x/y` | **`inset-x/y`** | inner spacing |
-| `radius` | **`corner`** | shape softness |
-| `typography` | **`text-style`** | composed type style |
-| `gap` | **`stack-gap`** | between children |
-| `width/height` | **`extent`** | overall size |
+| `background` | shadcn (`--background`) | container fill |
+| `foreground` | shadcn (`--foreground`) | text + icon color |
+| `border` | shadcn (`--border`) / DTCG composite type | outline / stroke |
+| `shadow` | DTCG composite type (shadcn has no shadow token) | depth |
+| `ring` | shadcn (`--ring`) | accessibility focus indicator |
+| `padding-x/y` | CSS native | inner spacing |
+| `radius` | CSS native (`border-radius`) | shape softness |
+| `text-style` | composed type (family+size+line-height+weight+tracking together) | composed type style |
+| `gap` | CSS native (flex/grid `gap`) | space between children |
+| `width/height` | CSS native | overall size |
 
-**Use the alias.** `surface` reads at any context — `bg` is HTML/CSS-specific. Aliases survive design-tool migrations (Figma / Sketch / Penpot).
+**Legacy note:** designs generated before this rename used `surface`/`content`/`edge`/`elevation`/`focus-halo` as **component prop names**. Treat those as deprecated synonyms of `background`/`foreground`/`border`/`shadow`/`ring` — migrate on next edit, don't leave both vocabularies in the same file.
+
+⚠️ **Do not confuse with the semantic color role `surface`** (§ Color roles: `surface.base/raised/sunken` — a Material-3-style color category, e.g. `{semantic.colors.surface.raised}`). That role name is unrelated to this prop-naming fix and stays as `surface` — only the **component prop** (the generic "fill" property on any atom/molecule/organism) is renamed to `background`.
 
 ### State aliases — interaction stage names
 
@@ -409,12 +415,12 @@ rest, hover, active, focus, disabled, selected, error
 
 | Atom class | Mandatory | Optional |
 |---|---|---|
-| button / chip | surface, content | edge, elevation, focus-halo |
-| input / textarea / select | surface, content, edge | focus-halo, helper, placeholder |
-| icon | content | extent |
-| badge | surface, content | edge |
-| label | content | – |
-| avatar | surface, content | edge, extent |
+| button / chip | background, foreground | border, shadow, ring |
+| input / textarea / select | background, foreground, border | ring, helper, placeholder |
+| icon | foreground | extent |
+| badge | background, foreground | border |
+| label | foreground | – |
+| avatar | background, foreground | border, extent |
 
 ### Molecule structure
 
@@ -428,9 +434,9 @@ molecule:
     layout:
       stack-gap: '{semantic.spacing.xs}'
     error:                          # state override at molecule level
-      label.content.rest:  '{semantic.colors.text.state.error}'
-      input.edge.rest:     '{semantic.colors.border.error}'
-      helper.content.rest: '{semantic.colors.text.state.error}'
+      label.foreground.rest:  '{semantic.colors.text.state.error}'
+      input.border.rest:      '{semantic.colors.border.error}'
+      helper.foreground.rest: '{semantic.colors.text.state.error}'
 ```
 
 `composed-of` lists atoms used.
@@ -448,8 +454,8 @@ organism:
       user-pill: '{component.molecule.user-pill.default}'
     layout:
       extent-x: 240
-      surface.rest: '{semantic.colors.surface.raised}'
-      edge.rest: '{semantic.colors.border.tertiary}'
+      background.rest: '{semantic.colors.surface.raised}'
+      border.rest: '{semantic.colors.border.tertiary}'
       inset: '{semantic.spacing.lg}'
       stack-gap: '{semantic.spacing.xl}'
 ```
@@ -465,7 +471,7 @@ atom:
         corner: '{semantic.radius.md}'
         text-style: '{semantic.typography.label.md}'
     primary:
-      surface:
+      background:
         rest: '...'
         hover: '...'
         active: '...'
@@ -477,7 +483,7 @@ Sizes never carry per-state values. State only attaches to interactive props.
 
 ### Literal values allowed
 - `'transparent'` (no fill)
-- `'none'` (no elevation / edge / focus-halo)
+- `'none'` (no shadow / border / ring)
 - `'slot'` (organism/template placeholder for content)
 
 Everything else MUST be a `{semantic.*}` or `{component.atom.*}` / `{component.molecule.*}` ref.
@@ -485,9 +491,10 @@ Everything else MUST be a `{semantic.*}` or `{component.atom.*}` / `{component.m
 ### Forbidden in component layer
 - Primitive refs (`{primitive.colors.red.500}`)
 - Raw hex / px
-- Old prop names (`bg`, `fg`, `border`, `shadow`, `ring`)
+- Deprecated prop names as **component props** (`surface`, `content`, `edge`, `elevation`, `focus-halo` — use `background`/`foreground`/`border`/`shadow`/`ring`). Does not apply to the semantic color role `surface` (`{semantic.colors.surface.*}`) — that's a different, unrelated token category and keeps its name.
 - Old state names (`default`, `pressed`, `focused`)
 - Old conflicting `active` for "current page" — use `selected`
+- `disabled` modeled as a variant name instead of a state (real-world anti-pattern — seen in production apps with a `BUTTON_VARIANT.disabled` entry) — `disabled` is a state on every variant, never its own variant
 - Tier mixing (organism → atom is allowed; atom → organism is forbidden — no upward refs)
 
 ---
@@ -546,6 +553,8 @@ Never inline numbers in semantic typography — always ref.
 | State in primitive (`primitive.colors.red.hover`) | states are semantic concepts |
 | Raw hex in semantic block | semantic must ref primitive |
 | Raw hex in markdown body | body must use `{...}` refs |
+| `surface`/`content`/`edge`/`elevation`/`focus-halo` used as a **component prop** name | deprecated — use `background`/`foreground`/`border`/`shadow`/`ring` (shadcn + DTCG vocab, no swap between spec and runtime). The semantic color role `surface` is unaffected. |
+| `disabled` as a variant name (instead of a state) | `disabled` must be a state on every variant, never its own variant |
 
 ---
 
