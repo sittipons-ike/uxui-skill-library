@@ -676,6 +676,34 @@ Role-based abstraction over primitives. Every value MUST `{primitive.*}`-ref.
 - All 5 sub-keys required — no `font: 16px/24px sans-serif` shorthand
 - Each sub-key MUST `{primitive.typography.*}`-ref
 
+**Optional responsive variance (v6.4+):** if a role needs a different value per breakpoint (e.g. a heading that's smaller on mobile), add a `responsive:` sibling key holding **diff-only overrides per breakpoint tier** — same merge philosophy as component variant/size/state (last declared tier at or below the viewport wins, mobile-first cascade):
+
+```yaml
+semantic:
+  typography:
+    heading:
+      h1:
+        family:      '{primitive.typography.family.sans}'
+        size:        '{primitive.typography.size.5xl}'      # ← base value, used when no responsive tier applies
+        line-height: '{primitive.typography.line-height.5xl}'
+        weight:      '{primitive.typography.weight.bold}'
+        tracking:    '{primitive.typography.tracking.tight}'
+        responsive:                                          # OPTIONAL — omit entirely for a non-responsive role
+          sm:                                                 # diff-only — only keys that change at this tier
+            size:        '{primitive.typography.size.4xl}'
+            line-height: '{primitive.typography.line-height.4xl}'
+          lg:
+            size:        '{primitive.typography.size.6xl}'
+            line-height: '{primitive.typography.line-height.6xl}'
+```
+
+Rules:
+- `responsive:` is OPTIONAL per role. Most roles (body, label, caption) rarely need it — reach for it mainly on `heading.*` for large display type that must shrink on small viewports.
+- Tier keys under `responsive:` must be from the project's declared `semantic.breakpoints` (see Breakpoint roles below) — do not invent new tier names here.
+- Each tier is a **diff from the base 5 keys** — only include the sub-keys that actually change. Do not repeat unchanged sub-keys.
+- **Backward-compatible by construction**: a `design.md` with no `responsive:` key behaves exactly as before this feature existed — the base 5 keys ARE the value at every breakpoint. No retrofit needed on existing files.
+- A tool/agent reading this without `responsive:` support can safely ignore the key and use the base 5 values — still a fully valid, if non-responsive, typography role.
+
 ### Spacing roles (required)
 T-shirt: `xs, sm, md, lg, xl, 2xl, 3xl` — each `{primitive.spacing.N}`-ref.
 

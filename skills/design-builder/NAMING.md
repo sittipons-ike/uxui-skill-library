@@ -537,6 +537,26 @@ semantic:
 ```
 Never inline numbers in semantic typography — always ref.
 
+**Optional responsive variance (v6.4+):** a role MAY add a `responsive:` sibling key with diff-only overrides per breakpoint tier (mobile-first cascade — last declared tier at or below the viewport wins):
+```yaml
+semantic:
+  typography:
+    heading:
+      h1:
+        family:      '{primitive.typography.family.sans}'
+        size:        '{primitive.typography.size.5xl}'       # base — used at every breakpoint unless overridden below
+        line-height: '{primitive.typography.line-height.5xl}'
+        weight:      '{primitive.typography.weight.bold}'
+        tracking:    '{primitive.typography.tracking.tight}'
+        responsive:
+          sm: { size: '{primitive.typography.size.4xl}', line-height: '{primitive.typography.line-height.4xl}' }
+          lg: { size: '{primitive.typography.size.6xl}', line-height: '{primitive.typography.line-height.6xl}' }
+```
+- `responsive:` is optional per role — omit for roles that don't need it (most `body`/`label`/`caption` roles never do)
+- Tier keys must be from `semantic.breakpoints` (§ Breakpoint roles) — no new tier names invented here
+- Each tier is diff-only — list only the sub-keys that change from base
+- A `design.md` with no `responsive:` key is unaffected — fully backward compatible, no migration required on existing files
+
 ---
 
 ## 8. Forbidden patterns (summary)

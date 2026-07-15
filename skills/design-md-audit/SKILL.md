@@ -346,6 +346,7 @@ Run on `design.md` always, and on `components.md` / `ui.md` / `DESIGN.md` when i
 - [ ] `border` has role variants + status variants + disable + on-bgcolor
 - [ ] Required typography roles: `heading{h1..h4}, body{sm,md,lg}, label{sm,md}, caption{md}`
 - [ ] Each typography role has all 5 sub-keys: `family, size, line-height, weight, tracking`
+- [ ] **If a typography role has `responsive:`** — every tier key under it exists in `semantic.breakpoints` (no invented tier names); each tier is diff-only (does not repeat unchanged sub-keys from base); base 5 keys still present on the role itself (responsive tiers augment, never replace, the base)
 - [ ] `spacing`, `radius`, `border-width`, `elevation`, `breakpoints` all present in semantic
 
 ### WCAG AA — Accessibility (Critical)
