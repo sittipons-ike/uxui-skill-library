@@ -18,8 +18,8 @@
         "html_template": "./components/button.html"
       },
       "tokens": {
-        "--btn-bg": "{design.semantic.color.primary.default}",
-        "--btn-fg": "{design.semantic.color.on-primary}",
+        "--btn-background": "{design.semantic.color.primary.default}",
+        "--btn-foreground": "{design.semantic.color.on-primary}",
         "--btn-border": "{design.semantic.color.primary.default}",
         "--btn-radius": "{design.semantic.radius.md}",
         "--btn-padding-x": "{design.semantic.space.4}",
@@ -34,32 +34,32 @@
         "secondary": {
           "classes": ["btn--secondary"],
           "tokens": {
-            "--btn-bg": "{design.semantic.color.surface.raised}",
-            "--btn-fg": "{design.semantic.color.content.default}",
+            "--btn-background": "{design.semantic.color.surface.raised}",
+            "--btn-foreground": "{design.semantic.color.content.default}",
             "--btn-border": "{design.semantic.color.edge.subtle}"
           }
         },
         "tertiary": {
           "classes": ["btn--tertiary"],
           "tokens": {
-            "--btn-bg": "{design.semantic.color.transparent}",
-            "--btn-fg": "{design.semantic.color.primary.default}",
+            "--btn-background": "{design.semantic.color.transparent}",
+            "--btn-foreground": "{design.semantic.color.primary.default}",
             "--btn-border": "{design.semantic.color.primary.default}"
           }
         },
         "ghost": {
           "classes": ["btn--ghost"],
           "tokens": {
-            "--btn-bg": "{design.semantic.color.transparent}",
-            "--btn-fg": "{design.semantic.color.primary.default}",
+            "--btn-background": "{design.semantic.color.transparent}",
+            "--btn-foreground": "{design.semantic.color.primary.default}",
             "--btn-border": "{design.semantic.color.transparent}"
           }
         },
         "destructive": {
           "classes": ["btn--destructive"],
           "tokens": {
-            "--btn-bg": "{design.semantic.color.error.default}",
-            "--btn-fg": "{design.semantic.color.on-error}",
+            "--btn-background": "{design.semantic.color.error.default}",
+            "--btn-foreground": "{design.semantic.color.on-error}",
             "--btn-border": "{design.semantic.color.error.default}"
           }
         }
@@ -70,7 +70,7 @@
           "expires": "2026-04-20",
           "extends": "primary",
           "tokens": {
-            "--btn-bg": "{design.primitive.color.green.600}"
+            "--btn-background": "{design.primitive.color.green.600}"
           }
         }
       },
@@ -98,12 +98,12 @@
       "states": {
         "hover": {
           "tokens": {
-            "--btn-bg": "{design.semantic.color.primary.hover}"
+            "--btn-background": "{design.semantic.color.primary.hover}"
           }
         },
         "active": {
           "tokens": {
-            "--btn-bg": "{design.semantic.color.primary.active}"
+            "--btn-background": "{design.semantic.color.primary.active}"
           }
         },
         "focus": {
@@ -111,8 +111,8 @@
         },
         "disabled": {
           "tokens": {
-            "--btn-bg": "{design.semantic.color.surface.disabled}",
-            "--btn-fg": "{design.semantic.color.content.disabled}",
+            "--btn-background": "{design.semantic.color.surface.disabled}",
+            "--btn-foreground": "{design.semantic.color.content.disabled}",
             "--btn-border": "{design.semantic.color.edge.disabled}"
           },
           "a11y": {
@@ -141,8 +141,8 @@
         "html_template": "./components/input.html"
       },
       "tokens": {
-        "--input-bg": "{design.semantic.color.surface.default}",
-        "--input-fg": "{design.semantic.color.content.default}",
+        "--input-background": "{design.semantic.color.surface.default}",
+        "--input-foreground": "{design.semantic.color.content.default}",
         "--input-placeholder": "{design.semantic.color.content.muted}",
         "--input-border": "{design.semantic.color.edge.default}",
         "--input-radius": "{design.semantic.radius.sm}",
@@ -198,8 +198,8 @@
         },
         "disabled": {
           "tokens": {
-            "--input-bg": "{design.semantic.color.surface.disabled}",
-            "--input-fg": "{design.semantic.color.content.disabled}"
+            "--input-background": "{design.semantic.color.surface.disabled}",
+            "--input-foreground": "{design.semantic.color.content.disabled}"
           },
           "a11y": {
             "required_attrs": ["aria-disabled"]
@@ -228,8 +228,8 @@
         "html_template": "./components/badge.html"
       },
       "tokens": {
-        "--badge-bg": "{design.semantic.color.surface.raised}",
-        "--badge-fg": "{design.semantic.color.content.default}",
+        "--badge-background": "{design.semantic.color.surface.raised}",
+        "--badge-foreground": "{design.semantic.color.content.default}",
         "--badge-radius": "{design.semantic.radius.full}",
         "--badge-padding-x": "{design.semantic.space.2}",
         "--badge-padding-y": "{design.semantic.space.0-5}",
@@ -242,22 +242,22 @@
         "success": {
           "classes": ["badge--success"],
           "tokens": {
-            "--badge-bg": "{design.semantic.color.success.subtle}",
-            "--badge-fg": "{design.semantic.color.success.strong}"
+            "--badge-background": "{design.semantic.color.success.subtle}",
+            "--badge-foreground": "{design.semantic.color.success.strong}"
           }
         },
         "warning": {
           "classes": ["badge--warning"],
           "tokens": {
-            "--badge-bg": "{design.semantic.color.warning.subtle}",
-            "--badge-fg": "{design.semantic.color.warning.strong}"
+            "--badge-background": "{design.semantic.color.warning.subtle}",
+            "--badge-foreground": "{design.semantic.color.warning.strong}"
           }
         },
         "error": {
           "classes": ["badge--error"],
           "tokens": {
-            "--badge-bg": "{design.semantic.color.error.subtle}",
-            "--badge-fg": "{design.semantic.color.error.strong}"
+            "--badge-background": "{design.semantic.color.error.subtle}",
+            "--badge-foreground": "{design.semantic.color.error.strong}"
           }
         }
       },
@@ -293,7 +293,7 @@
         "html_template": "./components/label.html"
       },
       "tokens": {
-        "--label-fg": "{design.semantic.color.content.default}",
+        "--label-foreground": "{design.semantic.color.content.default}",
         "--label-font": "{design.semantic.typography.label.md}"
       },
       "a11y": {
@@ -310,7 +310,7 @@
         "html_template": "./components/help-text.html"
       },
       "tokens": {
-        "--help-fg": "{design.semantic.color.content.muted}",
+        "--help-foreground": "{design.semantic.color.content.muted}",
         "--help-font": "{design.semantic.typography.body.sm}"
       },
       "variants": {
@@ -320,7 +320,7 @@
         "error": {
           "classes": ["help-text--error"],
           "tokens": {
-            "--help-fg": "{design.semantic.color.error.strong}"
+            "--help-foreground": "{design.semantic.color.error.strong}"
           },
           "render": {
             "role": "alert"

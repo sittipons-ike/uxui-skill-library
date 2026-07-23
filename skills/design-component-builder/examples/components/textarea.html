@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- ds-textarea | Comp tokens: --textarea-bg, --textarea-bg-disabled, --textarea-border, --textarea-border-hover, --textarea-border-focus, --textarea-border-error, --textarea-radius, --textarea-px, --textarea-py, --textarea-min-h, --textarea-font, --textarea-fs, --textarea-lh, --textarea-color, --textarea-color-placeholder, --textarea-color-disabled, --textarea-focus-ring, --textarea-error-ring, --textarea-transition, --textarea-gap, --textarea-max-w, --textarea-label-fs, --textarea-label-fw, --textarea-hint-fs, --textarea-hint-color, --textarea-error-fs, --textarea-error-color, --textarea-counter-fs, --textarea-counter-color, --textarea-disabled-opacity | Page tokens: --page-bg, --page-color, --page-font, --page-fs, --page-lh, --page-pad, --page-h1-fs, --page-h2-fs, --page-h3-fs, --page-section-gap | A11y: <label for>, aria-invalid, aria-describedby for error + counter, aria-disabled, min-height >= touch target, focus ring on focus -->
+<!-- ds-textarea | Comp tokens: --textarea-background, --textarea-background-disabled, --textarea-border, --textarea-border-hover, --textarea-border-focus, --textarea-border-error, --textarea-radius, --textarea-padding-x, --textarea-padding-y, --textarea-min-h, --textarea-font, --textarea-fs, --textarea-lh, --textarea-color, --textarea-color-placeholder, --textarea-color-disabled, --textarea-focus-ring, --textarea-error-ring, --textarea-transition, --textarea-gap, --textarea-max-w, --textarea-label-fs, --textarea-label-fw, --textarea-hint-fs, --textarea-hint-color, --textarea-error-fs, --textarea-error-color, --textarea-counter-fs, --textarea-counter-color, --textarea-disabled-opacity | Page tokens: --page-background, --page-color, --page-font, --page-fs, --page-lh, --page-pad, --page-h1-fs, --page-h2-fs, --page-h3-fs, --page-section-gap | A11y: <label for>, aria-invalid, aria-describedby for error + counter, aria-disabled, min-height >= touch target, focus ring on focus -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -12,14 +12,14 @@
     font-size: var(--page-fs);
     line-height: var(--page-lh);
     color: var(--page-color);
-    background: var(--page-bg);
+    background: var(--page-background);
     padding: var(--page-pad);
     margin: 0;
   }
   h1 { font-size: var(--page-h1-fs); margin: 0 0 var(--textarea-gap); }
-  h2 { font-size: var(--page-h2-fs); margin: var(--page-section-gap) 0 var(--textarea-py); }
-  h3 { font-size: var(--page-h3-fs); margin: var(--textarea-py) 0 var(--textarea-gap); color: var(--textarea-hint-color); font-weight: var(--textarea-label-fw); text-transform: uppercase; letter-spacing: 0.04em; }
-  p.lead { color: var(--textarea-hint-color); margin: 0 0 var(--textarea-py); }
+  h2 { font-size: var(--page-h2-fs); margin: var(--page-section-gap) 0 var(--textarea-padding-y); }
+  h3 { font-size: var(--page-h3-fs); margin: var(--textarea-padding-y) 0 var(--textarea-gap); color: var(--textarea-hint-color); font-weight: var(--textarea-label-fw); text-transform: uppercase; letter-spacing: 0.04em; }
+  p.lead { color: var(--textarea-hint-color); margin: 0 0 var(--textarea-padding-y); }
   section { margin-bottom: var(--page-section-gap); }
 
   .ds-field {
@@ -27,7 +27,7 @@
     flex-direction: column;
     gap: var(--textarea-gap);
     max-width: var(--textarea-max-w);
-    margin-bottom: var(--textarea-py);
+    margin-bottom: var(--textarea-padding-y);
   }
   .ds-field__label {
     font-size: var(--textarea-label-fs);
@@ -46,7 +46,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: var(--textarea-px);
+    gap: var(--textarea-padding-x);
   }
   .ds-field__counter {
     font-size: var(--textarea-counter-fs);
@@ -59,10 +59,10 @@
     font-size: var(--textarea-fs);
     line-height: var(--textarea-lh);
     color: var(--textarea-color);
-    background: var(--textarea-bg);
+    background: var(--textarea-background);
     border: 1px solid var(--textarea-border);
     border-radius: var(--textarea-radius);
-    padding: var(--textarea-py) var(--textarea-px);
+    padding: var(--textarea-padding-y) var(--textarea-padding-x);
     min-height: var(--textarea-min-h);
     width: 100%;
     box-sizing: border-box;
@@ -91,7 +91,7 @@
   }
   .ds-textarea:disabled,
   .ds-textarea.is-disabled {
-    background: var(--textarea-bg-disabled);
+    background: var(--textarea-background-disabled);
     color: var(--textarea-color-disabled);
     cursor: not-allowed;
     resize: none;

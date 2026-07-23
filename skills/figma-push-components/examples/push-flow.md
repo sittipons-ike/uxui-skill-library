@@ -36,8 +36,8 @@ Taken directly from `examples/components.example.json → atom.button`:
       "id": "button",
       "summary": "Primary interactive control. Use for triggering actions, never for navigation.",
       "tokens": {
-        "--btn-bg": "{design.semantic.color.primary.default}",
-        "--btn-fg": "{design.semantic.color.on-primary}",
+        "--btn-background": "{design.semantic.color.primary.default}",
+        "--btn-foreground": "{design.semantic.color.on-primary}",
         "--btn-border": "{design.semantic.color.primary.default}",
         "--btn-radius": "{design.semantic.radius.md}",
         "--btn-padding-x": "{design.semantic.space.4}",
@@ -46,8 +46,8 @@ Taken directly from `examples/components.example.json → atom.button`:
       },
       "variants": {
         "primary":   { "classes": ["btn--primary"] },
-        "secondary": { "classes": ["btn--secondary"], "tokens": { "--btn-bg": "{design.semantic.color.surface.raised}", "--btn-fg": "{design.semantic.color.content.default}" } },
-        "ghost":     { "classes": ["btn--ghost"],     "tokens": { "--btn-bg": "{design.semantic.color.transparent}",     "--btn-fg": "{design.semantic.color.primary.default}" } }
+        "secondary": { "classes": ["btn--secondary"], "tokens": { "--btn-background": "{design.semantic.color.surface.raised}", "--btn-foreground": "{design.semantic.color.content.default}" } },
+        "ghost":     { "classes": ["btn--ghost"],     "tokens": { "--btn-background": "{design.semantic.color.transparent}",     "--btn-foreground": "{design.semantic.color.primary.default}" } }
       },
       "sizes": {
         "sm": { "tokens": { "--btn-padding-x": "{design.semantic.space.3}", "--btn-padding-y": "{design.semantic.space.1}" } },
@@ -56,7 +56,7 @@ Taken directly from `examples/components.example.json → atom.button`:
       },
       "states": {
         "rest":     {},
-        "disabled": { "tokens": { "--btn-bg": "{design.semantic.color.surface.disabled}", "--btn-fg": "{design.semantic.color.content.disabled}" } }
+        "disabled": { "tokens": { "--btn-background": "{design.semantic.color.surface.disabled}", "--btn-foreground": "{design.semantic.color.content.disabled}" } }
       }
     }
   }
@@ -251,8 +251,8 @@ Tip: Run /design-styleguide to refresh the team-review page with the new color.
   "danger":    {
     "classes": ["btn--danger"],
     "tokens": {
-      "--btn-bg":     "{design.semantic.color.danger.default}",
-      "--btn-fg":     "{design.semantic.color.on-danger}",
+      "--btn-background":     "{design.semantic.color.danger.default}",
+      "--btn-foreground":     "{design.semantic.color.on-danger}",
       "--btn-border": "{design.semantic.color.danger.default}"
     }
   }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- ds-button | Comp-tier tokens: --btn-bg, --btn-bg-hover, --btn-bg-active, --btn-bg-disabled, --btn-text, --btn-text-disabled, --btn-radius, --btn-shadow, --btn-shadow-focus, --btn-px, --btn-py, --btn-h, --btn-font, --btn-weight + variant aliases (--btn-secondary-*, --btn-ghost-*) + size aliases (--btn-px-sm/lg, --btn-py-sm/lg, --btn-font-sm/lg) | A11y: native <button>, aria-disabled, aria-busy for loading, :focus-visible halo >=3:1, hit area >=44px -->
+<!-- ds-button | Comp-tier tokens: --btn-background, --btn-background-hover, --btn-background-active, --btn-background-disabled, --btn-text, --btn-text-disabled, --btn-radius, --btn-shadow, --btn-shadow-focus, --btn-padding-x, --btn-padding-y, --btn-h, --btn-font, --btn-weight + variant aliases (--btn-secondary-*, --btn-ghost-*) + size aliases (--btn-padding-x-sm/lg, --btn-padding-y-sm/lg, --btn-font-sm/lg) | A11y: native <button>, aria-disabled, aria-busy for loading, :focus-visible halo >=3:1, hit area >=44px -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -10,8 +10,8 @@
     body {
       font-family: var(--btn-font);
       color: var(--page-text);
-      background: var(--page-bg);
-      padding: var(--page-px);
+      background: var(--page-background);
+      padding: var(--page-padding-x);
       line-height: var(--page-leading);
     }
     h1 { font-size: var(--page-h1-size); margin-bottom: var(--page-gap-xs); }
@@ -28,7 +28,7 @@
       justify-content: center;
       gap: var(--btn-gap);
       min-height: var(--btn-h);
-      padding: var(--btn-py) var(--btn-px);
+      padding: var(--btn-padding-y) var(--btn-padding-x);
       /* typography */
       font-family: var(--btn-font);
       font-size: var(--btn-font-size);
@@ -55,33 +55,33 @@
     /* size modifiers */
     .ds-button--sm {
       min-height: var(--btn-h);
-      padding: var(--btn-py-sm) var(--btn-px-sm);
+      padding: var(--btn-padding-y-sm) var(--btn-padding-x-sm);
       font-size: var(--btn-font-sm);
     }
     .ds-button--md {
-      padding: var(--btn-py) var(--btn-px);
+      padding: var(--btn-padding-y) var(--btn-padding-x);
       font-size: var(--btn-font-size);
     }
     .ds-button--lg {
-      padding: var(--btn-py-lg) var(--btn-px-lg);
+      padding: var(--btn-padding-y-lg) var(--btn-padding-x-lg);
       font-size: var(--btn-font-lg);
     }
 
     /* variant: primary */
     .ds-button--primary {
-      background: var(--btn-bg);
+      background: var(--btn-background);
       color: var(--btn-text);
-      border-color: var(--btn-bg);
+      border-color: var(--btn-background);
     }
     .ds-button--primary:hover,
     .ds-button--primary.is-hover {
-      background: var(--btn-bg-hover);
-      border-color: var(--btn-bg-hover);
+      background: var(--btn-background-hover);
+      border-color: var(--btn-background-hover);
     }
     .ds-button--primary:active,
     .ds-button--primary.is-active {
-      background: var(--btn-bg-active);
-      border-color: var(--btn-bg-active);
+      background: var(--btn-background-active);
+      border-color: var(--btn-background-active);
     }
 
     /* variant: secondary */
@@ -119,9 +119,9 @@
     /* disabled */
     .ds-button:disabled,
     .ds-button.is-disabled {
-      background: var(--btn-bg-disabled);
+      background: var(--btn-background-disabled);
       color: var(--btn-text-disabled);
-      border-color: var(--btn-bg-disabled);
+      border-color: var(--btn-background-disabled);
       opacity: var(--btn-opacity-disabled);
       cursor: not-allowed;
       pointer-events: none;

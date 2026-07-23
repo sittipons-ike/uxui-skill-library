@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- ds-card | Comp-tier tokens: --card-bg, --card-bg-subtle, --card-fg, --card-fg-muted, --card-border, --card-border-color, --card-radius, --card-padding, --card-padding-sm, --card-gap, --card-shadow, --card-shadow-hover, --card-shadow-focus, --card-focus-ring, --card-font, --card-text-size, --card-title-size, --card-leading, --card-title-weight, --card-touch-min | A11y: interactive variant uses role=button + tabindex=0 + visible focus halo, semantic <article> wrappers, header uses heading level -->
+<!-- ds-card | Comp-tier tokens: --card-background, --card-background-subtle, --card-foreground, --card-foreground-muted, --card-border, --card-border-color, --card-radius, --card-padding, --card-padding-sm, --card-gap, --card-shadow, --card-shadow-hover, --card-shadow-focus, --card-focus-ring, --card-font, --card-text-size, --card-title-size, --card-leading, --card-title-weight, --card-touch-min | A11y: interactive variant uses role=button + tabindex=0 + visible focus halo, semantic <article> wrappers, header uses heading level -->
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -9,16 +9,16 @@
   <style>
     body {
       font-family: var(--card-font);
-      background: var(--card-bg-subtle);
-      color: var(--card-fg);
+      background: var(--card-background-subtle);
+      color: var(--card-foreground);
       padding: var(--card-padding-lg);
       margin: 0;
       line-height: var(--card-leading);
     }
     h1 { font-size: var(--card-title-size); margin: 0 0 var(--card-padding-xs); }
     h2 { font-size: var(--card-text-size); margin: var(--card-padding-lg) 0 var(--card-padding); border-bottom: 1px solid var(--card-border-color); padding-bottom: var(--card-padding-xs); }
-    h3 { font-size: var(--card-text-size); margin: var(--card-padding) 0 var(--card-padding-xs); color: var(--card-fg-muted); font-weight: var(--card-title-weight); }
-    .description { color: var(--card-fg-muted); margin-bottom: var(--card-padding); }
+    h3 { font-size: var(--card-text-size); margin: var(--card-padding) 0 var(--card-padding-xs); color: var(--card-foreground-muted); font-weight: var(--card-title-weight); }
+    .description { color: var(--card-foreground-muted); margin-bottom: var(--card-padding); }
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -27,8 +27,8 @@
 
     /* Base card */
     .ds-card {
-      background: var(--card-bg);
-      color: var(--card-fg);
+      background: var(--card-background);
+      color: var(--card-foreground);
       border-radius: var(--card-radius);
       font-family: var(--card-font);
       font-size: var(--card-text-size);
@@ -45,13 +45,13 @@
     .ds-card__body {
       padding: var(--card-padding);
       flex: 1;
-      color: var(--card-fg);
+      color: var(--card-foreground);
     }
     .ds-card__footer {
       padding: var(--card-padding-sm) var(--card-padding);
       border-top: 1px solid var(--card-border-color);
-      background: var(--card-bg-subtle);
-      color: var(--card-fg-muted);
+      background: var(--card-background-subtle);
+      color: var(--card-foreground-muted);
       display: flex;
       gap: var(--card-gap);
       justify-content: flex-end;

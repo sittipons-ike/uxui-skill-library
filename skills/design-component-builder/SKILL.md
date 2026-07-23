@@ -67,13 +67,13 @@ The **2-tier CSS custom property strategy** (Material 3 + Carbon inspired) is un
 | Tier | Prefix | Purpose | Who reads it | Who uses it |
 |---|---|---|---|---|
 | **sys** | `--sys-*` | Semantic, cross-component intent (e.g. `--sys-color-primary`, `--sys-space-md`, `--sys-radius-md`) | Agent reads to UNDERSTAND intent ("this is the primary brand color") | NOT used directly in component CSS |
-| **comp** | `--{component}-*` | Component-scoped aliases pointing to sys (e.g. `--btn-bg`, `--btn-bg-hover`, `--input-border`) | Agent reads to understand component-local naming | Agent USES in component CSS via `var(--btn-bg)` |
+| **comp** | `--{component}-*` | Component-scoped aliases pointing to sys (e.g. `--btn-background`, `--btn-background-hover`, `--input-border`) | Agent reads to understand component-local naming | Agent USES in component CSS via `var(--btn-background)` |
 
 ### Why 2 tiers (priority order)
 
-1. **Intent legibility** — `--sys-color-primary` tells the agent WHAT a color means semantically; `--btn-bg` tells the agent WHERE it goes.
-2. **Usability** — component CSS reads naturally: `background: var(--btn-bg)` instead of `background: var(--sys-color-primary-default)`.
-3. **Output token cost** — comp aliases are short (`--btn-bg` is 8 chars vs `--sys-color-primary-default` at 28). Across hundreds of CSS rules, this saves significant tokens in generated HTML files.
+1. **Intent legibility** — `--sys-color-primary` tells the agent WHAT a color means semantically; `--btn-background` tells the agent WHERE it goes.
+2. **Usability** — component CSS reads naturally: `background: var(--btn-background)` instead of `background: var(--sys-color-primary-default)`.
+3. **Output token cost** — comp aliases stay shorter than the full sys path (`--btn-background` at 16 chars vs `--sys-color-primary-default` at 28). Property words are spelled in full (`background`, not `bg`) to match the spec vocabulary — the component *prefix* stays short (`btn`, not `button`) to keep aliases compact across hundreds of CSS rules. Across many generated HTML files this still saves meaningful tokens.
 4. **Scalability** — re-theming a component only requires changing its comp aliases; sys layer stays stable. Dark mode only re-declares sys, comp inherits automatically.
 
 ### Naming rules
@@ -82,8 +82,9 @@ The **2-tier CSS custom property strategy** (Material 3 + Carbon inspired) is un
   - `--sys-color-primary`, `--sys-color-primary-hover`, `--sys-color-bg-surface`, `--sys-color-text-on-primary`
   - `--sys-space-xs|sm|md|lg|xl`, `--sys-radius-sm|md|lg`, `--sys-font-size-sm|md|lg`
 - **comp tier** — `--{component}-{property}[-{state}]`
-  - `--btn-bg`, `--btn-bg-hover`, `--btn-bg-disabled`, `--btn-fg`, `--btn-border`, `--btn-radius`, `--btn-px`
-  - `--input-bg`, `--input-border`, `--input-border-focus`, `--input-border-error`
+  - `--btn-background`, `--btn-background-hover`, `--btn-background-disabled`, `--btn-foreground`, `--btn-border`, `--btn-radius`, `--btn-padding-x`
+  - `--input-background`, `--input-border`, `--input-border-focus`, `--input-border-error`
+  - **Property is spelled in FULL** (`background`/`foreground`/`padding-x`, never `bg`/`fg`/`px`) so the CSS var shares the exact vocabulary of the spec (`{...background}`) and shadcn (`--background`) — no vocabulary swap. The **component prefix stays short** (`btn`, not `button`) to keep aliases compact.
 
 ### Example pattern
 
@@ -97,20 +98,20 @@ The **2-tier CSS custom property strategy** (Material 3 + Carbon inspired) is un
   --sys-radius-md: 8px;
 
   /* --- comp tier (component-scoped aliases → sys) --- */
-  --btn-bg: var(--sys-color-primary);
-  --btn-bg-hover: var(--sys-color-primary-hover);
-  --btn-fg: var(--sys-color-text-on-primary);
-  --btn-px: var(--sys-space-md);
+  --btn-background: var(--sys-color-primary);
+  --btn-background-hover: var(--sys-color-primary-hover);
+  --btn-foreground: var(--sys-color-text-on-primary);
+  --btn-padding-x: var(--sys-space-md);
   --btn-radius: var(--sys-radius-md);
 }
 
 .ds-btn {
-  background: var(--btn-bg);    /* ✅ uses comp alias */
-  color: var(--btn-fg);
-  padding: 0 var(--btn-px);
+  background: var(--btn-background);    /* ✅ uses comp alias */
+  color: var(--btn-foreground);
+  padding: 0 var(--btn-padding-x);
   border-radius: var(--btn-radius);
 }
-.ds-btn:hover { background: var(--btn-bg-hover); }
+.ds-btn:hover { background: var(--btn-background-hover); }
 ```
 
 ### Dark mode pattern (only sys re-declared)
@@ -124,7 +125,7 @@ The **2-tier CSS custom property strategy** (Material 3 + Carbon inspired) is un
 }
 ```
 
-Comp aliases (`--btn-bg`, etc.) do NOT need re-declaration — they resolve through their `var(--sys-*)` reference at use-time.
+Comp aliases (`--btn-background`, etc.) do NOT need re-declaration — they resolve through their `var(--sys-*)` reference at use-time.
 
 ## Execution Steps
 
@@ -182,8 +183,8 @@ Build a single JSON object with this shape (see `examples/components.example.jso
         "html_template": "./components/button.html"
       },
       "tokens": {
-        "--btn-bg":     "{design.semantic.color.primary.default}",
-        "--btn-fg":     "{design.semantic.color.on-primary}",
+        "--btn-background":     "{design.semantic.color.primary.default}",
+        "--btn-foreground":     "{design.semantic.color.on-primary}",
         "--btn-border": "{design.semantic.color.primary.default}",
         "--btn-radius": "{design.semantic.radius.md}",
         "--btn-padding-x": "{design.semantic.space.4}",
@@ -196,8 +197,8 @@ Build a single JSON object with this shape (see `examples/components.example.jso
         "secondary": {
           "classes": ["btn--secondary"],
           "tokens": {
-            "--btn-bg":     "{design.semantic.color.surface.raised}",
-            "--btn-fg":     "{design.semantic.color.content.default}",
+            "--btn-background":     "{design.semantic.color.surface.raised}",
+            "--btn-foreground":     "{design.semantic.color.content.default}",
             "--btn-border": "{design.semantic.color.edge.subtle}"
           }
         }
@@ -214,13 +215,13 @@ Build a single JSON object with this shape (see `examples/components.example.jso
         }
       },
       "states": {
-        "hover":  { "tokens": { "--btn-bg": "{design.semantic.color.primary.hover}" } },
-        "active": { "tokens": { "--btn-bg": "{design.semantic.color.primary.active}" } },
+        "hover":  { "tokens": { "--btn-background": "{design.semantic.color.primary.hover}" } },
+        "active": { "tokens": { "--btn-background": "{design.semantic.color.primary.active}" } },
         "focus":  { "classes": ["btn--focus-visible"] },
         "disabled": {
           "tokens": {
-            "--btn-bg":     "{design.semantic.color.surface.disabled}",
-            "--btn-fg":     "{design.semantic.color.content.disabled}",
+            "--btn-background":     "{design.semantic.color.surface.disabled}",
+            "--btn-foreground":     "{design.semantic.color.content.disabled}",
             "--btn-border": "{design.semantic.color.edge.disabled}"
           },
           "a11y": { "required_attrs": ["aria-disabled"] }
@@ -338,14 +339,14 @@ Structure:
   /* ============================================ */
 
   /* --- comp: button --- */
-  --btn-bg: var(--sys-color-primary);
-  --btn-bg-hover: var(--sys-color-primary-hover);
-  --btn-fg: var(--sys-color-text-on-primary);
-  --btn-px: var(--sys-space-md);
+  --btn-background: var(--sys-color-primary);
+  --btn-background-hover: var(--sys-color-primary-hover);
+  --btn-foreground: var(--sys-color-text-on-primary);
+  --btn-padding-x: var(--sys-space-md);
   --btn-radius: var(--sys-radius-md);
 
   /* --- comp: input --- */
-  --input-bg: var(--sys-color-bg-surface);
+  --input-background: var(--sys-color-bg-surface);
   --input-border: var(--sys-color-border-default);
   --input-border-focus: var(--sys-color-primary);
   --input-radius: var(--sys-radius-md);
@@ -375,12 +376,12 @@ For every atomic component in scope (default: `button, input, select, checkbox, 
 - `<link rel="stylesheet" href="../tokens.css">` in `<head>`
 - Component-specific CSS in `<style>` tag
 - NEVER use raw hex/px — only `var(--name)` from tokens.css
-- **CRITICAL — reference comp-tier aliases ONLY** (e.g. `var(--btn-bg)`, `var(--input-border)`). NEVER reference `var(--sys-*)` directly inside component CSS. If a needed token alias doesn't exist, ADD it to `tokens.css` comp section first, then use it.
+- **CRITICAL — reference comp-tier aliases ONLY** (e.g. `var(--btn-background)`, `var(--input-border)`). NEVER reference `var(--sys-*)` directly inside component CSS. If a needed token alias doesn't exist, ADD it to `tokens.css` comp section first, then use it.
 - Class prefix `.ds-<component>` (e.g. `.ds-btn`, `.ds-input`)
 - Show ALL states/variants in `<body>` grouped with `<h2>`/`<h3>`
 - Use semantic HTML (`<button>`, `<input>`, `<select>`, etc.)
 - a11y: aria-* attrs, label-for, role attrs
-- HTML comment at top: `<!-- Component: <name> | Tokens used: --btn-bg, --btn-fg, ... | A11y: ... -->` (list comp aliases used)
+- HTML comment at top: `<!-- Component: <name> | Tokens used: --btn-background, --btn-foreground, ... | A11y: ... -->` (list comp aliases used)
 - Open in browser standalone (with `../tokens.css` present) = works
 
 Apply mood-biased state mapping (see Mood Overrides below) when picking which token each state hooks into. States to cover per component:
@@ -410,7 +411,7 @@ Instead, add it under `variant-extensions` on the atom (per `schemas/components.
     "expires": "2026-04-20",
     "extends": "primary",
     "tokens": {
-      "--btn-bg": "{design.primitive.colors.green.600}"
+      "--btn-background": "{design.primitive.colors.green.600}"
     }
   }
 }

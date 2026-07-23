@@ -111,7 +111,7 @@ Do not proceed until the user confirms.
 
 ### Step 6 — Push comp tier (optional)
 
-- If `components.json` provides comp aliases (e.g. `--btn-bg → {design.semantic.color.primary.default}`):
+- If `components.json` provides comp aliases (e.g. `--btn-background → {design.semantic.color.primary.default}`):
   - Create comp variables pointing to semantic variables by alias
 
 ### Step 7 — Report

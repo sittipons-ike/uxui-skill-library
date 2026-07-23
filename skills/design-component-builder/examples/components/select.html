@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- ds-select | Comp-tier tokens: --select-bg, --select-bg-disabled, --select-color, --select-color-muted, --select-color-disabled, --select-color-selected, --select-border, --select-border-focus, --select-border-error, --select-radius, --select-py, --select-px, --select-px-end, --select-gap, --select-min-h, --select-font, --select-font-size, --select-line-height, --select-font-weight, --select-font-weight-strong, --select-shadow-focus, --select-arrow, --select-dropdown-bg, --select-dropdown-border, --select-dropdown-radius, --select-dropdown-shadow, --select-dropdown-padding, --select-dropdown-offset, --select-dropdown-max-h, --select-option-bg-hover, --select-option-radius, --select-option-py, --select-option-px, --select-label-color, --select-label-font-weight, --select-help-color, --select-error-color, --select-page-bg, --select-page-padding, --select-section-gap, --select-section-padding, --select-section-border, --select-section-radius, --select-field-gap, --select-field-max-w | A11y: native <select> with <label for>; custom dropdown uses role=combobox, aria-haspopup=listbox, aria-expanded, role=listbox, role=option, aria-selected, aria-disabled, aria-invalid, aria-describedby for error -->
+<!-- ds-select | Comp-tier tokens: --select-background, --select-background-disabled, --select-color, --select-color-muted, --select-color-disabled, --select-color-selected, --select-border, --select-border-focus, --select-border-error, --select-radius, --select-padding-y, --select-padding-x, --select-padding-x-end, --select-gap, --select-min-h, --select-font, --select-font-size, --select-line-height, --select-font-weight, --select-font-weight-strong, --select-shadow-focus, --select-arrow, --select-dropdown-bg, --select-dropdown-border, --select-dropdown-radius, --select-dropdown-shadow, --select-dropdown-padding, --select-dropdown-offset, --select-dropdown-max-h, --select-option-bg-hover, --select-option-radius, --select-option-py, --select-option-px, --select-label-color, --select-label-font-weight, --select-help-color, --select-error-color, --select-page-bg, --select-page-padding, --select-section-gap, --select-section-padding, --select-section-border, --select-section-radius, --select-field-gap, --select-field-max-w | A11y: native <select> with <label for>; custom dropdown uses role=combobox, aria-haspopup=listbox, aria-expanded, role=listbox, role=option, aria-selected, aria-disabled, aria-invalid, aria-describedby for error -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -22,10 +22,10 @@
       line-height: var(--select-line-height);
       font-weight: var(--select-font-weight);
       color: var(--select-color);
-      background: var(--select-bg);
+      background: var(--select-background);
       border: 1px solid var(--select-border);
       border-radius: var(--select-radius);
-      padding: var(--select-py) var(--select-px);
+      padding: var(--select-padding-y) var(--select-padding-x);
       min-height: var(--select-min-h);
       width: 100%;
       appearance: none;
@@ -33,7 +33,7 @@
       background-position: calc(100% - 18px) 50%, calc(100% - 12px) 50%;
       background-size: 6px 6px;
       background-repeat: no-repeat;
-      padding-right: var(--select-px-end);
+      padding-right: var(--select-padding-x-end);
     }
     .ds-select:focus-visible {
       outline: none;
@@ -43,7 +43,7 @@
     .ds-select.is-error { border-color: var(--select-border-error); }
     .ds-select.is-error:focus-visible { box-shadow: var(--select-shadow-focus); border-color: var(--select-border-error); }
     .ds-select:disabled, .ds-select.is-disabled {
-      background: var(--select-bg-disabled);
+      background: var(--select-background-disabled);
       color: var(--select-color-disabled);
       cursor: not-allowed;
     }
@@ -55,10 +55,10 @@
       font-size: var(--select-font-size);
       line-height: var(--select-line-height);
       color: var(--select-color);
-      background: var(--select-bg);
+      background: var(--select-background);
       border: 1px solid var(--select-border);
       border-radius: var(--select-radius);
-      padding: var(--select-py) var(--select-px);
+      padding: var(--select-padding-y) var(--select-padding-x);
       min-height: var(--select-min-h);
       width: 100%;
       text-align: left;
@@ -76,7 +76,7 @@
     .ds-select__trigger[aria-expanded="true"] { border-color: var(--select-border-focus); }
     .ds-select--custom.is-error .ds-select__trigger { border-color: var(--select-border-error); }
     .ds-select--custom.is-disabled .ds-select__trigger {
-      background: var(--select-bg-disabled);
+      background: var(--select-background-disabled);
       color: var(--select-color-disabled);
       cursor: not-allowed;
     }

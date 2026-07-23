@@ -284,7 +284,7 @@ After merge, verify:
 - [ ] `render.tag` is set (string)
 - [ ] `render.classes` is a non-empty array
 - [ ] `render.html_template` resolves to an existing file
-- [ ] `tokens` block has all required keys for the component type (e.g. button must have a `--btn-bg`-equivalent after merge; input must have bg+fg+border-equivalent)
+- [ ] `tokens` block has all required keys for the component type (e.g. button must have a `--btn-background`-equivalent after merge; input must have bg+fg+border-equivalent)
 - [ ] No merged token value is the literal string `null` (use omission, not null, to "unset")
 - [ ] Interactive components (`atom.button`, molecule that includes button) have all 5 states present after merge: `rest`, `hover`, `active`, `focus`, `disabled` — partial state coverage = Critical
 - [ ] Input-like components have `rest`, `hover`, `focus`, `disabled` (+ `error` where applicable)

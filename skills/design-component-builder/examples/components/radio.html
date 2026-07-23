@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- ds-radio | Comp tokens: --radio-size, --radio-dot-size, --radio-border-width, --radio-border, --radio-radius, --radio-bg, --radio-bg-checked, --radio-border-checked, --radio-dot, --radio-bg-disabled, --radio-bg-checked-disabled, --radio-border-disabled, --radio-text, --radio-text-disabled, --radio-gap, --radio-group-gap, --radio-min-height, --radio-focus-ring, --radio-font, --radio-text-size, --radio-line-height, --radio-legend-weight | A11y: native input[type=radio] inside fieldset+legend, label-for binding, focus-visible halo, disabled state preserves contrast, grouped by name attribute for keyboard arrow navigation -->
+<!-- ds-radio | Comp tokens: --radio-size, --radio-dot-size, --radio-border-width, --radio-border, --radio-radius, --radio-background, --radio-background-checked, --radio-border-checked, --radio-dot, --radio-background-disabled, --radio-background-checked-disabled, --radio-border-disabled, --radio-text, --radio-text-disabled, --radio-gap, --radio-group-gap, --radio-min-height, --radio-focus-ring, --radio-font, --radio-text-size, --radio-line-height, --radio-legend-weight | A11y: native input[type=radio] inside fieldset+legend, label-for binding, focus-visible halo, disabled state preserves contrast, grouped by name attribute for keyboard arrow navigation -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -53,7 +53,7 @@
       margin: 0;
       border: var(--radio-border-width) solid var(--radio-border);
       border-radius: var(--radio-radius);
-      background: var(--radio-bg);
+      background: var(--radio-background);
       display: inline-grid;
       place-content: center;
       cursor: pointer;
@@ -73,7 +73,7 @@
     /* Selected */
     .ds-radio input[type="radio"]:checked {
       border-color: var(--radio-border-checked);
-      background: var(--radio-bg-checked);
+      background: var(--radio-background-checked);
     }
     .ds-radio input[type="radio"]:checked::before {
       transform: scale(1);
@@ -90,13 +90,13 @@
     .ds-radio input[type="radio"]:disabled,
     .ds-radio.is-disabled input[type="radio"] {
       border-color: var(--radio-border-disabled);
-      background: var(--radio-bg-disabled);
+      background: var(--radio-background-disabled);
       cursor: not-allowed;
       opacity: var(--radio-opacity-disabled);
     }
     .ds-radio input[type="radio"]:disabled:checked,
     .ds-radio.is-disabled input[type="radio"]:checked {
-      background: var(--radio-bg-checked-disabled);
+      background: var(--radio-background-checked-disabled);
     }
     .ds-radio.is-disabled,
     .ds-radio:has(input:disabled) {

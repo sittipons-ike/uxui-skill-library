@@ -95,7 +95,7 @@ Verify Phase 7A:
   variants: { primary: {...}, secondary: {...}, ghost: {...} },
   sizes: { sm: {...}, md: {...}, lg: {...} },
   states: { rest: {...}, disabled: {...} },
-  tokens_map: { "--btn-bg": "color.primary.default", ... }
+  tokens_map: { "--btn-background": "color.primary.default", ... }
 }
 ```
 
@@ -127,10 +127,10 @@ for (const variant of variants) {
       comp.counterAxisSizingMode = "AUTO";
 
       // Bind padding to Variables (diff-merged token map)
-      comp.setBoundVariable("paddingTop",    varIdMap[tokens["--btn-py"]]);
-      comp.setBoundVariable("paddingBottom", varIdMap[tokens["--btn-py"]]);
-      comp.setBoundVariable("paddingLeft",   varIdMap[tokens["--btn-px"]]);
-      comp.setBoundVariable("paddingRight",  varIdMap[tokens["--btn-px"]]);
+      comp.setBoundVariable("paddingTop",    varIdMap[tokens["--btn-padding-y"]]);
+      comp.setBoundVariable("paddingBottom", varIdMap[tokens["--btn-padding-y"]]);
+      comp.setBoundVariable("paddingLeft",   varIdMap[tokens["--btn-padding-x"]]);
+      comp.setBoundVariable("paddingRight",  varIdMap[tokens["--btn-padding-x"]]);
       comp.setBoundVariable("itemSpacing",   varIdMap[tokens["--btn-gap"]]);
 
       // Bind corner radius (all 4)
@@ -138,7 +138,7 @@ for (const variant of variants) {
         .forEach(p => comp.setBoundVariable(p, varIdMap[tokens["--btn-radius"]]));
 
       // Bind fill (variant + state aware)
-      const bgVarId = varIdMap[tokens["--btn-bg"]];
+      const bgVarId = varIdMap[tokens["--btn-background"]];
       comp.fills = [
         figma.variables.setBoundVariableForPaint(
           figma.util.solidPaint("#ffffff"), "color", figma.variables.getVariableById(bgVarId)
@@ -229,15 +229,15 @@ Grand total: **45 Figma components** across 5 Component Sets.
 
 | Comp token | Figma Variable | Bound to |
 |---|---|---|
-| `--btn-bg` | `Color/Primary/Default` | `fills[0].color` |
+| `--btn-background` | `Color/Primary/Default` | `fills[0].color` |
 | `--btn-text` | `Color/Text/On-bgcolor` | text node `fills[0].color` |
 | `--btn-radius` | `Radius/Md` | all 4 corner radii |
-| `--btn-px` | `Space/Md` | `paddingLeft` + `paddingRight` |
-| `--btn-py` | `Space/Sm` | `paddingTop` + `paddingBottom` |
+| `--btn-padding-x` | `Space/Md` | `paddingLeft` + `paddingRight` |
+| `--btn-padding-y` | `Space/Sm` | `paddingTop` + `paddingBottom` |
 | `--btn-gap` | `Space/Sm` | `itemSpacing` |
 | `--input-border` | `Color/Border/Default` | `strokes[0].color` |
 | `--input-border-error` | `Color/Border/Error` | `strokes[0].color` (error variant) |
-| `--input-bg` | `Color/Surface/Default` | `fills[0].color` |
+| `--input-background` | `Color/Surface/Default` | `fills[0].color` |
 | `--badge-radius` | `Radius/Full` | corner radius |
 | `--card-shadow` | `Shadow/Sm/*` (composite) | effect (split per Phase 7A mapping) |
 
@@ -269,7 +269,7 @@ Grand total: **45 Figma components** across 5 Component Sets.
 | Failure | User-facing message |
 |---|---|
 | `DS Tokens` collection not found | "ไม่พบ Variable Collection `DS Tokens` — รัน `/figma-push-tokens` ก่อน" |
-| Variable `X` missing for a token | "Warning: token `<--btn-bg>` → `Color/Primary/Default` not found — used raw value as fallback" |
+| Variable `X` missing for a token | "Warning: token `<--btn-background>` → `Color/Primary/Default` not found — used raw value as fallback" |
 | Component Set already exists | "Updated existing `Button` set — added/refreshed N variants" |
 | Image fill needed (atom has bg image) | "Skipped image fill on `<atom>` — auto-layout binding not applied to image atoms" |
 | `figma-console` MCP not connected | "Figma MCP ไม่ได้ต่อ — ตรวจที่ `/mcp` แล้วลองใหม่" |

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- ds-badge | Comp-tier tokens: --badge-bg-{success,warning,error,info,neutral}, --badge-text-{success,warning,error,info,neutral}, --badge-radius, --badge-radius-pill, --badge-px-sm, --badge-px-md, --badge-py-sm, --badge-py-md, --badge-gap, --badge-font-family, --badge-font-weight, --badge-line-height, --badge-text-size-sm, --badge-text-size-md, --badge-min-height-sm, --badge-min-height-md, --badge-dot-size-sm, --badge-dot-size-md, --badge-count-min-width, --badge-count-px, --badge-leading-dot-size | A11y: role=status, aria-label for icon/dot-only, aria-live for dynamic counts -->
+<!-- ds-badge | Comp-tier tokens: --badge-background-{success,warning,error,info,neutral}, --badge-text-{success,warning,error,info,neutral}, --badge-radius, --badge-radius-pill, --badge-padding-x-sm, --badge-padding-x-md, --badge-padding-y-sm, --badge-padding-y-md, --badge-gap, --badge-font-family, --badge-font-weight, --badge-line-height, --badge-text-size-sm, --badge-text-size-md, --badge-min-height-sm, --badge-min-height-md, --badge-dot-size-sm, --badge-dot-size-md, --badge-count-min-width, --badge-count-px, --badge-leading-dot-size | A11y: role=status, aria-label for icon/dot-only, aria-live for dynamic counts -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -10,7 +10,7 @@
     body {
       font-family: var(--badge-font-family);
       padding: var(--page-padding, 24px);
-      background: var(--page-bg, #fff);
+      background: var(--page-background, #fff);
       color: var(--page-text, #111);
     }
     h1 { font-size: var(--page-h1-size, 24px); margin-bottom: var(--page-h1-mb, 8px); }
@@ -33,34 +33,34 @@
     /* Sizes */
     .ds-badge--sm {
       font-size: var(--badge-text-size-sm);
-      padding: var(--badge-py-sm) var(--badge-px-sm);
+      padding: var(--badge-padding-y-sm) var(--badge-padding-x-sm);
       min-height: var(--badge-min-height-sm);
     }
     .ds-badge--md {
       font-size: var(--badge-text-size-md);
-      padding: var(--badge-py-md) var(--badge-px-md);
+      padding: var(--badge-padding-y-md) var(--badge-padding-x-md);
       min-height: var(--badge-min-height-md);
     }
 
     /* Variants */
     .ds-badge--success {
-      background: var(--badge-bg-success);
+      background: var(--badge-background-success);
       color: var(--badge-text-success);
     }
     .ds-badge--warning {
-      background: var(--badge-bg-warning);
+      background: var(--badge-background-warning);
       color: var(--badge-text-warning);
     }
     .ds-badge--error {
-      background: var(--badge-bg-error);
+      background: var(--badge-background-error);
       color: var(--badge-text-error);
     }
     .ds-badge--info {
-      background: var(--badge-bg-info);
+      background: var(--badge-background-info);
       color: var(--badge-text-info);
     }
     .ds-badge--neutral {
-      background: var(--badge-bg-neutral);
+      background: var(--badge-background-neutral);
       color: var(--badge-text-neutral);
     }
 

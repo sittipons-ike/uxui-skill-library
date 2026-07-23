@@ -123,8 +123,8 @@ Invoke this skill when user:
 
 | Element | Property | Token |
 |---|---|---|
-| Page background | fill | `var(--color-bg-primary)` |
-| Card surface | fill | `var(--color-bg-secondary)` |
+| Page background | fill | `var(--color-background-primary)` |
+| Card surface | fill | `var(--color-background-secondary)` |
 | Heading | font | `var(--font-heading-1)` |
 | Body text | font | `var(--font-body-m)` |
 | Primary action | fill | `var(--color-brand-primary)` |

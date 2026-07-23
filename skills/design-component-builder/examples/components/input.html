@@ -1,4 +1,4 @@
-<!-- ds-input | Comp tokens: --input-bg, --input-border, --input-border-focus, --input-border-error, --input-text, --input-placeholder, --input-radius, --input-px, --input-py, --input-h, --input-font, --input-font-size, --input-font-size-sm, --input-font-size-lg, --input-line-height, --input-font-weight, --input-px-sm, --input-py-sm, --input-h-sm, --input-px-lg, --input-py-lg, --input-h-lg, --input-bg-disabled, --input-text-disabled, --input-shadow-focus, --input-shadow-focus-error, --input-icon-color, --input-icon-size, --input-icon-gap | A11y: label-for/id pairing, aria-invalid on error, aria-describedby for hints, disabled attr -->
+<!-- ds-input | Comp tokens: --input-background, --input-border, --input-border-focus, --input-border-error, --input-text, --input-placeholder, --input-radius, --input-padding-x, --input-padding-y, --input-h, --input-font, --input-font-size, --input-font-size-sm, --input-font-size-lg, --input-line-height, --input-font-weight, --input-padding-x-sm, --input-padding-y-sm, --input-h-sm, --input-padding-x-lg, --input-padding-y-lg, --input-h-lg, --input-background-disabled, --input-text-disabled, --input-shadow-focus, --input-shadow-focus-error, --input-icon-color, --input-icon-size, --input-icon-gap | A11y: label-for/id pairing, aria-invalid on error, aria-describedby for hints, disabled attr -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,10 +12,10 @@
       font-size: var(--input-font-size);
       line-height: var(--input-line-height);
       color: var(--input-text);
-      padding: var(--page-px);
+      padding: var(--page-padding-x);
       max-width: 960px;
       margin: 0 auto;
-      background: var(--page-bg);
+      background: var(--page-background);
     }
     h1 { font-size: var(--page-title-size); margin-bottom: var(--page-title-mb); }
     h2 { font-size: var(--section-title-size); margin-top: var(--section-title-mt); border-bottom: 1px solid var(--section-divider); padding-bottom: var(--section-title-pb); }
@@ -39,10 +39,10 @@
       line-height: var(--input-line-height);
       font-weight: var(--input-font-weight);
       color: var(--input-text);
-      background: var(--input-bg);
+      background: var(--input-background);
       border: 1px solid var(--input-border);
       border-radius: var(--input-radius);
-      padding: var(--input-py) var(--input-px);
+      padding: var(--input-padding-y) var(--input-padding-x);
       min-height: var(--input-h);
       width: 100%;
       box-sizing: border-box;
@@ -54,13 +54,13 @@
     /* ===== Sizes ===== */
     .ds-input--sm {
       font-size: var(--input-font-size-sm);
-      padding: var(--input-py-sm) var(--input-px-sm);
+      padding: var(--input-padding-y-sm) var(--input-padding-x-sm);
       min-height: var(--input-h-sm);
     }
     .ds-input--md { /* default */ }
     .ds-input--lg {
       font-size: var(--input-font-size-lg);
-      padding: var(--input-py-lg) var(--input-px-lg);
+      padding: var(--input-padding-y-lg) var(--input-padding-x-lg);
       min-height: var(--input-h-lg);
     }
 
@@ -82,17 +82,17 @@
     }
     .ds-input:disabled,
     .ds-input.is-disabled {
-      background: var(--input-bg-disabled);
+      background: var(--input-background-disabled);
       color: var(--input-text-disabled);
       cursor: not-allowed;
       border-color: var(--input-border);
     }
 
     /* ===== Leading icon slot ===== */
-    .ds-input-wrap.has-leading-icon .ds-input { padding-left: calc(var(--input-px) + var(--input-icon-size) + var(--input-icon-gap)); }
+    .ds-input-wrap.has-leading-icon .ds-input { padding-left: calc(var(--input-padding-x) + var(--input-icon-size) + var(--input-icon-gap)); }
     .ds-input__icon {
       position: absolute;
-      left: var(--input-px);
+      left: var(--input-padding-x);
       width: var(--input-icon-size);
       height: var(--input-icon-size);
       pointer-events: none;
