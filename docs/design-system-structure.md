@@ -152,6 +152,7 @@ atom → molecule → organism → pattern → page
 > 📌 **หมายเหตุการอ่าน:** รายการข้างล่างคือ "จักรวาลของสิ่งที่พบทั่วไป" ในแต่ละชั้น — ไม่ใช่ทุกอันถูก build แล้ว
 > ⭐ = อยู่ใน **default scope** ที่ `design-component-builder` สร้างให้ทันที (button, input, select, checkbox, radio, textarea, label, card, badge)
 > ตัวที่เหลือ = เพิ่มได้ตามต้องการ (สั่ง `--scope`) หรือเป็น reference ว่าควรจัดชั้นไหน
+> ตัวอย่างรวบรวมจากของจริง 2 library: **shadcn/ui** (74 components) + **Astryx** (Meta) — แล้วจัดชั้นตามระบบเรา (บาง lib จัดต่างจากเรา เช่น Astryx วาง `App Shell` ไว้หมวด Layout แต่เราจัดเป็น **Pattern**)
 
 ### 🔹 Atom — ชิ้นเล็กสุด แยกไม่ได้ (`components.json`)
 
@@ -159,11 +160,11 @@ atom → molecule → organism → pattern → page
 
 | หมวด | ตัวอย่าง |
 |---|---|
-| **Form controls** | ⭐`button` · ⭐`input` · ⭐`textarea` · ⭐`select` · ⭐`checkbox` · ⭐`radio` · ⭐`label` · `toggle`/`switch` · `slider` · `icon-button` |
-| **Display** | `text`/`typography` · `heading` · `icon` · `image` · `avatar` · ⭐`badge` · `tag`/`chip` · `divider`/`separator` · `kbd` |
-| **Feedback (เดี่ยว)** | `spinner`/`loader` · `progress-bar` · `skeleton` · `dot`/`status-indicator` |
+| **Form controls** | ⭐`button` · ⭐`input`/`text-input` · ⭐`textarea` · ⭐`select`/`selector` · ⭐`checkbox` · ⭐`radio` · ⭐`label` · `toggle`/`switch` · `slider` · `icon-button` · `toggle-button` · `number-input` · `date-input` · `time-input` · `file-input` |
+| **Display** | `text`/`typography` · `heading` · `icon` · `image`/`thumbnail` · `avatar` · ⭐`badge` · `tag`/`chip`/`token` · `divider`/`separator` · `kbd` · `code` · `blockquote` · `citation` · `timestamp` · `status-dot` |
+| **Feedback (เดี่ยว)** | `spinner`/`loader` · `progress-bar` · `skeleton` · `status-dot` · `banner` |
 | **Navigation (เดี่ยว)** | `link` · `anchor` |
-| **Container เดี่ยว** | ⭐`card` (แบบ simple — ถ้ามี header/body/footer slot → เลื่อนขึ้น molecule/organism) |
+| **Container เดี่ยว** | ⭐`card` · `clickable-card` · `selectable-card` (แบบ simple — ถ้ามี header/body/footer slot → เลื่อนขึ้น molecule/organism) |
 
 ### 🔸 Molecule — atom หลายตัวประกอบ
 
@@ -171,11 +172,11 @@ atom ≥2 ตัวทำงานร่วมกันเป็นหน่ว�
 
 | หมวด | ตัวอย่าง |
 |---|---|
-| **Form** | `form-field` (label+input+help-text) · `input-group` · `checkbox-group` · `radio-group` · `button-group` · `search-bar` (input+button) · `date-picker` · `stepper`/`number-input` · `rating` · `tag-input` · `file-upload` |
-| **Navigation** | `nav-item` · `breadcrumb-item` · `menu-item` · `tab-item` · `pagination-item` · `dropdown` (button+menu) |
-| **Display** | `stat-tile`/`metric` · `list-item` · `media-object` (avatar+text) · `avatar-group` · `key-value` |
-| **Feedback** | `alert`/`toast` (icon+text+close) · `tooltip` · `popover` · `banner` |
-| **Interactive เล็ก** | `accordion-item` · `switch-field` (label+toggle) · `segmented-control` |
+| **Form** | `form-field`/`field` (label+input+help) · `input-group` · `checkbox-group` · `radio-group`/`radio-list` · `button-group` · `search-bar`/`power-search` · `date-picker` · `date-range-input` · `date-time-input` · `stepper`/`number-input` · `rating` · `tag-input`/`tokenizer` · `multi-selector` · `typeahead` · `file-upload` |
+| **Navigation** | `nav-item` · `breadcrumb-item` · `menu-item`/`typeahead-item` · `tab-item` · `pagination-item` · `dropdown`/`dropdown-menu` · `segmented-control` · `more-menu` · `outline` |
+| **Display** | `stat-tile`/`metric` · `list-item` · `media-object` (avatar+text) · `avatar-group` · `key-value`/`metadata` · `code-block` · `thumbnail` |
+| **Feedback** | `alert`/`banner` (icon+text+close) · `toast` · `tooltip` · `popover` · `hover-card` |
+| **Interactive เล็ก** | `accordion-item` · `collapsible` · `switch-field` (label+toggle) · `segmented-control` · `command-item` |
 
 ### 🔷 Organism — molecule (+ atom) ประกอบเป็นส่วนใหญ่ของหน้า
 
@@ -183,11 +184,18 @@ atom ≥2 ตัวทำงานร่วมกันเป็นหน่ว�
 
 | หมวด | ตัวอย่าง |
 |---|---|
-| **Layout ส่วนหลัก** | `navbar`/`topbar` · `sidebar` · `header` · `footer` · `toolbar` |
-| **Data / list** | `table`/`data-table` · `list` · `card-grid` · `feed` · `kanban-board` |
-| **Content block** | `hero` · `pricing-table` · `feature-grid` · `testimonial-block` · `stats-row` |
-| **Overlay / interactive** | `modal`/`dialog` · `drawer` · `tabs` · `accordion` · `carousel` · `dropdown-panel` · `command-palette` |
-| **Composite** | `form` (เต็ม) · `filter-panel` · `search-results` · `comment-thread` · `notification-center` · `pagination` (เต็ม) · `breadcrumb` (เต็ม) |
+| **Layout ส่วนหลัก** | `navbar`/`top-nav` · `sidebar`/`side-nav` · `header` · `footer` · `toolbar` · `mega-menu` (top-nav-mega-menu) |
+| **Data / list** | `table`/`data-table` · `list` · `card-grid` · `feed` · `kanban-board` · `tree-list` · `overflow-list` · `metadata-list` |
+| **Content block** | `hero` · `pricing-table` · `feature-grid` · `carousel` · `testimonial-block` · `stats-row` |
+| **Overlay / interactive** | `modal`/`dialog` · `drawer`/`sheet` · `tabs`/`tab-list` · `accordion` · `dropdown-panel` · `command-palette` · `lightbox` · `context-menu` · `menubar` · `navigation-menu` |
+| **Composite** | `form`/`form-layout` (เต็ม) · `filter-panel` · `search-results` · `comment-thread` · `notification-center` · `pagination` (เต็ม) · `breadcrumb` (เต็ม) · `chat` (chat-layout / composer / message) |
+
+### 🛠️ Utility / Layout helper — ตัวช่วยจัดวาง (ไม่ใช่ UI element)
+
+ไม่มีหน้าตาของตัวเอง ทำหน้าที่เชิงเทคนิค (คุมสัดส่วน / scroll / grid) — **ไม่มี variant/state แบบ atom** เลยแยกออกมา ไม่ปนกับ component ปกติ
+
+| helper | `aspect-ratio` · `scroll-area` · `resizable`/`resize-handle` · `grid` · `section` · `layout` · `visually-hidden` · `direction` (RTL/LTR) |
+|---|---|
 
 โยงกับ naming — ระดับอยู่ใน path:
 ```
@@ -202,7 +210,7 @@ atom ≥2 ตัวทำงานร่วมกันเป็นหน่ว�
 
 | หมวด | ตัวอย่าง |
 |---|---|
-| **Shell (โครงทั้งแอป)** | `app-shell` (header+sidebar+main) · `dashboard-layout` · `settings-layout` · `docs-layout` |
+| **Shell (โครงทั้งแอป)** | `app-shell` (header+sidebar+main) · `dashboard-layout` · `settings-layout` · `docs-layout` · `chat-layout` |
 | **Auth / focused** | `auth-split` (form ซ้าย + ภาพขวา) · `centered-card` (login กลางจอ) · `wizard`/`stepper-flow` |
 | **Content layout** | `hero-grid` · `feed-layout` · `master-detail`/`list-detail` · `split-view` · `two-column` · `landing-section` |
 | **State (โครงหน้าพิเศษ)** | `empty-state` · `error-state` · `loading-state` · `onboarding-flow` |
