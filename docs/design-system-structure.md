@@ -149,13 +149,45 @@ allowed stops: `2xs, xs, sm, md, lg, xl, 2xl, 3xl … 9xl` + special: `pill, ful
 atom → molecule → organism → pattern → page
 ```
 
-### Component — 3 ชั้น (`components.json`)
+> 📌 **หมายเหตุการอ่าน:** รายการข้างล่างคือ "จักรวาลของสิ่งที่พบทั่วไป" ในแต่ละชั้น — ไม่ใช่ทุกอันถูก build แล้ว
+> ⭐ = อยู่ใน **default scope** ที่ `design-component-builder` สร้างให้ทันที (button, input, select, checkbox, radio, textarea, label, card, badge)
+> ตัวที่เหลือ = เพิ่มได้ตามต้องการ (สั่ง `--scope`) หรือเป็น reference ว่าควรจัดชั้นไหน
 
-| ชั้น | คือ | ตัวอย่าง |
-|---|---|---|
-| **atom** | ชิ้นเล็กสุด แยกไม่ได้ | `button` `input` `icon` `badge` `label` |
-| **molecule** | atom หลายตัวประกอบ | `form-field` (= label+input+help-text) · `nav-item` · `search-bar` |
-| **organism** | molecule ประกอบเป็นส่วนใหญ่ | `navbar` · `sidebar` · `table` · `hero` |
+### 🔹 Atom — ชิ้นเล็กสุด แยกไม่ได้ (`components.json`)
+
+แยกแล้วไม่มีความหมาย / ไม่ทำงานเดี่ยวๆ ต่อไม่ได้อีก
+
+| หมวด | ตัวอย่าง |
+|---|---|
+| **Form controls** | ⭐`button` · ⭐`input` · ⭐`textarea` · ⭐`select` · ⭐`checkbox` · ⭐`radio` · ⭐`label` · `toggle`/`switch` · `slider` · `icon-button` |
+| **Display** | `text`/`typography` · `heading` · `icon` · `image` · `avatar` · ⭐`badge` · `tag`/`chip` · `divider`/`separator` · `kbd` |
+| **Feedback (เดี่ยว)** | `spinner`/`loader` · `progress-bar` · `skeleton` · `dot`/`status-indicator` |
+| **Navigation (เดี่ยว)** | `link` · `anchor` |
+| **Container เดี่ยว** | ⭐`card` (แบบ simple — ถ้ามี header/body/footer slot → เลื่อนขึ้น molecule/organism) |
+
+### 🔸 Molecule — atom หลายตัวประกอบ
+
+atom ≥2 ตัวทำงานร่วมกันเป็นหน่วยเล็กที่มีหน้าที่เดียว
+
+| หมวด | ตัวอย่าง |
+|---|---|
+| **Form** | `form-field` (label+input+help-text) · `input-group` · `checkbox-group` · `radio-group` · `button-group` · `search-bar` (input+button) · `date-picker` · `stepper`/`number-input` · `rating` · `tag-input` · `file-upload` |
+| **Navigation** | `nav-item` · `breadcrumb-item` · `menu-item` · `tab-item` · `pagination-item` · `dropdown` (button+menu) |
+| **Display** | `stat-tile`/`metric` · `list-item` · `media-object` (avatar+text) · `avatar-group` · `key-value` |
+| **Feedback** | `alert`/`toast` (icon+text+close) · `tooltip` · `popover` · `banner` |
+| **Interactive เล็ก** | `accordion-item` · `switch-field` (label+toggle) · `segmented-control` |
+
+### 🔷 Organism — molecule (+ atom) ประกอบเป็นส่วนใหญ่ของหน้า
+
+ส่วนที่ยืนได้ด้วยตัวเอง มักกินพื้นที่ใหญ่ในหน้า
+
+| หมวด | ตัวอย่าง |
+|---|---|
+| **Layout ส่วนหลัก** | `navbar`/`topbar` · `sidebar` · `header` · `footer` · `toolbar` |
+| **Data / list** | `table`/`data-table` · `list` · `card-grid` · `feed` · `kanban-board` |
+| **Content block** | `hero` · `pricing-table` · `feature-grid` · `testimonial-block` · `stats-row` |
+| **Overlay / interactive** | `modal`/`dialog` · `drawer` · `tabs` · `accordion` · `carousel` · `dropdown-panel` · `command-palette` |
+| **Composite** | `form` (เต็ม) · `filter-panel` · `search-results` · `comment-thread` · `notification-center` · `pagination` (เต็ม) · `breadcrumb` (เต็ม) |
 
 โยงกับ naming — ระดับอยู่ใน path:
 ```
@@ -164,16 +196,31 @@ atom → molecule → organism → pattern → page
 {component.organism.navbar.default.background.rest}
 ```
 
-### Pattern — โครง reusable ข้ามหน้า (`patterns.json`)
+### 🟪 Pattern — โครง reusable ข้ามหน้า (`patterns.json`)
 
-โครง layout ที่ไม่ผูกหน้าไหน มี **slot** (ช่องว่าง) ให้แต่ละหน้ามาเสียบ content
+โครง layout ที่ไม่ผูกหน้าไหน มี **slot** (ช่องว่าง) ให้แต่ละหน้ามาเสียบ content — ต่างจาก organism ตรงมันคือ "โครงของทั้งหน้า/ส่วนใหญ่ของหน้า" ที่หลายหน้าใช้ซ้ำ
 
-- ตัวอย่าง: `app-shell` · `auth-split` · `empty-state` · `hero-grid` · `modal-shell`
+| หมวด | ตัวอย่าง |
+|---|---|
+| **Shell (โครงทั้งแอป)** | `app-shell` (header+sidebar+main) · `dashboard-layout` · `settings-layout` · `docs-layout` |
+| **Auth / focused** | `auth-split` (form ซ้าย + ภาพขวา) · `centered-card` (login กลางจอ) · `wizard`/`stepper-flow` |
+| **Content layout** | `hero-grid` · `feed-layout` · `master-detail`/`list-detail` · `split-view` · `two-column` · `landing-section` |
+| **State (โครงหน้าพิเศษ)** | `empty-state` · `error-state` · `loading-state` · `onboarding-flow` |
+| **Overlay shell** | `modal-shell` · `drawer-shell` |
+
 - slot เสียบได้: `component` · `section` · `pattern` (ซ้อน) · `text` · `image` · `icon`
 
-### Page — หน้าจริง (`ui.json`)
+### 🟩 Page — หน้าจริง (`ui.json`)
 
-เอา pattern + component มาประกอบเป็นหน้า แล้วเสียบของลง slot
+เอา pattern + component มาประกอบเป็นหน้า แล้วเสียบของลง slot — คือสิ่งที่ user เห็นจริง
+
+| หมวด | ตัวอย่าง |
+|---|---|
+| **Auth** | `login` · `signup` · `forgot-password` · `reset-password` · `verify-otp` |
+| **App หลัก** | `dashboard` · `home`/`landing` · `profile` · `settings` · `notifications` |
+| **List / detail** | `index`/`list-page` · `detail-page` · `search-results` · `filter-results` |
+| **Flow** | `checkout` · `onboarding` · `wizard-step` |
+| **System** | `404`/`not-found` · `error`/`500` · `maintenance` · `help`/`support` · `empty` |
 
 ### flow จริง (pattern + slot)
 
