@@ -56,7 +56,7 @@ Two kinds of deviation to report in the Taste Gate (§6):
 
 - **Never `transition: all`** — name the properties (`transition: background-color var(--dur-short) var(--ease-out)`).
 - **One signal per element** — not every card gets `hover:scale`. Pick one: a 1px translate, a colour shift, or an underline change — not all of them.
-- **UI easing = ease-out** — reserve bouncy / overshoot easings for genuine physical interactions, not buttons/modals/tooltips.
+- **UI easing = ease-out** — reserve bouncy / overshoot easings for genuine physical interactions, not buttons/modals/tooltips. Concrete curves (IBM Carbon Motion): **standard** `cubic-bezier(0.5, 0, 0.1, 1)` for most transitions, **ease-out** `cubic-bezier(0, 0, 0.25, 1)` for entering / state-change on input, **ease-in** `cubic-bezier(0.25, 0, 1, 1)` for exiting. Keep durations short and scale them by motion size (Carbon's *productive* motion is fast; *expressive* is slower).
 - **One orchestrated entrance on load** — don't fade-up every section on scroll; after the first paint, content just exists.
 - **Focus rings appear instantly** — don't animate `outline` / `box-shadow` when an element gains focus (keyboard users need it immediately).
 - **Spinners: delay-show ~150ms or min-show ~300ms** — prefer skeletons when the layout is known.
