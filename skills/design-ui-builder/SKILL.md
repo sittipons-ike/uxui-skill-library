@@ -395,6 +395,12 @@ A pattern HTML file is a **shell with `<slot>` placeholders** — NOT a self-con
 - Patterns include `<link rel="stylesheet" href="../tokens.css">` — never inline token values.
 - Patterns may render in-browser as a hollow shell (useful for previewing layout); they are NOT self-contained — they expect pages to fill the slots.
 
+### Step 5.5. Taste gate (self-critique) — read [`TASTE.md`](../design-builder/TASTE.md)
+
+Before writing any page HTML, run the **Taste Gate** in [`skills/design-builder/TASTE.md`](../design-builder/TASTE.md) against the composition-relevant sections (§2 Composition · §3 Motion · §4 Content · §5 A11y/Perf). This is where "on-brand tokens" become "non-generic layout" — bias asymmetry over centred-everything, break the 3-equal-column grid, vary section padding, avoid the generic AI nav/footer, hero matches content height.
+
+This gate **warns, it does not block** (§0 governed deviation): if the layout needs a pattern/component the DS doesn't have yet, or intentionally breaks a taste rule for a better result, build it anyway and surface it in the **Taste Report** (§6) for the human to approve and later promote into `patterns.json` / `components.json`. Never invent-and-forget silently.
+
 ### Step 6. Build `ui.json` + `pages/<name>.html`
 
 For each page:
