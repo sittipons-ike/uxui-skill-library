@@ -399,6 +399,8 @@ A pattern HTML file is a **shell with `<slot>` placeholders** — NOT a self-con
 
 Before writing any page HTML, run the **Taste Gate** in [`skills/design-builder/TASTE.md`](../design-builder/TASTE.md) against the composition-relevant sections (§2 Composition · §3 Motion · §4 Content · §5 A11y/Perf). This is where "on-brand tokens" become "non-generic layout" — bias asymmetry over centred-everything, break the 3-equal-column grid, vary section padding, avoid the generic AI nav/footer, hero matches content height.
 
+**Dials — reuse, don't re-derive.** First read `design.md` `## Overview` for a `**Design dials:**` line (VARIANCE · MOTION · DENSITY, written by `design-builder`). If present, use those exact numbers to drive TASTE §8 recipe/motion selection — the token layer and the composition layer must share one brand reading. Only derive dials fresh (TASTE §8 table) if design.md has none.
+
 This gate **warns, it does not block** (§0 governed deviation): if the layout needs a pattern/component the DS doesn't have yet, or intentionally breaks a taste rule for a better result, build it anyway and surface it in the **Taste Report** (§6) for the human to approve and later promote into `patterns.json` / `components.json`. Never invent-and-forget silently.
 
 ### Step 6. Build `ui.json` + `pages/<name>.html`

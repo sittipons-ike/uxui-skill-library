@@ -217,7 +217,9 @@ Fit tags: `neutral` = works anywhere · others = reach for it when the brand lea
 
 ## §8 Dials — tune boldness to the brand  `[both]`
 
-Three knobs (1–10) derived from `docs/brand/` + `docs/blueprints/` in Phase 0. They gate how far the recipes and motion push, so "distinctive" stays *on-brand* instead of random.
+Three knobs (1–10). **Single source of truth:** if `design.md` already records a `**Design dials:**` line in its `## Overview` (written by `design-builder` Step 1b-dials), **reuse those exact numbers** — do not re-derive. Only when no design.md dials exist, derive them here from `docs/brand/` + `docs/blueprints/` (Phase 0) using the table below. This keeps the token layer (`design.md`) and the composition layer (this file) tuned to the *same* brand reading.
+
+They gate how far the recipes and motion push, so "distinctive" stays *on-brand* instead of random.
 
 | dial | 1 (low) | 10 (high) | gates |
 |---|---|---|---|

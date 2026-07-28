@@ -209,6 +209,20 @@ If user picks 2 moods, take primary's defaults but blend the secondary's spacing
 
 > Refs: [Material 3 — corner radius scale](https://m3.material.io/styles/shape/corner-radius-scale) · [Tailwind — border-radius](https://tailwindcss.com/docs/border-radius) · Refactoring UI (Wathan & Schoger) — typography/letter-spacing chapter. Values verified 2026-07; mood→value pairings are this skill's editorial defaults.
 
+### 1b-dials. Derive the three brand dials (one reading, reused by the UI)
+
+After the mood, derive **VARIANCE · MOTION · DENSITY** (1–10) from the brand + audience using the **same mapping table as [`TASTE.md`](TASTE.md) §8**. The UI builder reads these same three dials to pick layout recipes and motion — so they must be decided *once here, from one reading of the brand*, not re-guessed later.
+
+Apply them at the token layer:
+- **DENSITY** nudges the mood's spacing bias one step: high (7–9) → tighten (e.g. `8/16/24` → `4/8/12`); low (1–3) → loosen. Radius and hue stay mood-driven; DENSITY only touches spacing.
+- **VARIANCE / MOTION** do **not** change tokens here (they steer the UI builder's composition + motion) — but derive them now so the value is fixed from a single brand reading.
+
+**Record the trio in `## Overview`** (see the Overview template) so `design-ui-builder` and TASTE §8 reuse the exact same numbers instead of re-deriving and drifting:
+```
+**Design dials:** VARIANCE <n> · MOTION <n> · DENSITY <n>   [derived from: <brand signal>]
+```
+This is a prose line in an existing required section — it does **not** change the token naming, the 2-tier strategy, or the JSON schema, so `design-md-audit` is unaffected.
+
 ### 1bb. WCAG AA constants — inject into mood + tokens
 
 Before generating semantic colors, add these **mandatory primitive constants** for accessibility:
@@ -560,6 +574,9 @@ Brand philosophy + design language principles. 3-5 short paragraphs.
 **Mood & Tone — required first paragraph.** Open with the chosen primary mood, what it means visually for this brand, and what it explicitly is NOT. Example: *"TaskFlow leans `calm-focused` — a moderate-radii surface with one calm accent, generous whitespace, restrained shadows. Not bold. Not playful. The product should feel like quiet competence."*
 
 **Reference provenance — second paragraph.** Briefly cite any reference attachments that shaped the tokens (mood board, brand brief, competing site). Be specific: *"The terracotta accent was extracted from the user's mood board file `IMG_3412.jpg`; the spacing rhythm was inherited from `notion/DESIGN.md` in the local design library."*
+
+**Design dials — required line (from Step 1b-dials).** Record the three brand dials so downstream skills (`design-ui-builder`, `TASTE.md` §8) reuse the same numbers:
+`**Design dials:** VARIANCE 6 · MOTION 4 · DENSITY 3   [derived from: premium / minimal audience]`
 
 ## Mood & Tone
 
