@@ -200,6 +200,15 @@ Use the chosen primary mood to bias the YAML defaults BEFORE generating. This is
 
 If user picks 2 moods, take primary's defaults but blend the secondary's spacing/radius if no conflict.
 
+**Where these biases come from (rationale + refs).** The *numeric values* sit on established scales; the *mood → value* pairing is our editorial judgment informed by common practice. Cite honestly — don't over-claim an authority.
+
+- **Radius values** — the 4 / 8 / 12 / 16 / 24 ladder matches the **Material 3 corner-radius scale** (extra-small 4dp · small 8dp · medium 12dp · large 16dp · extra-large 28dp) and **Tailwind** (`sm` 4px · `lg` 8px · `xl` 12px · `2xl` 16px · `3xl` 24px). *Which* radius a mood gets (sharp for `bold-tech`/`premium-editorial`, round for `friendly-warm`/`playful-vivid`) is design common-sense — smaller reads geometric/precise, larger reads soft/approachable — **team convention**, not a Material rule.
+- **Tracking** — **Refactoring UI**: tighten large/display headings with a small negative value (~-0.01 to -0.02em), loosen all-caps/labels with positive tracking (~+0.05em). So `bold-tech` / `premium-editorial` tight display tracking, and any uppercase eyebrow gets positive tracking, are grounded; `friendly-warm` "normal" is the neutral default.
+- **Spacing density** — the 4 / 8 base rhythm is **Tailwind's 4px base unit** + the **8-point grid** convention (Material). Tight (4/8/12) vs generous (8/16/24) per mood is **team convention**.
+- **Shadow strength / border-width / hue tendency** — these are **team convention** (informed by mood/colour-psychology common practice). No single authority prescribes them; treat as our opinionated defaults, override freely per brand.
+
+> Refs: [Material 3 — corner radius scale](https://m3.material.io/styles/shape/corner-radius-scale) · [Tailwind — border-radius](https://tailwindcss.com/docs/border-radius) · Refactoring UI (Wathan & Schoger) — typography/letter-spacing chapter. Values verified 2026-07; mood→value pairings are this skill's editorial defaults.
+
 ### 1bb. WCAG AA constants — inject into mood + tokens
 
 Before generating semantic colors, add these **mandatory primitive constants** for accessibility:
