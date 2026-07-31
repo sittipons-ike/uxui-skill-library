@@ -94,9 +94,18 @@ Rules:
 - Read `semantic.spacing` (icon sizes ref this)
 
 ### 2. Pick icon style
-- Apply mood map above
+- Apply mood map above **as a starting point** — then run the min-stroke check below before locking it.
 - If user wants override (e.g., "I want filled instead of outlined"), record reasoning in YAML comment
 - Document the choice in the ## Iconography body section
+
+**Min-stroke check (REQUIRED — the mood map gives a *name*, not a guarantee).**
+A weight *name* like `thin` / `light` does not tell you the rendered stroke width — that depends on the library AND the icon size. Thin strokes below ~1px physical width render as sub-pixel: they anti-alias to grey and **lose the locked icon colour** (e.g. a gold `#edcd67` line renders as muddy `rgb(145,150,92)`).
+
+Rule: **the icon's stroke must render at ≥ 1.00px at the smallest size it will be shown.** Verify against the real SVG, don't trust the weight name:
+- Look at the SVG's `stroke-width` (in its viewBox units) and compute the physical px at your smallest icon size: `physical_px = stroke_width × (icon_px / viewBox_size)`. Phosphor `thin` ≈ 1 unit on a 256 viewBox → at 24px that's `1 × 24/256 ≈ 0.09`… i.e. Phosphor thin is authored differently; **the reliable move is to render a sample and sample pixels**, or step up one weight when unsure.
+- If the chosen weight renders < 1.00px at the target size → **step up one weight** (`thin → light → regular`) and note it in the YAML comment as the reason.
+- If icons must stay very thin for the mood, raise the minimum icon size instead so the stroke clears 1px.
+- **Prefer measuring the real asset over following the weight name** — the name is a default, the render is the truth (NO MAGIC).
 
 ### 3. Populate `iconography` YAML block
 

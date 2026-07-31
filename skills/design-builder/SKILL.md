@@ -50,6 +50,14 @@ design-styleguide         →  renders styleguide.html (reads JSON when present,
 
 Also scan `docs/product/product-overview.md` → may have positioning + audience (skip those questions).
 
+**Scan wider than `docs/brand/` (v6.5 — the brand info may not live there).** Real projects often keep brand data in `PRD.md`, `docs/intent/`, or as image assets. Before deciding there is "no brand info", also check:
+- `PRD.md` / `docs/prd/` / `docs/intent/` — mood, palette, constraints are often buried here.
+- `public/`, `assets/`, `src/assets/` (and their subfolders, recursively) — logos, hero banners, reference comps, brand imagery.
+
+**Asset inventory (REQUIRED before writing any brand doc).** List **every** image/asset file found — including deep subfolders (`public/home/`, `public/reference/`, …) — and **open the visually-relevant ones** (heroes, banners, reference comps, brand imagery), not just the ones a doc happens to name. A finished hero banner sitting in `public/home/` is a stronger colour/composition source than any prose description; skipping it because a doc didn't mention it is the failure mode this step exists to prevent. For each asset record: path · what it is · role (`colour source of truth` / `composition reference` / `logo` / `archive-unused`).
+
+**Conflict = surface it, don't decide it (NO MAGIC + DISSENT).** If a doc says one thing and an asset shows another (e.g. PRD says "light mode" but the finished hero banner uses a dark teal band), **do NOT resolve it silently and write the resolution as a conclusion.** Record it as `⚠️ UNRESOLVED conflict — needs human` with both sides quoted, and ask. Never let "the doc said X" stop you from opening the asset that shows Y — trust the real artifact in front of you over a second-hand description of it.
+
 **Show user what was found:**
 ```
 PHASE 0a SCAN RESULTS:
@@ -71,7 +79,7 @@ InputBundle pre-filled:
 
 → **Skip Phase 0 inventory question entirely if all 4 flags resolved by docs.**
 
-If conflict (e.g. doc says cool palette + user wants warm) → flag explicitly + ask clarify before continuing.
+If conflict (e.g. doc says cool palette + user wants warm, or a doc contradicts an asset) → record as `⚠️ UNRESOLVED — needs human`, quote both sides, and ask before continuing. Do not pick a winner and write it as settled (see the conflict rule in the asset-inventory note above).
 
 If `docs/brand/` empty / missing → continue to Phase 0 inventory question (legacy behavior).
 
