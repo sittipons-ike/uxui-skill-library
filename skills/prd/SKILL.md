@@ -197,6 +197,28 @@ Synthesize input → Map user flow → Define non-goals
 + Onboarding completion rate >= 70% ใน user testing 20 คน
 ```
 
+### Constraint discipline (v2.1 — from the Rubstang taste experiment)
+
+A PRD says **what problem to solve and what the real limits are — not what the design should look like.** Design decisions dressed up as "Must" become walls that neither humans nor downstream skills dare to question, and they poison the design chain.
+
+**The one-sentence test for every `Must`:**
+> If you can't answer *"why?"* in one sentence → it is **not a constraint, it is a preference** → move it to `docs/brand/`, not the PRD.
+
+| Belongs in PRD `Must` (has a reason) | Belongs in `docs/brand/` (a design preference) |
+|---|---|
+| `WCAG AA ≥4.5:1` — audience + law | `premium-editorial` — a mood choice |
+| `Thai font support` — market requirement | `light mode only` — a look choice |
+| `touch target ≥44px` — mobile-first | specific hex values, font names |
+| `"trust is the top risk"` — persona fear | "gold is decorative-only" — that's a *result* of a contrast check, not an order |
+
+**Hard rules for the PRD output:**
+- Every `Must` carries a one-sentence reason. No reason → move it out.
+- **No mood/style words** in `Must` (`premium`, `minimal`, `bold`, `editorial`, `playful`…) — those go to `docs/brand/brand-book.md`.
+- **No hex colours or font names** in the PRD — those go to `docs/brand/palette.md` / `typography.md`.
+- Prefer **stating the problem over dictating the answer.** "Trust is the top risk" produced better design across every run than any prescriptive style order — the skills reasoned "too much gold/sparkle looks scammy" on their own. Give the problem, let the design skill solve it.
+- State **at least one design-affecting risk** with its source.
+- Don't reference files that don't exist yet; if you must, mark them `(not yet created)`.
+
 ---
 
 ## Implementation Guidelines
