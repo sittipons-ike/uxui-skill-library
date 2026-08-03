@@ -37,7 +37,7 @@ echo ""
 
 echo "→ Refreshing skills via npx..."
 if command -v npx >/dev/null 2>&1; then
-  npx --yes skills add sittipons-ike/uxui-skill-library
+  npx --yes skills add sittipons-ike/uxui-skill-library -g
   echo "✅ skills refreshed"
 else
   echo "❌ npx not found — install Node.js first (https://nodejs.org)"

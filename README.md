@@ -67,14 +67,22 @@ Script จะ:
 
 ### 🧩 ขั้นที่ 2 — Skills (29 ตัว)
 
-หลัง rules ลงเรียบร้อย ค่อยติด skills — เลือก **1 วิธี** ก็พอ
+หลัง rules ลงเรียบร้อย ค่อยติด skills
 
-**วิธีที่ 1 — npx (แนะนำ — เร็ว, update บ่อย):**
+**แนะนำ — ลง global (`-g`): ลงครั้งเดียว ทุก project ใช้ได้**
 ```bash
-npx skills add sittipons-ike/uxui-skill-library
+npx skills add sittipons-ike/uxui-skill-library -g
+```
+> `-g` = ลงที่ user-level (`~/.claude/skills` → `~/.agents/`) → **ทุก project เห็นเลย ไม่ต้องลงซ้ำแต่ละ project**
+> ✅ อัพเดตครั้งเดียว ทุก project ตามพร้อมกัน · ✅ ไม่มีปัญหา project ดึงเวอร์ชันเก่า
+> ⚠️ ถ้าเคยลงแบบ project-local ไว้ (มี `.agents/` ในโฟลเดอร์ project) → **ลบ `.agents/` local ทิ้ง** ไม่งั้นมันทับ global (`~/.agents` ห้ามลบ — เป็น global source)
+
+**ถ้าอยาก lock version เฉพาะบาง project** (เช่น production ที่ห้ามเปลี่ยน) → ตัด `-g` ออก (ลงเป็น project-local):
+```bash
+npx skills add sittipons-ike/uxui-skill-library      # ลงเฉพาะ project นี้
 ```
 
-**วิธีที่ 2 — Claude Code Plugin (ใช้เมื่อ npx ไม่ได้):**
+**ทางเลือก — Claude Code Plugin (ใช้เมื่อ npx ไม่ได้):**
 ```bash
 claude plugin marketplace add https://github.com/sittipons-ike/uxui-skill-library
 claude plugin install uxui-skills
@@ -90,13 +98,20 @@ claude plugin install uxui-skills
 
 ---
 
-### 🔄 Update (ต่อจากนี้ — รวบ 1 command)
+### 🔄 Update
 
+**global (แนะนำ — ทุก project ตามพร้อมกัน):**
+```bash
+npx skills add sittipons-ike/uxui-skill-library -g
+```
+> ⚠️ npx **ไม่ auto-pull** จาก GitHub — ต้องรันคำสั่งนี้เอง**ทุกครั้ง**ที่ repo มีอัพเดต
+> symlink `~/.claude/skills` ชี้ path เดิม → อัพ `~/.agents` เมื่อไหร่ เห็นใหม่ทันที ไม่ต้อง re-link
+
+**รวบ rules + skills 1 command** (สำหรับคนที่ clone repo ไว้):
 ```bash
 cd uxui-skill-library && bash update.sh
 ```
-
-Script ทำ: `git pull` (rules) → `npx skills add` (skills) → hint `/check-setup`
+> ทำ: `git pull` (team rules) → `npx skills add -g` (skills) → hint `/check-setup`
 
 ---
 
@@ -207,18 +222,37 @@ npx skills add pbakaus/impeccable
 
 ---
 
-## DS Architecture
+## แต่ละสกิลรับอะไร ออกอะไร (input → output)
 
-3-file split architecture (JSON manifest, DTCG-aligned):
+**Design System chain — เรียงลำดับการทำงาน:**
 
+| # | สกิล | อ่าน (input) | ออก (output) |
+|---|---|---|---|
+| 1 | `design-builder` | brand info · `docs/brand/` · asset จริงใน `public/` | `design.md` (tokens + mood + **dials**) |
+| 2 | `design-icon-builder` | `design.md` (mood) | `./icons/*.svg` + iconography block ใน `design.md` |
+| 3 | `design-component-builder` | `design.md` + [`TASTE.md`](skills/design-builder/TASTE.md) gate | `components.json` + `tokens.css` + `components/*.html` |
+| 4 | `design-ui-builder` | `design.md` + `components.json` + `TASTE.md` (recipes/dials) | `ui.json` + `patterns.json` + `pages/*.html` |
+| — | `design-md-audit` | ทุกไฟล์ข้างบน | รายงาน validate (schema · refs · WCAG · naming) |
+| — | `design-styleguide` | `components/*.html` + `pages/*.html` | `styleguide.html` (รวมดูหน้าเดียว) |
+| — | `design-export-dtcg` | `design.md` + `components.json` | `tokens.json` (DTCG) + Style Dictionary (iOS/Android/Flutter/web) |
+| — | `figma-push-tokens` / `-components` | `design.md` / `components.json` | Figma Variables / Component Sets |
+
+**Pipeline (ทิศทางไหล — downward เท่านั้น):**
 ```
-design-builder            →  design.md        (YAML tokens, designer-facing)
-design-component-builder  →  components.json  (atoms/molecules/organisms)
-design-icon-builder       →  design.md        (iconography block + ./icons/*.svg)
-design-ui-builder         →  ui.json + patterns.json  (pages/flows/shells)
-design-md-audit           →  validates all files + cross-file refs
-design-styleguide         →  styleguide.html  (aggregator view)
+brand + PRD + assets
+      ↓  design-builder                     → design.md  (+ dials, Mood Map มี ref)
+      ↓  design-icon-builder                → icons/
+      ↓  design-component-builder (+TASTE)  → components.json + tokens.css + HTML
+      ↓  design-ui-builder (+TASTE recipes) → ui.json + patterns.json + pages/
+      ↓  design-md-audit                    → verify ทั้งหมด
+      ↓  design-styleguide / export-dtcg / figma-push → ส่งออก
 ```
+
+**Taste layer (ขวางทุกสกิลที่ gen UI):** [`TASTE.md`](skills/design-builder/TASTE.md) — §6 gate + §7 recipes (~50 ท่า) + §8 dials · report deviation/DS-gap ให้ human approve → promote เข้า DS
+
+**หลักคิด:** `design.md` = สี/ฟอนต์/token (หน้าตา) · `TASTE.md` = การจัดวาง/รสนิยม (กันโหล) · `docs/brand/` = ที่วางการตัดสินใจดีไซน์ (ไม่ใช่ PRD)
+
+Full diagrams: [docs/pipeline.html](docs/pipeline.html) · [docs/data-flow.html](docs/data-flow.html) · [docs/design-system-structure.md](docs/design-system-structure.md)
 
 Schemas: [schemas/](schemas/) — ref syntax: [schemas/ref-resolver.md](schemas/ref-resolver.md)  
 Architecture doc: [docs/architecture-v5.md](docs/architecture-v5.md)
