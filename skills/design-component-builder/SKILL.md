@@ -369,7 +369,7 @@ Structure:
 
 ### Step 5.5 — Taste gate (self-critique) — read [`TASTE.md`](../design-builder/TASTE.md)
 
-Before writing any component HTML, run the **Taste Gate** in [`skills/design-builder/TASTE.md`](../design-builder/TASTE.md) against the component-relevant sections (§1 Component · §3 Motion · §4 Content · §5 A11y/Perf). It reinforces DS compliance at the craft level — deliberate button/chip shapes, tabular numerals on numeric components, one icon library, hover affordances that also have focus states, no inline colour/font values.
+Before writing any component HTML, run the **Taste Gate** in [`skills/design-builder/TASTE.md`](../design-builder/TASTE.md) — the §6 mechanical checks plus the relevant §7 component recipes (`outlined chip`, `typographic link`, etc.), honouring the §8 dials. Craft-level defaults still apply (deliberate button/chip shapes, tabular numerals on numeric components, one icon library, hover affordances that also have focus states, no inline colour/font values).
 
 This gate **warns, it does not block** (§0 governed deviation): if the best design needs a component or token the DS doesn't have yet, or intentionally breaks a taste rule, emit it anyway and surface it in the **Taste Report** (§6) for the human to approve and later promote into `components.json` (governed, like `variant-extensions`). Never invent-and-forget silently.
 

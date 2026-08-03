@@ -397,7 +397,7 @@ A pattern HTML file is a **shell with `<slot>` placeholders** — NOT a self-con
 
 ### Step 5.5. Taste gate (self-critique) — read [`TASTE.md`](../design-builder/TASTE.md)
 
-Before writing any page HTML, run the **Taste Gate** in [`skills/design-builder/TASTE.md`](../design-builder/TASTE.md) against the composition-relevant sections (§2 Composition · §3 Motion · §4 Content · §5 A11y/Perf). This is where "on-brand tokens" become "non-generic layout" — bias asymmetry over centred-everything, break the 3-equal-column grid, vary section padding, avoid the generic AI nav/footer, hero matches content height.
+Before writing any page HTML, run the **Taste Gate** in [`skills/design-builder/TASTE.md`](../design-builder/TASTE.md) — the §6 mechanical checks (eyebrow ratio, no split-header, hero restraint, etc.), the §7 recipe menu (pick per brand × dials, don't reuse the same one every page), honouring the §8 dials. This is where "on-brand tokens" become "non-generic layout".
 
 **Dials — reuse, don't re-derive.** First read `design.md` `## Overview` for a `**Design dials:**` line (VARIANCE · MOTION · DENSITY, written by `design-builder`). If present, use those exact numbers to drive TASTE §8 recipe/motion selection — the token layer and the composition layer must share one brand reading. Only derive dials fresh (TASTE §8 table) if design.md has none.
 
